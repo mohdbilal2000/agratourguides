@@ -121,47 +121,47 @@ const mapMarkers = [{
     showStats={false}
   />
 
-  <Section>
+  <Section class="bg-white">
     <Container>
       <Breadcrumbs items={breadcrumbs} />
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-8">
         <!-- Main Content -->
-        <div class="lg:col-span-2 prose prose-lg dark:prose-invert">
+        <div class="lg:col-span-2 prose prose-lg prose-stone max-w-none">
           <Content />
         </div>
 
         <!-- Sidebar -->
         <aside class="space-y-6">
           <!-- Visit Info Card -->
-          <div class="bg-white dark:bg-stone-800 rounded-2xl shadow-lg p-6 sticky top-24">
-            <h3 class="font-heading text-xl font-bold text-gray-900 dark:text-white mb-4">Visit Information</h3>
+          <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
+            <h3 class="font-heading text-xl font-bold text-gray-900 mb-4">Visit Information</h3>
             <dl class="space-y-3 text-sm">
               <div class="flex justify-between">
-                <dt class="text-gray-500 dark:text-gray-400">Entry Fee (Indian)</dt>
-                <dd class="font-semibold text-gray-900 dark:text-white">{attraction.data.visitInfo.entryFeeIndian}</dd>
+                <dt class="text-gray-500">Entry Fee (Indian)</dt>
+                <dd class="font-semibold text-gray-900">{attraction.data.visitInfo.entryFeeIndian}</dd>
               </div>
               <div class="flex justify-between">
-                <dt class="text-gray-500 dark:text-gray-400">Entry Fee (Foreign)</dt>
-                <dd class="font-semibold text-gray-900 dark:text-white">{attraction.data.visitInfo.entryFeeForeign}</dd>
+                <dt class="text-gray-500">Entry Fee (Foreign)</dt>
+                <dd class="font-semibold text-gray-900">{attraction.data.visitInfo.entryFeeForeign}</dd>
               </div>
               <div class="flex justify-between">
-                <dt class="text-gray-500 dark:text-gray-400">Timings</dt>
-                <dd class="font-semibold text-gray-900 dark:text-white">{attraction.data.visitInfo.timings}</dd>
+                <dt class="text-gray-500">Timings</dt>
+                <dd class="font-semibold text-gray-900">{attraction.data.visitInfo.timings}</dd>
               </div>
               {attraction.data.visitInfo.closedOn && (
                 <div class="flex justify-between">
-                  <dt class="text-gray-500 dark:text-gray-400">Closed On</dt>
+                  <dt class="text-gray-500">Closed On</dt>
                   <dd class="font-semibold text-red-600">{attraction.data.visitInfo.closedOn}</dd>
                 </div>
               )}
               <div class="flex justify-between">
-                <dt class="text-gray-500 dark:text-gray-400">Best Time</dt>
-                <dd class="font-semibold text-gray-900 dark:text-white">{attraction.data.visitInfo.bestTimeToVisit}</dd>
+                <dt class="text-gray-500">Best Time</dt>
+                <dd class="font-semibold text-gray-900">{attraction.data.visitInfo.bestTimeToVisit}</dd>
               </div>
               <div class="flex justify-between">
-                <dt class="text-gray-500 dark:text-gray-400">Duration</dt>
-                <dd class="font-semibold text-gray-900 dark:text-white">{attraction.data.visitInfo.duration}</dd>
+                <dt class="text-gray-500">Duration</dt>
+                <dd class="font-semibold text-gray-900">{attraction.data.visitInfo.duration}</dd>
               </div>
             </dl>
             <a href="/contact/" class="mt-6 block w-full text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-700 transition-colors">
@@ -171,9 +171,9 @@ const mapMarkers = [{
 
           <!-- Tips -->
           {attraction.data.tips.length > 0 && (
-            <div class="bg-amber-50 dark:bg-amber-900/20 rounded-2xl p-6">
-              <h3 class="font-heading text-lg font-bold text-gray-900 dark:text-white mb-3">Insider Tips</h3>
-              <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+            <div class="bg-amber-50 rounded-2xl p-6">
+              <h3 class="font-heading text-lg font-bold text-gray-900 mb-3">Insider Tips</h3>
+              <ul class="space-y-2 text-sm text-gray-700">
                 {attraction.data.tips.map((tip: string) => (
                   <li class="flex gap-2">
                     <span class="text-amber-600 mt-1 shrink-0">&#10003;</span>
@@ -190,9 +190,9 @@ const mapMarkers = [{
 
   <!-- Photo Gallery -->
   {attraction.data.gallery.length > 0 && (
-    <Section class="bg-stone-50 dark:bg-stone-900">
+    <Section class="bg-stone-50">
       <Container>
-        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <h2 class="font-heading text-3xl font-bold text-gray-900 mb-8 text-center">
           Photo Gallery
         </h2>
         <PhotoGallery images={attraction.data.gallery} client:visible />
@@ -201,10 +201,10 @@ const mapMarkers = [{
   )}
 
   <!-- Map -->
-  <Section>
+  <Section class="bg-white">
     <Container>
-      <h2 class="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-6">Location</h2>
-      <p class="text-gray-600 dark:text-gray-300 mb-4">{attraction.data.location.address}</p>
+      <h2 class="font-heading text-2xl font-bold text-gray-900 mb-6">Location</h2>
+      <p class="text-gray-600 mb-4">{attraction.data.location.address}</p>
       <div class="rounded-2xl overflow-hidden shadow-lg h-[300px]">
         <InteractiveMap
           markers={mapMarkers}
@@ -218,9 +218,9 @@ const mapMarkers = [{
 
   <!-- Related Attractions -->
   {relatedAttractions.length > 0 && (
-    <Section class="bg-stone-50 dark:bg-stone-900">
+    <Section class="bg-stone-50">
       <Container>
-        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <h2 class="font-heading text-3xl font-bold text-gray-900 mb-8 text-center">
           More Attractions in {cityName}
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -241,9 +241,9 @@ const mapMarkers = [{
 
   <!-- Related Tours -->
   {relatedTours.length > 0 && (
-    <Section>
+    <Section class="bg-white">
       <Container>
-        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <h2 class="font-heading text-3xl font-bold text-gray-900 mb-8 text-center">
           Tours Including {attraction.data.title}
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -264,9 +264,9 @@ const mapMarkers = [{
 
   <!-- FAQs -->
   {attraction.data.faqs.length > 0 && (
-    <Section class="bg-stone-50 dark:bg-stone-900" id="faqs">
+    <Section class="bg-stone-50" id="faqs">
       <Container>
-        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <h2 class="font-heading text-3xl font-bold text-gray-900 mb-8 text-center">
           Frequently Asked Questions
         </h2>
         <div class="max-w-3xl mx-auto">

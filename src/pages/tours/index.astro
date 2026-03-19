@@ -43,13 +43,13 @@ const jsonLd = [buildFAQSchema(tourFaqs)];
   description="Browse our curated Golden Triangle tours. Day trips, multi-day packages, private guides, and custom itineraries for Agra, Delhi & Jaipur."
   jsonLd={jsonLd}
 >
-  <Section>
+  <Section class="bg-white">
     <Container>
       <div class="text-center mb-12">
-        <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
           Tours & Packages
         </h1>
-        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
           Explore our handcrafted Golden Triangle tours. Every package includes a licensed guide, comfortable transport, and personalized attention to detail.
         </p>
       </div>
@@ -57,7 +57,7 @@ const jsonLd = [buildFAQSchema(tourFaqs)];
       <!-- Category Filter (static, CSS-based) -->
       <div class="flex flex-wrap justify-center gap-3 mb-12">
         {categories.map((cat) => (
-          <span class="px-4 py-2 rounded-full text-sm font-medium bg-stone-100 text-stone-700 hover:bg-amber-100 hover:text-amber-800 cursor-pointer transition-colors dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-amber-900 dark:hover:text-amber-200">
+          <span class="px-4 py-2 rounded-full text-sm font-medium bg-stone-100 text-stone-700 hover:bg-amber-100 hover:text-amber-800 cursor-pointer transition-colors">
             {cat.label}
           </span>
         ))}

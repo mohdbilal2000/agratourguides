@@ -62,21 +62,21 @@ const jsonLd = [
   description={guide.data.metaDescription}
   jsonLd={jsonLd}
 >
-  <Section>
+  <Section class="bg-white">
     <Container>
       <Breadcrumbs items={breadcrumbs} />
 
       <article class="max-w-3xl mx-auto mt-8">
         <!-- Article Header -->
         <header class="mb-10">
-          <span class="inline-block px-3 py-1 text-xs font-semibold bg-amber-100 text-amber-800 rounded-full mb-4 dark:bg-amber-900/30 dark:text-amber-300">
+          <span class="inline-block px-3 py-1 text-xs font-semibold bg-amber-100 text-amber-800 rounded-full mb-4">
             {guide.data.category.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
           </span>
-          <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             {guide.data.title}
           </h1>
-          <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">{guide.data.description}</p>
-          <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <p class="text-xl text-gray-600 mb-6">{guide.data.description}</p>
+          <div class="flex items-center gap-4 text-sm text-gray-500">
             <span>By {guide.data.author}</span>
             <span>|</span>
             <time datetime={guide.data.publishedAt.toISOString()}>
@@ -92,7 +92,7 @@ const jsonLd = [
         </header>
 
         <!-- Article Content -->
-        <div class="prose prose-lg dark:prose-invert prose-headings:font-heading prose-a:text-amber-700 dark:prose-a:text-amber-400">
+        <div class="prose prose-lg prose-stone max-w-none prose-headings:font-heading prose-a:text-amber-700">
           <Content />
         </div>
       </article>
@@ -101,9 +101,9 @@ const jsonLd = [
 
   <!-- FAQs -->
   {guide.data.faqs.length > 0 && (
-    <Section class="bg-stone-50 dark:bg-stone-900" id="faqs">
+    <Section class="bg-stone-50" id="faqs">
       <Container>
-        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <h2 class="font-heading text-3xl font-bold text-gray-900 mb-8 text-center">
           Frequently Asked Questions
         </h2>
         <div class="max-w-3xl mx-auto">
@@ -115,9 +115,9 @@ const jsonLd = [
 
   <!-- Related Guides -->
   {relatedGuides.length > 0 && (
-    <Section>
+    <Section class="bg-white">
       <Container>
-        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <h2 class="font-heading text-3xl font-bold text-gray-900 mb-8 text-center">
           More Travel Guides
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
