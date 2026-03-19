@@ -58,10 +58,10 @@ const tours = [
     </div>
 
     <!-- Tour cards: horizontal scroll on mobile, grid on desktop -->
-    <div class="no-scrollbar flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0">
+    <div class="no-scrollbar -mx-4 flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 pb-4 md:mx-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:px-0 md:pb-0">
       {
         tours.map((tour) => (
-          <div class="min-w-[300px] snap-center flex-shrink-0 md:min-w-0 group">
+          <div class="w-[80vw] max-w-[320px] snap-start flex-shrink-0 md:w-auto md:max-w-none group">
             <div class="bg-white border border-sandstone-100 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-500">
               <!-- Image container -->
               <div class="relative aspect-[4/3] overflow-hidden">
