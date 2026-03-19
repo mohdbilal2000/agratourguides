@@ -1,0 +1,70 @@
+---
+interface HreflangAlternate {
+  hreflang: string;
+  href: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogImage?: string;
+  ogType?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
+  hreflangAlternates?: HreflangAlternate[];
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage,
+  ogType = "website",
+  jsonLd,
+  noindex = false,
+  hreflangAlternates,
+} = Astro.props;
+
+const siteName = "Agra Tour Guides";
+const jsonLdArray = jsonLd
+  ? Array.isArray(jsonLd)
+    ? jsonLd
+    : [jsonLd]
+  : [];
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={siteName} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{ogImage && <meta name="twitter:image" content={ogImage} />}
+
+<!-- Hreflang -->
+{
+  hreflangAlternates &&
+    hreflangAlternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+    ))
+}
+
+<!-- JSON-LD -->
+{
+  jsonLdArray.map((ld) => (
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  ))
+}

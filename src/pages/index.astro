@@ -1,0 +1,169 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import HeroSection from '../components/sections/HeroSection.astro';
+import TrustBadges from '../components/sections/TrustBadges.astro';
+import FeatureGrid from '../components/sections/FeatureGrid.astro';
+import BentoDestinations from '../components/sections/BentoDestinations.astro';
+import PopularTours from '../components/sections/PopularTours.astro';
+import WhyChooseUs from '../components/sections/WhyChooseUs.astro';
+import TestimonialStrip from '../components/sections/TestimonialStrip.astro';
+import CTABanner from '../components/sections/CTABanner.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import AttractionCard from '../components/cards/AttractionCard.astro';
+import FAQAccordion from '../components/react/FAQAccordion';
+import { buildOrganizationSchema, buildWebSiteSchema, buildFAQSchema } from '../lib/schema';
+import { SITE_NAME, SITE_DESCRIPTION } from '../lib/constants';
+
+const jsonLd = [
+  buildOrganizationSchema(),
+  buildWebSiteSchema(),
+  buildFAQSchema([
+    { question: 'What is the best time to visit the Taj Mahal?', answer: 'The best time to visit the Taj Mahal is from October to March when the weather is pleasant with temperatures between 10-25°C. Early morning visits at sunrise offer the most magical experience with fewer crowds and beautiful golden light.' },
+    { question: 'How do I book a tour guide in Agra?', answer: 'You can book a licensed tour guide through our website by filling the inquiry form, contacting us on WhatsApp, or calling directly. We recommend booking at least 48 hours in advance, especially during peak season (October-March).' },
+    { question: 'What is the Golden Triangle tour?', answer: 'The Golden Triangle is India\'s most popular tourist circuit connecting Delhi, Agra, and Jaipur. The route forms a triangle on the map covering approximately 720 km. Our guided tours range from 3 to 7 days.' },
+    { question: 'Are your tour guides licensed and certified?', answer: 'Yes, all our tour guides are licensed by the Ministry of Tourism, Government of India. They are multilingual, experienced professionals with deep knowledge of history, culture, and local traditions.' },
+    { question: 'What is included in your tour packages?', answer: 'Our tour packages typically include a licensed guide, air-conditioned vehicle, hotel accommodation (for multi-day tours), monument entry fees, and 24/7 support. Airport transfers, meals, and tips are available as add-ons.' },
+  ]),
+];
+
+const topAttractions = [
+  {
+    title: 'Taj Mahal',
+    slug: 'taj-mahal',
+    city: 'agra',
+    image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+    description: 'One of the Seven Wonders of the World — an ivory-white marble mausoleum and UNESCO World Heritage Site.',
+    rating: 4.9,
+  },
+  {
+    title: 'Amber Fort',
+    slug: 'amber-fort',
+    city: 'jaipur',
+    image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
+    description: 'A majestic hilltop fort known for its artistic Hindu-Rajput architecture and Maota Lake views.',
+    rating: 4.8,
+  },
+  {
+    title: 'Red Fort',
+    slug: 'red-fort',
+    city: 'delhi',
+    image: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
+    description: 'A UNESCO World Heritage Site and iconic symbol of India built from red sandstone by Shah Jahan.',
+    rating: 4.7,
+  },
+  {
+    title: 'Hawa Mahal',
+    slug: 'hawa-mahal',
+    city: 'jaipur',
+    image: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80',
+    description: 'The Palace of Winds features 953 small windows — a masterpiece of Rajput architecture.',
+    rating: 4.7,
+  },
+  {
+    title: 'Qutub Minar',
+    slug: 'qutub-minar',
+    city: 'delhi',
+    image: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=80',
+    description: 'A 73-meter UNESCO World Heritage victory tower — the tallest brick minaret in the world.',
+    rating: 4.6,
+  },
+  {
+    title: 'Agra Fort',
+    slug: 'agra-fort',
+    city: 'agra',
+    image: 'https://images.pexels.com/photos/3881104/pexels-photo-3881104.jpeg?w=600&q=80',
+    description: 'A powerful Mughal fortress with stunning palaces, audience halls, and mosque interiors.',
+    rating: 4.7,
+  },
+];
+
+const homeFaqs = [
+  { question: 'What is the best time to visit the Taj Mahal?', answer: 'The best time to visit the Taj Mahal is from October to March when the weather is pleasant with temperatures between 10-25°C. Early morning visits at sunrise offer the most magical experience with fewer crowds and beautiful golden light.' },
+  { question: 'How do I book a tour guide in Agra?', answer: 'You can book a licensed tour guide through our website by filling the inquiry form, contacting us on WhatsApp, or calling directly. We recommend booking at least 48 hours in advance, especially during peak season (October-March).' },
+  { question: 'What is the Golden Triangle tour?', answer: 'The Golden Triangle is India\'s most popular tourist circuit connecting Delhi, Agra, and Jaipur. The route forms a triangle on the map covering approximately 720 km. Our guided tours range from 3 to 7 days covering major monuments, local culture, and hidden gems.' },
+  { question: 'Are your tour guides licensed and certified?', answer: 'Yes, all our tour guides are licensed by the Ministry of Tourism, Government of India. They are multilingual, experienced professionals with deep knowledge of history, culture, and local traditions of the Golden Triangle region.' },
+  { question: 'What is included in your tour packages?', answer: 'Our tour packages typically include a licensed guide, air-conditioned vehicle, hotel accommodation (for multi-day tours), monument entry fees, and 24/7 support. Airport transfers, meals, and tips are available as add-ons.' },
+];
+---
+
+<PageLayout
+  title={`${SITE_NAME} — Expert Tour Guides for Agra, Delhi & Jaipur`}
+  description={SITE_DESCRIPTION}
+  jsonLd={jsonLd}
+>
+  <!-- 1. Cinematic Hero -->
+  <HeroSection />
+
+  <!-- 2. Trust Badges (social proof bar) -->
+  <TrustBadges />
+
+  <!-- 3. Feature Grid (Our Services) -->
+  <FeatureGrid />
+
+  <!-- 4. Bento Grid Destinations -->
+  <BentoDestinations />
+
+  <!-- 5. Popular Tours (horizontal scroll on mobile) -->
+  <PopularTours />
+
+  <!-- 6. Why Choose Us (split layout) -->
+  <WhyChooseUs />
+
+  <!-- 7. Must-Visit Attractions -->
+  <Section id="attractions" class="bg-gray-950">
+    <Container>
+      <div class="text-center mb-16">
+        <p class="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-3">ICONIC LANDMARKS</p>
+        <h2 class="font-heading text-3xl md:text-5xl font-bold text-white mb-4">
+          Must-Visit Attractions
+        </h2>
+        <div class="w-16 h-1 bg-gradient-to-r from-amber-400 to-orange-500 mx-auto rounded-full mb-6"></div>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto font-accent italic">
+          From UNESCO World Heritage Sites to architectural marvels across three historic cities
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {topAttractions.map((attraction) => (
+          <AttractionCard {...attraction} />
+        ))}
+      </div>
+      <div class="text-center mt-12">
+        <a href="/agra/" class="inline-flex items-center gap-2 text-amber-400 font-semibold hover:text-amber-300 transition-colors group">
+          Explore All Attractions
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>
+        </a>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- 8. Testimonials -->
+  <TestimonialStrip />
+
+  <!-- 9. FAQs -->
+  <Section id="faqs" class="bg-stone-50">
+    <Container>
+      <div class="text-center mb-16">
+        <p class="text-sm font-semibold uppercase tracking-widest text-amber-600 mb-3">GOT QUESTIONS?</p>
+        <h2 class="font-heading text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+          Frequently Asked Questions
+        </h2>
+        <div class="w-16 h-1 bg-gradient-to-r from-amber-400 to-orange-500 mx-auto rounded-full mb-6"></div>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto font-accent italic">
+          Everything you need to know about touring India's Golden Triangle with us
+        </p>
+      </div>
+      <div class="max-w-3xl mx-auto">
+        <FAQAccordion items={homeFaqs} client:visible />
+      </div>
+    </Container>
+  </Section>
+
+  <!-- 10. Final CTA -->
+  <CTABanner
+    title="Ready to Explore India's Golden Triangle?"
+    subtitle="Get a personalized tour itinerary from our local experts. No commitment — just tell us your travel dates and interests."
+    ctaText="Get Free Quote"
+    ctaLink="/contact/"
+  />
+</PageLayout>

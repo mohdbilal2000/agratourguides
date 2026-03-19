@@ -1,0 +1,67 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import HeroSection from '../components/sections/HeroSection.astro';
+import CTABanner from '../components/sections/CTABanner.astro';
+import TrustBadges from '../components/sections/TrustBadges.astro';
+import { buildOrganizationSchema } from '../lib/schema';
+import { SITE_NAME } from '../lib/constants';
+
+const jsonLd = [buildOrganizationSchema()];
+---
+
+<PageLayout
+  title={`About Us — ${SITE_NAME}`}
+  description="Meet the team behind Agra Tour Guides. Licensed, multilingual tour guides with decades of experience in Agra, Delhi, and Jaipur's Golden Triangle."
+  jsonLd={jsonLd}
+>
+  <HeroSection
+    title="About Agra Tour Guides"
+    subtitle="Licensed, passionate local guides dedicated to sharing the real stories behind India's greatest monuments."
+    backgroundImage="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1920&q=80"
+  />
+
+  <Section>
+    <Container>
+      <div class="max-w-3xl mx-auto prose prose-lg dark:prose-invert">
+        <h2 class="font-heading">Who Are We?</h2>
+        <p>
+          We are a team of government-licensed tour guides based in Agra, specializing in the Golden Triangle circuit — Delhi, Agra, and Jaipur. With over 15 years of experience, we have guided thousands of travelers from around the world through India's most iconic heritage sites.
+        </p>
+
+        <h2 class="font-heading">Why Choose Us?</h2>
+        <ul>
+          <li><strong>Licensed & Certified</strong> — All guides hold credentials from the Ministry of Tourism, Government of India</li>
+          <li><strong>Multilingual</strong> — We offer tours in English, French, German, Spanish, and Hindi</li>
+          <li><strong>Local Expertise</strong> — Born and raised in the Golden Triangle, we share insider knowledge you won't find in guidebooks</li>
+          <li><strong>Personalized Service</strong> — Every itinerary is customized to your interests, pace, and budget</li>
+          <li><strong>Best Price Guarantee</strong> — Book directly with us and skip the aggregator markups</li>
+        </ul>
+
+        <h2 class="font-heading">Our Mission</h2>
+        <p>
+          We believe that great travel experiences come from authentic human connections. Our mission is to bring India's rich history and vibrant culture to life through storytelling, local insights, and genuine hospitality. Every tour is more than a sightseeing trip — it's a journey through centuries of history told by someone who lives and breathes it.
+        </p>
+
+        <h2 class="font-heading">What We Offer</h2>
+        <ul>
+          <li><strong>Private Tour Guide Services</strong> — Dedicated guides for the Taj Mahal, Agra Fort, and all major monuments</li>
+          <li><strong>Multi-Day Tour Packages</strong> — Golden Triangle tours from 3 to 7 days with hotel, transport, and guide</li>
+          <li><strong>Day Trips & Transfers</strong> — Same-day Agra from Delhi, Jaipur day tours, airport transfers</li>
+          <li><strong>Car Hire</strong> — Comfortable AC vehicles with experienced drivers</li>
+          <li><strong>Custom Itineraries</strong> — Tell us what you want, and we'll design the perfect trip</li>
+        </ul>
+      </div>
+    </Container>
+  </Section>
+
+  <TrustBadges />
+
+  <CTABanner
+    title="Ready to Explore with a Local Expert?"
+    subtitle="Get in touch and let us create your perfect Golden Triangle itinerary."
+    ctaText="Contact Us"
+    ctaHref="/contact/"
+  />
+</PageLayout>

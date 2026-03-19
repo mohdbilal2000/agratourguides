@@ -1,0 +1,200 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import Section from '../../components/ui/Section.astro';
+import HeroSection from '../../components/sections/HeroSection.astro';
+import CTABanner from '../../components/sections/CTABanner.astro';
+import AttractionCard from '../../components/cards/AttractionCard.astro';
+import TourCard from '../../components/cards/TourCard.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import FAQAccordion from '../../components/react/FAQAccordion';
+import InteractiveMap from '../../components/react/InteractiveMap';
+import { getCollection, render } from 'astro:content';
+import { buildTouristDestinationSchema, buildFAQSchema, buildBreadcrumbSchema } from '../../lib/schema';
+import { SITE_NAME, SITE_URL } from '../../lib/constants';
+
+export async function getStaticPaths() {
+  const cities = await getCollection('cities');
+  return cities.map((city) => ({
+    params: { city: city.data.slug },
+    props: { city },
+  }));
+}
+
+const { city } = Astro.props;
+const { Content } = await render(city);
+
+// Map city slugs to working Unsplash images since local images don't exist
+const cityHeroImages: Record<string, string> = {
+  'agra': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1920&q=80',
+  'delhi': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=1920&q=80',
+  'jaipur': 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=1920&q=80',
+};
+const heroImage = cityHeroImages[city.data.slug] || city.data.heroImage;
+
+const attractionImages: Record<string, string> = {
+  'taj-mahal': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'agra-fort': 'https://images.pexels.com/photos/3881104/pexels-photo-3881104.jpeg?w=600&q=80',
+  'fatehpur-sikri': 'https://images.pexels.com/photos/1007426/pexels-photo-1007426.jpeg?w=600&q=80',
+  'mehtab-bagh': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'red-fort': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
+  'qutub-minar': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
+  'india-gate': 'https://images.pexels.com/photos/1603650/pexels-photo-1603650.jpeg?w=600&q=80',
+  'humayuns-tomb': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'amber-fort': 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
+  'hawa-mahal': 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80',
+  'city-palace': 'https://images.unsplash.com/photo-1603262110263-fb0112e7cc33?w=600&q=80',
+  'jantar-mantar': 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80',
+};
+
+const tourImages: Record<string, string> = {
+  'golden-triangle-3-days': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'golden-triangle-5-days': 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
+  'same-day-agra-from-delhi': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'agra-overnight-from-delhi': 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80',
+  'delhi-day-tour': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
+  'jaipur-day-tour': 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80',
+};
+
+const allAttractions = await getCollection('attractions');
+const cityAttractions = allAttractions.filter((a) => a.data.city === city.data.slug);
+
+const allTours = await getCollection('tours');
+const cityTours = allTours.filter((t) => t.data.cities.includes(city.data.slug));
+
+const markers = cityAttractions.map((a) => ({
+  lat: a.data.location.lat,
+  lng: a.data.location.lng,
+  title: a.data.title,
+  link: `/${city.data.slug}/${a.data.slug}/`,
+}));
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: city.data.title },
+];
+
+const jsonLd = [
+  buildTouristDestinationSchema({
+    title: city.data.title,
+    description: city.data.description,
+    mapCenter: city.data.mapCenter,
+    highlights: city.data.highlights,
+    url: `${SITE_URL}/${city.data.slug}/`,
+  }),
+  buildFAQSchema(city.data.faqs),
+  buildBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: city.data.title, url: `${SITE_URL}/${city.data.slug}/` },
+  ]),
+];
+---
+
+<PageLayout
+  title={`${city.data.metaTitle} — ${SITE_NAME}`}
+  description={city.data.metaDescription}
+  jsonLd={jsonLd}
+>
+  <HeroSection
+    title={city.data.title}
+    subtitle={city.data.description}
+    ctaText={`Explore ${city.data.title} Tours`}
+    ctaHref="/tours/"
+    backgroundImage={heroImage}
+  />
+
+  <Section>
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+
+      <!-- City Content -->
+      <div class="max-w-3xl mx-auto prose prose-lg dark:prose-invert mt-8">
+        <Content />
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Attractions -->
+  <Section class="bg-stone-50 dark:bg-stone-900" id="attractions">
+    <Container>
+      <h2 class="font-heading text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        Top Attractions in {city.data.title}
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {cityAttractions.map((attraction) => (
+          <AttractionCard
+            title={attraction.data.title}
+            slug={attraction.data.slug}
+            city={attraction.data.city}
+            image={attractionImages[attraction.data.slug] || attraction.data.heroImage}
+            description={attraction.data.description}
+            duration={attraction.data.visitInfo.duration}
+          />
+        ))}
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Map -->
+  {markers.length > 0 && (
+    <Section id="map">
+      <Container>
+        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Explore {city.data.title} on the Map
+        </h2>
+        <div class="rounded-2xl overflow-hidden shadow-lg h-[400px] md:h-[500px]">
+          <InteractiveMap
+            markers={markers}
+            center={city.data.mapCenter}
+            zoom={12}
+            client:only="react"
+          />
+        </div>
+      </Container>
+    </Section>
+  )}
+
+  <!-- Tours for this city -->
+  {cityTours.length > 0 && (
+    <Section class="bg-stone-50 dark:bg-stone-900">
+      <Container>
+        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Tours Covering {city.data.title}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {cityTours.map((tour) => (
+            <TourCard
+              title={tour.data.title}
+              slug={tour.data.slug}
+              image={tourImages[tour.data.slug] || tour.data.heroImage}
+              duration={tour.data.duration}
+              price={tour.data.priceFrom}
+              highlights={tour.data.highlights.slice(0, 3)}
+            />
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )}
+
+  <!-- FAQs -->
+  {city.data.faqs.length > 0 && (
+    <Section id="faqs">
+      <Container>
+        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Frequently Asked Questions About {city.data.title}
+        </h2>
+        <div class="max-w-3xl mx-auto">
+          <FAQAccordion items={city.data.faqs} client:visible />
+        </div>
+      </Container>
+    </Section>
+  )}
+
+  <CTABanner
+    title={`Plan Your ${city.data.title} Trip`}
+    subtitle="Get a free custom itinerary from our local expert guides."
+    ctaText="Get Free Quote"
+    ctaHref="/contact/"
+  />
+</PageLayout>

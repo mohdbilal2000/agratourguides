@@ -1,0 +1,144 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import Section from '../../components/ui/Section.astro';
+import CTABanner from '../../components/sections/CTABanner.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import GuideCard from '../../components/cards/GuideCard.astro';
+import FAQAccordion from '../../components/react/FAQAccordion';
+import { getCollection, render } from 'astro:content';
+import { buildArticleSchema, buildFAQSchema, buildBreadcrumbSchema } from '../../lib/schema';
+import { SITE_NAME, SITE_URL } from '../../lib/constants';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+  return guides.map((guide) => ({
+    params: { slug: guide.data.slug },
+    props: { guide },
+  }));
+}
+
+const { guide } = Astro.props;
+const { Content } = await render(guide);
+
+const guideImages: Record<string, string> = {
+  'best-time-to-visit-taj-mahal': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'delhi-to-agra-how-to-reach': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
+  'golden-triangle-itinerary-planning': 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
+};
+
+const allGuides = await getCollection('guides');
+const relatedGuides = allGuides
+  .filter((g) => g.data.slug !== guide.data.slug)
+  .slice(0, 3);
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Guides', href: '/guides/' },
+  { label: guide.data.title },
+];
+
+const jsonLd = [
+  buildArticleSchema({
+    title: guide.data.title,
+    description: guide.data.description,
+    author: guide.data.author,
+    publishedAt: guide.data.publishedAt,
+    updatedAt: guide.data.updatedAt,
+    heroImage: guide.data.heroImage,
+    url: `${SITE_URL}/guides/${guide.data.slug}/`,
+  }),
+  buildFAQSchema(guide.data.faqs),
+  buildBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Guides', url: `${SITE_URL}/guides/` },
+    { name: guide.data.title, url: `${SITE_URL}/guides/${guide.data.slug}/` },
+  ]),
+];
+---
+
+<PageLayout
+  title={`${guide.data.metaTitle} — ${SITE_NAME}`}
+  description={guide.data.metaDescription}
+  jsonLd={jsonLd}
+>
+  <Section>
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+
+      <article class="max-w-3xl mx-auto mt-8">
+        <!-- Article Header -->
+        <header class="mb-10">
+          <span class="inline-block px-3 py-1 text-xs font-semibold bg-amber-100 text-amber-800 rounded-full mb-4 dark:bg-amber-900/30 dark:text-amber-300">
+            {guide.data.category.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
+          </span>
+          <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            {guide.data.title}
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">{guide.data.description}</p>
+          <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <span>By {guide.data.author}</span>
+            <span>|</span>
+            <time datetime={guide.data.publishedAt.toISOString()}>
+              {guide.data.publishedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+            {guide.data.updatedAt > guide.data.publishedAt && (
+              <>
+                <span>|</span>
+                <span>Updated: {guide.data.updatedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              </>
+            )}
+          </div>
+        </header>
+
+        <!-- Article Content -->
+        <div class="prose prose-lg dark:prose-invert prose-headings:font-heading prose-a:text-amber-700 dark:prose-a:text-amber-400">
+          <Content />
+        </div>
+      </article>
+    </Container>
+  </Section>
+
+  <!-- FAQs -->
+  {guide.data.faqs.length > 0 && (
+    <Section class="bg-stone-50 dark:bg-stone-900" id="faqs">
+      <Container>
+        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Frequently Asked Questions
+        </h2>
+        <div class="max-w-3xl mx-auto">
+          <FAQAccordion items={guide.data.faqs} client:visible />
+        </div>
+      </Container>
+    </Section>
+  )}
+
+  <!-- Related Guides -->
+  {relatedGuides.length > 0 && (
+    <Section>
+      <Container>
+        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          More Travel Guides
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {relatedGuides.map((g) => (
+            <GuideCard
+              title={g.data.title}
+              slug={g.data.slug}
+              image={guideImages[g.data.slug] || g.data.heroImage}
+              description={g.data.description}
+              category={g.data.category}
+            />
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )}
+
+  <CTABanner
+    title="Need Help Planning Your Trip?"
+    subtitle="Our local experts can create a custom itinerary based on your interests and budget."
+    ctaText="Get Free Quote"
+    ctaHref="/contact/"
+  />
+</PageLayout>

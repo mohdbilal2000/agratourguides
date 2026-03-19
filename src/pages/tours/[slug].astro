@@ -1,0 +1,238 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import Section from '../../components/ui/Section.astro';
+import HeroSection from '../../components/sections/HeroSection.astro';
+import CTABanner from '../../components/sections/CTABanner.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import Badge from '../../components/ui/Badge.astro';
+import TourCard from '../../components/cards/TourCard.astro';
+import FAQAccordion from '../../components/react/FAQAccordion';
+import BookingForm from '../../components/react/BookingForm';
+import { getCollection, render } from 'astro:content';
+import { buildTouristTripSchema, buildFAQSchema, buildBreadcrumbSchema } from '../../lib/schema';
+import { SITE_NAME, SITE_URL } from '../../lib/constants';
+
+export async function getStaticPaths() {
+  const tours = await getCollection('tours');
+  return tours.map((tour) => ({
+    params: { slug: tour.data.slug },
+    props: { tour },
+  }));
+}
+
+const { tour } = Astro.props;
+const { Content } = await render(tour);
+
+const tourImages: Record<string, string> = {
+  'golden-triangle-3-days': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'golden-triangle-5-days': 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
+  'same-day-agra-from-delhi': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'agra-overnight-from-delhi': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'delhi-day-tour': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
+  'jaipur-day-tour': 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80',
+};
+
+const allTours = await getCollection('tours');
+const relatedTours = allTours
+  .filter((t) => t.data.slug !== tour.data.slug && t.data.cities.some((c: string) => tour.data.cities.includes(c)))
+  .slice(0, 3);
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Tours', href: '/tours/' },
+  { label: tour.data.title },
+];
+
+const jsonLd = [
+  buildTouristTripSchema({
+    title: tour.data.title,
+    description: tour.data.description,
+    itinerary: tour.data.itinerary,
+    priceFrom: tour.data.priceFrom,
+    currency: tour.data.currency,
+    duration: tour.data.duration,
+    url: `${SITE_URL}/tours/${tour.data.slug}/`,
+  }),
+  buildFAQSchema(tour.data.faqs),
+  buildBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Tours', url: `${SITE_URL}/tours/` },
+    { name: tour.data.title, url: `${SITE_URL}/tours/${tour.data.slug}/` },
+  ]),
+];
+---
+
+<PageLayout
+  title={`${tour.data.metaTitle} — ${SITE_NAME}`}
+  description={tour.data.metaDescription}
+  jsonLd={jsonLd}
+>
+  <HeroSection
+    title={tour.data.title}
+    subtitle={tour.data.description}
+    ctaText="Inquire Now"
+    ctaHref="#booking"
+    backgroundImage={tourImages[tour.data.slug] || tour.data.heroImage}
+  />
+
+  <Section>
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-8">
+        <!-- Main Content -->
+        <div class="lg:col-span-2">
+          <!-- Quick Info Bar -->
+          <div class="flex flex-wrap gap-4 mb-8">
+            <Badge variant="gold">{tour.data.duration}</Badge>
+            <Badge variant="green">From ${tour.data.priceFrom} {tour.data.currency}</Badge>
+            {tour.data.cities.map((city: string) => (
+              <Badge>{city.charAt(0).toUpperCase() + city.slice(1)}</Badge>
+            ))}
+          </div>
+
+          <!-- Highlights -->
+          <div class="mb-10">
+            <h2 class="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-4">Tour Highlights</h2>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {tour.data.highlights.map((h: string) => (
+                <li class="flex items-start gap-2 text-gray-700 dark:text-gray-300">
+                  <span class="text-amber-600 mt-1">&#10003;</span>
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- MDX Content -->
+          <div class="prose prose-lg dark:prose-invert mb-10">
+            <Content />
+          </div>
+
+          <!-- Itinerary -->
+          <div class="mb-10">
+            <h2 class="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-6">Day-by-Day Itinerary</h2>
+            <div class="space-y-6">
+              {tour.data.itinerary.map((day: { day: number; title: string; description: string; locations: string[] }) => (
+                <div class="relative pl-8 border-l-2 border-amber-200 dark:border-amber-800">
+                  <div class="absolute -left-3 top-0 w-6 h-6 bg-amber-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    {day.day}
+                  </div>
+                  <h3 class="font-heading text-lg font-bold text-gray-900 dark:text-white mb-2">
+                    Day {day.day}: {day.title}
+                  </h3>
+                  <p class="text-gray-600 dark:text-gray-300 mb-2">{day.description}</p>
+                  <div class="flex flex-wrap gap-2">
+                    {day.locations.map((loc: string) => (
+                      <span class="text-xs bg-stone-100 dark:bg-stone-700 text-stone-600 dark:text-stone-300 px-2 py-1 rounded">
+                        {loc}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- Includes / Excludes -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            <div>
+              <h3 class="font-heading text-xl font-bold text-gray-900 dark:text-white mb-4">What's Included</h3>
+              <ul class="space-y-2">
+                {tour.data.includes.map((item: string) => (
+                  <li class="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                    <span class="text-emerald-600 mt-0.5">&#10003;</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-heading text-xl font-bold text-gray-900 dark:text-white mb-4">Not Included</h3>
+              <ul class="space-y-2">
+                {tour.data.excludes.map((item: string) => (
+                  <li class="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm">
+                    <span class="text-red-500 mt-0.5">&#10007;</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside>
+          <div class="bg-white dark:bg-stone-800 rounded-2xl shadow-lg p-6 sticky top-24">
+            <div class="text-center mb-4">
+              <p class="text-sm text-gray-500">Starting from</p>
+              <p class="text-4xl font-bold text-amber-600">${tour.data.priceFrom}</p>
+              <p class="text-sm text-gray-500">per person</p>
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-300 space-y-2 mb-6">
+              <p class="flex justify-between"><span>Duration:</span> <strong>{tour.data.duration}</strong></p>
+              <p class="flex justify-between"><span>Group Size:</span> <strong>Private</strong></p>
+              <p class="flex justify-between"><span>Languages:</span> <strong>EN, FR, DE</strong></p>
+            </div>
+            <a href="#booking" class="block w-full text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-700 transition-colors mb-3">
+              Inquire Now
+            </a>
+            <a href={`https://wa.me/919999999999?text=Hi! I'm interested in the ${tour.data.title}`} class="block w-full text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition-colors" target="_blank" rel="noopener noreferrer">
+              WhatsApp Us
+            </a>
+          </div>
+        </aside>
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Booking Form -->
+  <Section id="booking" class="bg-stone-50 dark:bg-stone-900">
+    <Container>
+      <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        Book This Tour
+      </h2>
+      <div class="max-w-2xl mx-auto">
+        <BookingForm client:visible />
+      </div>
+    </Container>
+  </Section>
+
+  <!-- FAQs -->
+  {tour.data.faqs.length > 0 && (
+    <Section id="faqs">
+      <Container>
+        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Frequently Asked Questions
+        </h2>
+        <div class="max-w-3xl mx-auto">
+          <FAQAccordion items={tour.data.faqs} client:visible />
+        </div>
+      </Container>
+    </Section>
+  )}
+
+  <!-- Related Tours -->
+  {relatedTours.length > 0 && (
+    <Section class="bg-stone-50 dark:bg-stone-900">
+      <Container>
+        <h2 class="font-heading text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          You Might Also Like
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {relatedTours.map((t) => (
+            <TourCard
+              title={t.data.title}
+              slug={t.data.slug}
+              image={tourImages[t.data.slug] || t.data.heroImage}
+              duration={t.data.duration}
+              price={t.data.priceFrom}
+              highlights={t.data.highlights.slice(0, 3)}
+            />
+          ))}
+        </div>
+      </Container>
+    </Section>
+  )}
+</PageLayout>

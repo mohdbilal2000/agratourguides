@@ -1,0 +1,99 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "agra": "Agra",
+    "delhi": "Delhi",
+    "jaipur": "Jaipur",
+    "tours": "Circuits",
+    "guides": "Guides",
+    "about": "\u00c0 propos",
+    "contact": "Contact",
+    "bookNow": "R\u00e9server"
+  },
+  "hero": {
+    "cta": "Planifiez votre voyage",
+    "scrollDown": "D\u00e9filez pour explorer"
+  },
+  "services": {
+    "title": "Nos Services",
+    "guides": "Guides touristiques agr\u00e9\u00e9s",
+    "guidesDesc": "Guides certifi\u00e9s par le gouvernement, multilingues avec une connaissance locale approfondie",
+    "packages": "Forfaits touristiques",
+    "packagesDesc": "Forfaits multi-jours avec h\u00f4tel, transport et visites guid\u00e9es",
+    "dayTrips": "Excursions & Transferts",
+    "dayTripsDesc": "Excursions d'une journ\u00e9e et transferts a\u00e9roport/ville confortables",
+    "carHire": "Location de voiture",
+    "carHireDesc": "V\u00e9hicules climatis\u00e9s avec chauffeurs exp\u00e9riment\u00e9s"
+  },
+  "trust": {
+    "happyTravelers": "1 000+ voyageurs satisfaits",
+    "licensed": "Guides agr\u00e9\u00e9s et certifi\u00e9s",
+    "support": "Assistance 24h/24",
+    "bestPrice": "Garantie meilleur prix"
+  },
+  "cta": {
+    "getQuote": "Devis gratuit",
+    "whatsapp": "WhatsApp",
+    "inquireNow": "Demander un devis",
+    "viewDetails": "Voir les d\u00e9tails",
+    "readMore": "Lire la suite",
+    "explore": "Explorer",
+    "viewAllTours": "Voir tous les circuits",
+    "bookGuide": "R\u00e9server un guide"
+  },
+  "booking": {
+    "step1Title": "Type de circuit",
+    "step2Title": "D\u00e9tails du voyage",
+    "step3Title": "Coordonn\u00e9es",
+    "step4Title": "V\u00e9rification et envoi",
+    "tourType": "Type de circuit",
+    "destination": "Destination",
+    "travelDate": "Date de voyage",
+    "travelers": "Nombre de voyageurs",
+    "requirements": "Demandes sp\u00e9ciales",
+    "name": "Nom complet",
+    "email": "Adresse e-mail",
+    "phone": "T\u00e9l\u00e9phone / WhatsApp",
+    "contactMethod": "Mode de contact pr\u00e9f\u00e9r\u00e9",
+    "submit": "Envoyer la demande",
+    "next": "Suivant",
+    "back": "Retour",
+    "success": "Merci ! Nous vous r\u00e9pondrons dans les 2 heures."
+  },
+  "footer": {
+    "tagline": "Guides touristiques experts du Triangle d'Or de l'Inde depuis 2010",
+    "destinations": "Destinations",
+    "popularTours": "Circuits populaires",
+    "contactInfo": "Coordonn\u00e9es",
+    "copyright": "Tous droits r\u00e9serv\u00e9s.",
+    "privacy": "Politique de confidentialit\u00e9"
+  },
+  "common": {
+    "from": "\u00c0 partir de",
+    "perPerson": "par personne",
+    "duration": "Dur\u00e9e",
+    "includes": "Inclus",
+    "excludes": "Non inclus",
+    "highlights": "Points forts",
+    "itinerary": "Itin\u00e9raire",
+    "faqs": "Questions fr\u00e9quentes",
+    "relatedTours": "Circuits associ\u00e9s",
+    "relatedAttractions": "Attractions associ\u00e9es",
+    "entryFee": "Tarif d'entr\u00e9e",
+    "timings": "Horaires",
+    "closedOn": "Ferm\u00e9",
+    "bestTime": "Meilleure p\u00e9riode",
+    "visitDuration": "Dur\u00e9e de visite",
+    "insiderTips": "Conseils d'initi\u00e9",
+    "location": "Emplacement",
+    "photoGallery": "Galerie photos"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Fran\u00e7ais",
+    "de": "Deutsch",
+    "zh": "\u4e2d\u6587",
+    "es": "Espa\u00f1ol",
+    "ja": "\u65e5\u672c\u8a9e"
+  }
+}

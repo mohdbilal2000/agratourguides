@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "agra": "Agra",
+    "delhi": "Delhi",
+    "jaipur": "Jaipur",
+    "tours": "Touren",
+    "guides": "Reisef\u00fchrer",
+    "about": "\u00dcber uns",
+    "contact": "Kontakt",
+    "bookNow": "Jetzt buchen"
+  },
+  "hero": {
+    "cta": "Tour planen",
+    "scrollDown": "Scrollen zum Entdecken"
+  },
+  "trust": {
+    "happyTravelers": "\u00dcber 1.000 zufriedene Reisende",
+    "licensed": "Lizenzierte & zertifizierte Guides",
+    "support": "24/7 Unterst\u00fctzung",
+    "bestPrice": "Bestpreisgarantie"
+  },
+  "cta": {
+    "getQuote": "Kostenloses Angebot",
+    "whatsapp": "WhatsApp",
+    "inquireNow": "Jetzt anfragen",
+    "viewDetails": "Details ansehen",
+    "readMore": "Weiterlesen",
+    "explore": "Entdecken",
+    "viewAllTours": "Alle Touren ansehen",
+    "bookGuide": "Guide buchen"
+  },
+  "footer": {
+    "tagline": "Experten-Reisef\u00fchrer f\u00fcr Indiens Goldenes Dreieck seit 2010",
+    "destinations": "Reiseziele",
+    "popularTours": "Beliebte Touren",
+    "contactInfo": "Kontaktdaten",
+    "copyright": "Alle Rechte vorbehalten.",
+    "privacy": "Datenschutz"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Fran\u00e7ais",
+    "de": "Deutsch",
+    "zh": "\u4e2d\u6587",
+    "es": "Espa\u00f1ol",
+    "ja": "\u65e5\u672c\u8a9e"
+  }
+}

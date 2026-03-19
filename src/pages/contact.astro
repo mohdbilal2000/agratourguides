@@ -1,0 +1,73 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import BookingForm from '../components/react/BookingForm';
+import { buildOrganizationSchema } from '../lib/schema';
+import { SITE_NAME, CONTACT_EMAIL, CONTACT_PHONE, WHATSAPP_NUMBER } from '../lib/constants';
+
+const jsonLd = [buildOrganizationSchema()];
+---
+
+<PageLayout
+  title={`Contact Us — ${SITE_NAME}`}
+  description="Book your Golden Triangle tour or ask us anything. Reach us via WhatsApp, email, or phone. We respond within 2 hours."
+  jsonLd={jsonLd}
+>
+  <Section>
+    <Container>
+      <div class="text-center mb-12">
+        <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          Get in Touch
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Ready to plan your Golden Triangle adventure? Fill out the form below or contact us directly. We typically respond within 2 hours.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Contact Info -->
+        <div class="space-y-8">
+          <div>
+            <h3 class="font-heading text-xl font-bold text-gray-900 dark:text-white mb-2">WhatsApp</h3>
+            <a href={`https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}?text=Hi! I'm interested in booking a tour.`} class="text-emerald-600 hover:underline font-medium" target="_blank" rel="noopener noreferrer">
+              {WHATSAPP_NUMBER}
+            </a>
+            <p class="text-sm text-gray-500 mt-1">Fastest way to reach us — instant replies</p>
+          </div>
+
+          <div>
+            <h3 class="font-heading text-xl font-bold text-gray-900 dark:text-white mb-2">Email</h3>
+            <a href={`mailto:${CONTACT_EMAIL}`} class="text-amber-700 hover:underline font-medium">
+              {CONTACT_EMAIL}
+            </a>
+            <p class="text-sm text-gray-500 mt-1">For detailed inquiries and custom itineraries</p>
+          </div>
+
+          <div>
+            <h3 class="font-heading text-xl font-bold text-gray-900 dark:text-white mb-2">Phone</h3>
+            <a href={`tel:${CONTACT_PHONE.replace(/[^0-9+]/g, '')}`} class="text-amber-700 hover:underline font-medium">
+              {CONTACT_PHONE}
+            </a>
+            <p class="text-sm text-gray-500 mt-1">Available 8 AM — 10 PM IST</p>
+          </div>
+
+          <div>
+            <h3 class="font-heading text-xl font-bold text-gray-900 dark:text-white mb-2">Office</h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Agra Tour Guides<br />
+              Near Taj Mahal East Gate<br />
+              Agra, Uttar Pradesh 282001<br />
+              India
+            </p>
+          </div>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="lg:col-span-2">
+          <BookingForm client:load />
+        </div>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

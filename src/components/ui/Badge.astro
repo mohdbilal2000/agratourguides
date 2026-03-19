@@ -1,0 +1,25 @@
+---
+interface Props {
+  variant?: "default" | "gold" | "green" | "red";
+  class?: string;
+}
+
+const { variant = "default", class: className } = Astro.props;
+
+const variantClasses: Record<string, string> = {
+  default: "bg-sandstone-100 text-sandstone-700",
+  gold: "bg-gold-100 text-gold-800",
+  green: "bg-jade-light text-jade-dark",
+  red: "bg-ruby-light text-ruby-dark",
+};
+---
+
+<span
+  class:list={[
+    "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+    variantClasses[variant],
+    className,
+  ]}
+>
+  <slot />
+</span>

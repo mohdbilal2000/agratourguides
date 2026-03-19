@@ -1,0 +1,196 @@
+---
+import Container from "../ui/Container.astro";
+
+interface Destination {
+  name: string;
+  slug: string;
+  image: string;
+  alt: string;
+  attractions: number;
+  colSpan: string;
+  rowSpan: string;
+  minHeight: string;
+}
+
+const destinations: Destination[] = [
+  {
+    name: "Agra",
+    slug: "/agra",
+    image:
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80",
+    alt: "Taj Mahal reflected in water at sunrise in Agra",
+    attractions: 12,
+    colSpan: "md:col-span-1 lg:col-span-2",
+    rowSpan: "lg:row-span-2",
+    minHeight: "min-h-[250px] lg:min-h-[540px]",
+  },
+  {
+    name: "Delhi",
+    slug: "/delhi",
+    image:
+      "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80",
+    alt: "Red Fort monument in Delhi with clear sky",
+    attractions: 18,
+    colSpan: "md:col-span-1 lg:col-span-2",
+    rowSpan: "",
+    minHeight: "min-h-[250px] lg:min-h-[260px]",
+  },
+  {
+    name: "Jaipur",
+    slug: "/jaipur",
+    image:
+      "https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=800&q=80",
+    alt: "Hawa Mahal palace facade in Jaipur",
+    attractions: 15,
+    colSpan: "",
+    rowSpan: "",
+    minHeight: "min-h-[250px] lg:min-h-[260px]",
+  },
+];
+---
+
+<section class="py-20 md:py-28 bg-stone-50" id="destinations">
+  <Container>
+    {/* Section Header */}
+    <div class="mb-12 md:mb-16 text-center">
+      <h2
+        class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-stone-900"
+      >
+        Explore Destinations
+      </h2>
+      <div
+        class="mt-4 mx-auto h-1 w-16 rounded-full bg-gradient-to-r from-amber-500 to-orange-500"
+      >
+      </div>
+      <p class="mt-5 text-lg md:text-xl italic text-stone-600 font-serif">
+        Three cities, centuries of history, one unforgettable journey
+      </p>
+    </div>
+
+    {/* Bento Grid */}
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 auto-rows-auto"
+    >
+      {
+        destinations.map((dest) => (
+          <a
+            href={dest.slug}
+            class:list={[
+              "bento-tile group relative block overflow-hidden rounded-2xl",
+              dest.colSpan,
+              dest.rowSpan,
+              dest.minHeight,
+            ]}
+          >
+            {/* Background Image */}
+            <img
+              src={dest.image}
+              alt={dest.alt}
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 z-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+
+            {/* Gradient Overlay */}
+            <div class="absolute inset-0 z-[1] bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+
+            {/* Content */}
+            <div class="relative z-10 flex h-full flex-col justify-end p-5 md:p-7">
+              <span class="mb-1.5 inline-flex w-fit items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur-sm">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-3.5 w-3.5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                {dest.attractions} Attractions
+              </span>
+              <h3 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-tight">
+                {dest.name}
+              </h3>
+            </div>
+
+            {/* Arrow Button */}
+            <div class="absolute bottom-5 right-5 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-all duration-300 group-hover:bg-amber-500 group-hover:text-white md:bottom-7 md:right-7">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          </a>
+        ))
+      }
+
+      {/* Golden Triangle Info Tile */}
+      <div
+        class="relative flex min-h-[250px] flex-col justify-between overflow-hidden rounded-2xl border border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50 p-6 md:p-7 lg:min-h-[260px]"
+      >
+        {/* Decorative circles */}
+        <div
+          class="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-amber-400/10"
+        >
+        </div>
+        <div
+          class="pointer-events-none absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-orange-400/10"
+        >
+        </div>
+
+        <div class="relative z-10">
+          {/* Golden Triangle Icon */}
+          <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/15">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-amber-600"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon points="12 2 22 20 2 20"></polygon>
+            </svg>
+          </div>
+
+          <h3 class="text-lg font-bold text-stone-900">The Golden Triangle</h3>
+          <p class="mt-2 text-sm leading-relaxed text-stone-700">
+            India's most iconic tourism circuit connecting three cities of
+            incredible heritage
+          </p>
+        </div>
+
+        <a
+          href="/tours/golden-triangle-3-days/"
+          class="relative z-10 mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-700 transition-colors duration-200 hover:text-amber-900"
+        >
+          Learn More
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </Container>
+</section>

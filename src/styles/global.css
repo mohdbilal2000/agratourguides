@@ -1,0 +1,421 @@
+@import "tailwindcss";
+
+/* Font imports */
+@import "@fontsource-variable/playfair-display";
+@import "@fontsource-variable/inter";
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/cormorant-garamond/700.css";
+
+/* ──────────────────────────────────────────────
+   Design Tokens
+   ────────────────────────────────────────────── */
+
+@theme {
+  /* ── Typography ────────────────────────────── */
+  --font-heading: "Playfair Display Variable", "Georgia", serif;
+  --font-body: "Inter Variable", "system-ui", sans-serif;
+  --font-accent: "Cormorant Garamond", "Georgia", serif;
+
+  /* ── Gold Primary (warm-shifted) ─────────── */
+  --color-gold-50: #FFFBEB;
+  --color-gold-100: #FEF3C7;
+  --color-gold-200: #FDE68A;
+  --color-gold-300: #FCD34D;
+  --color-gold-400: #FBBF24;
+  --color-gold-500: #F59E0B;
+  --color-gold-600: #D97706;
+  --color-gold-700: #B45309;
+  --color-gold-800: #92400E;
+  --color-gold-900: #78350F;
+  --color-gold-950: #451A03;
+
+  /* ── Sandstone ─────────────────────────────── */
+  --color-sandstone-50: #FAF5F0;
+  --color-sandstone-100: #F5EDE3;
+  --color-sandstone-200: #E8D9C8;
+  --color-sandstone-300: #D9C3A9;
+  --color-sandstone-400: #C4A67E;
+  --color-sandstone-500: #AB875B;
+  --color-sandstone-600: #8E6D45;
+  --color-sandstone-700: #6E5436;
+  --color-sandstone-800: #52402A;
+  --color-sandstone-900: #3D2E1E;
+  --color-sandstone-950: #2A1F14;
+
+  /* ── Warm Gray (text scale) ────────────────── */
+  --color-warm-gray-50: #FAFAF8;
+  --color-warm-gray-100: #F5F5F0;
+  --color-warm-gray-200: #E8E8E0;
+  --color-warm-gray-300: #D4D4CC;
+  --color-warm-gray-400: #A8A89E;
+  --color-warm-gray-500: #787872;
+  --color-warm-gray-600: #5C5C56;
+  --color-warm-gray-700: #434340;
+  --color-warm-gray-800: #2E2E2B;
+  --color-warm-gray-900: #1C1C1A;
+  --color-warm-gray-950: #0F0F0E;
+
+  /* ── Premium Neutrals ──────────────────────── */
+  --color-midnight: #0f172a;
+  --color-ivory: #faf7f2;
+
+  /* ── Accent Colors ─────────────────────────── */
+  --color-ruby: #DC2626;
+  --color-ruby-light: #FEE2E2;
+  --color-ruby-dark: #991B1B;
+
+  --color-jade: #059669;
+  --color-jade-light: #D1FAE5;
+  --color-jade-dark: #065F46;
+}
+
+/* ──────────────────────────────────────────────
+   CSS Custom Properties (light mode defaults)
+   ────────────────────────────────────────────── */
+
+:root {
+  --background: var(--color-sandstone-50);
+  --foreground: var(--color-sandstone-900);
+  --background-alt: #FFFFFF;
+  --foreground-muted: var(--color-sandstone-600);
+  --border: var(--color-sandstone-200);
+  --ring: var(--color-gold-500);
+  --selection-bg: var(--color-gold-200);
+  --selection-fg: var(--color-gold-900);
+  --scrollbar-track: var(--color-sandstone-100);
+  --scrollbar-thumb: var(--color-gold-300);
+  --scrollbar-thumb-hover: var(--color-gold-500);
+}
+
+/* ── Dark Mode ───────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #1C1510;
+    --foreground: var(--color-sandstone-100);
+    --background-alt: var(--color-sandstone-950);
+    --foreground-muted: var(--color-sandstone-400);
+    --border: var(--color-sandstone-800);
+    --ring: var(--color-gold-400);
+    --selection-bg: var(--color-gold-800);
+    --selection-fg: var(--color-gold-100);
+    --scrollbar-track: var(--color-sandstone-950);
+    --scrollbar-thumb: var(--color-gold-700);
+    --scrollbar-thumb-hover: var(--color-gold-600);
+  }
+}
+
+[data-theme="dark"] {
+  --background: #1C1510;
+  --foreground: var(--color-sandstone-100);
+  --background-alt: var(--color-sandstone-950);
+  --foreground-muted: var(--color-sandstone-400);
+  --border: var(--color-sandstone-800);
+  --ring: var(--color-gold-400);
+  --selection-bg: var(--color-gold-800);
+  --selection-fg: var(--color-gold-100);
+  --scrollbar-track: var(--color-sandstone-950);
+  --scrollbar-thumb: var(--color-gold-700);
+  --scrollbar-thumb-hover: var(--color-gold-600);
+}
+
+/* ──────────────────────────────────────────────
+   Base Styles
+   ────────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* ──────────────────────────────────────────────
+   Premium Scrollbar
+   ────────────────────────────────────────────── */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* ──────────────────────────────────────────────
+   Typography Utilities
+   ────────────────────────────────────────────── */
+
+.heading-display {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.heading-editorial {
+  font-family: var(--font-accent);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* ──────────────────────────────────────────────
+   Glassmorphism
+   ────────────────────────────────────────────── */
+
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-gold {
+  background: rgba(217, 119, 6, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(217, 119, 6, 0.15);
+}
+
+/* ──────────────────────────────────────────────
+   Keyframe Animations
+   ────────────────────────────────────────────── */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(217, 119, 6, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(217, 119, 6, 0.6);
+  }
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   Animation Utility Classes
+   ────────────────────────────────────────────── */
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fade-in 0.5s ease forwards;
+}
+
+.animate-slide-in-left {
+  opacity: 0;
+  animation: slide-in-left 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-in-right {
+  opacity: 0;
+  animation: slide-in-right 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-in {
+  opacity: 0;
+  animation: scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+/* ── Animation Delays ────────────────────────── */
+
+.animate-delay-100 { animation-delay: 100ms; }
+.animate-delay-200 { animation-delay: 200ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+.animate-delay-400 { animation-delay: 400ms; }
+.animate-delay-500 { animation-delay: 500ms; }
+.animate-delay-600 { animation-delay: 600ms; }
+
+/* ──────────────────────────────────────────────
+   Image Hover
+   ────────────────────────────────────────────── */
+
+.img-hover {
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.img-hover:hover {
+  transform: scale(1.05);
+}
+
+/* ──────────────────────────────────────────────
+   Card Styles
+   ────────────────────────────────────────────── */
+
+.card-luxury {
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-luxury:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* ──────────────────────────────────────────────
+   Reduced Motion
+   ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,104 @@
+---
+interface Props {
+  title?: string;
+  subtitle?: string;
+  backgroundImage?: string;
+  showStats?: boolean;
+}
+
+const {
+  title = "Timeless Wonders",
+  subtitle = "Private guided tours across Delhi, Agra & Jaipur — crafted by locals who know every hidden corner of India's Golden Triangle.",
+  backgroundImage = "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1920&q=80",
+  showStats = true,
+} = Astro.props;
+
+const stats = [
+  { value: "1000+", label: "Tours Completed" },
+  { value: "4.9★", label: "Guest Rating" },
+  { value: "3", label: "Iconic Cities" },
+  { value: "50+", label: "Expert Guides" },
+];
+---
+
+<section class="relative flex min-h-[90vh] md:min-h-screen flex-col overflow-hidden">
+  <!-- Background Image -->
+  <img
+    src={backgroundImage}
+    alt=""
+    role="presentation"
+    class="absolute inset-0 z-0 h-full w-full object-cover"
+    loading="eager"
+    decoding="async"
+    fetchpriority="high"
+  />
+
+  <!-- Gradient overlays -->
+  <div class="absolute inset-0 z-[1] bg-gradient-to-b from-black/60 via-black/20 to-black/70"></div>
+  <div class="absolute inset-0 z-[1] bg-amber-900/15"></div>
+
+  <!-- Main Content — vertically centered with flex-grow -->
+  <div class="relative z-10 flex flex-1 flex-col items-center justify-center px-4 pt-24 pb-8 text-center sm:px-6 lg:px-8">
+    <!-- Eyebrow label -->
+    <p class="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-amber-400 sm:mb-6 sm:text-sm">
+      Experience the Golden Triangle
+    </p>
+
+    <!-- Main heading — capped at reasonable sizes -->
+    <h1 class="font-heading leading-[0.95] tracking-tight text-white max-w-4xl">
+      <span class="block text-3xl font-light sm:text-4xl md:text-5xl lg:text-6xl">
+        Discover India's
+      </span>
+      <span class="mt-1 block text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
+        {title}
+      </span>
+    </h1>
+
+    <!-- Subtitle -->
+    <p class="mx-auto mt-4 max-w-2xl font-accent text-base font-medium italic leading-relaxed text-white/80 sm:mt-6 sm:text-lg md:text-xl">
+      {subtitle}
+    </p>
+
+    <!-- CTA Buttons — clearly separated from stats -->
+    <div class="mt-6 flex flex-col items-center gap-3 sm:mt-8 sm:flex-row sm:gap-4">
+      <a
+        href="/tours/"
+        class="inline-flex items-center gap-2 rounded-full bg-amber-500 px-7 py-3 text-sm font-semibold uppercase tracking-wider text-white shadow-lg shadow-amber-500/25 transition-all duration-300 hover:bg-amber-400 hover:shadow-xl sm:px-8 sm:py-3.5"
+      >
+        Explore Tours
+        <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
+      <a
+        href="/contact/"
+        class="inline-flex items-center gap-2 rounded-full border border-white/30 px-7 py-3 text-sm font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-all duration-300 hover:border-white/50 hover:bg-white/10 sm:px-8 sm:py-3.5"
+      >
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+        </svg>
+        Contact Us
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats Bar — fixed at bottom, separate from content flow -->
+  {showStats && (
+    <div class="relative z-10 w-full px-4 pb-12 sm:pb-16">
+      <div class="mx-auto max-w-3xl">
+        <div class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl sm:grid-cols-4">
+          {stats.map((stat) => (
+            <div class="flex flex-col items-center justify-center px-3 py-4 text-center sm:px-6 sm:py-5">
+              <span class="font-heading text-xl font-bold text-white sm:text-2xl">
+                {stat.value}
+              </span>
+              <span class="mt-1 text-[10px] font-medium uppercase tracking-wider text-white/60 sm:text-xs">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
+</section>

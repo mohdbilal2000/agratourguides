@@ -1,0 +1,91 @@
+---
+interface Props {
+  title: string;
+  slug: string;
+  image: string;
+  duration: string;
+  price: number;
+  currency?: string;
+  highlights: string[];
+  category?: string;
+}
+
+const { title, slug, image, duration, price, currency = "USD", highlights, category } = Astro.props;
+
+const href = `/tours/${slug}`;
+const displayHighlights = highlights.slice(0, 3);
+
+const currencySymbols: Record<string, string> = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  INR: "₹",
+};
+const symbol = currencySymbols[currency] || currency + " ";
+---
+
+<a
+  href={href}
+  class="group block rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 ease-out"
+>
+  <!-- Image Container -->
+  <div class="relative aspect-[16/10] overflow-hidden">
+    <img
+      src={image}
+      alt={title}
+      class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+      loading="lazy"
+      decoding="async"
+    />
+
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/10 pointer-events-none" />
+
+    <!-- Duration Badge — top left, dark glass with clock icon -->
+    <span class="absolute left-3 top-3 rounded-full bg-black/60 backdrop-blur-sm px-3 py-1 text-xs font-medium text-white shadow-sm flex items-center gap-1.5">
+      <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+      {duration}
+    </span>
+
+    <!-- Category Badge — top right -->
+    {category && (
+      <span class="absolute right-3 top-3 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-800 shadow-sm">
+        {category}
+      </span>
+    )}
+
+    <!-- Price Tag — bottom right of image -->
+    <div class="absolute bottom-0 right-0 bg-amber-500 text-white font-bold px-4 py-2 rounded-tl-xl text-lg shadow-lg">
+      <span class="text-xs font-normal opacity-90 mr-0.5">from</span>
+      {symbol}{price}
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-5">
+    <h3 class="text-lg font-bold text-gray-900 group-hover:text-amber-700 transition-colors duration-300 leading-snug">
+      {title}
+    </h3>
+
+    <!-- Highlights -->
+    <ul class="mt-3 space-y-2">
+      {displayHighlights.map((highlight) => (
+        <li class="flex items-start gap-2 text-sm text-gray-600">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          <span class="leading-snug">{highlight}</span>
+        </li>
+      ))}
+    </ul>
+
+    <!-- CTA Button -->
+    <div class="mt-4">
+      <span class="block w-full py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium text-center transition-colors duration-300 group-hover:bg-amber-600">
+        Book This Tour
+      </span>
+    </div>
+  </div>
+</a>

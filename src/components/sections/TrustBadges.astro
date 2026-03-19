@@ -1,0 +1,50 @@
+---
+const badges = [
+  { value: "1,000+", label: "Happy Travelers" },
+  { value: "4.9\u2605", label: "Google Rating" },
+  { value: "50+", label: "Expert Guides" },
+  { value: "15+", label: "Years Experience" },
+  { value: "24/7", label: "Support Available" },
+];
+---
+
+<section class="bg-white border-y border-sandstone-100 py-8">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Desktop: flex row with separators -->
+    <div class="hidden md:flex items-center justify-between">
+      {
+        badges.map((badge, i) => (
+          <>
+            <div class="flex flex-col items-center text-center px-4">
+              <span class="font-heading text-3xl font-bold text-gray-900">
+                {badge.value}
+              </span>
+              <span class="mt-1 text-sm text-sandstone-600">
+                {badge.label}
+              </span>
+            </div>
+            {i < badges.length - 1 && (
+              <div class="h-10 w-px bg-sandstone-100 flex-shrink-0"></div>
+            )}
+          </>
+        ))
+      }
+    </div>
+
+    <!-- Mobile: 2-column grid, last item full width -->
+    <div class="grid grid-cols-2 gap-6 md:hidden">
+      {
+        badges.map((badge, i) => (
+          <div class={`flex flex-col items-center text-center ${i === badges.length - 1 ? "col-span-2" : ""}`}>
+            <span class="font-heading text-2xl font-bold text-gray-900">
+              {badge.value}
+            </span>
+            <span class="mt-1 text-xs text-sandstone-600">
+              {badge.label}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

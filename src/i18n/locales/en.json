@@ -1,0 +1,99 @@
+{
+  "nav": {
+    "home": "Home",
+    "agra": "Agra",
+    "delhi": "Delhi",
+    "jaipur": "Jaipur",
+    "tours": "Tours",
+    "guides": "Guides",
+    "about": "About",
+    "contact": "Contact",
+    "bookNow": "Book Now"
+  },
+  "hero": {
+    "cta": "Plan Your Tour",
+    "scrollDown": "Scroll to explore"
+  },
+  "services": {
+    "title": "Our Services",
+    "guides": "Licensed Tour Guides",
+    "guidesDesc": "Government-certified multilingual guides with deep local knowledge",
+    "packages": "Tour Packages",
+    "packagesDesc": "Multi-day packages with hotel, transport & guided sightseeing",
+    "dayTrips": "Day Trips & Transfers",
+    "dayTripsDesc": "Same-day tours and comfortable airport/city transfers",
+    "carHire": "Car Hire",
+    "carHireDesc": "AC vehicles with experienced drivers for flexible travel"
+  },
+  "trust": {
+    "happyTravelers": "1,000+ Happy Travelers",
+    "licensed": "Licensed & Certified Guides",
+    "support": "24/7 Support",
+    "bestPrice": "Best Price Guarantee"
+  },
+  "cta": {
+    "getQuote": "Get Free Quote",
+    "whatsapp": "WhatsApp Us",
+    "inquireNow": "Inquire Now",
+    "viewDetails": "View Details",
+    "readMore": "Read More",
+    "explore": "Explore",
+    "viewAllTours": "View All Tours",
+    "bookGuide": "Book Guided Tour"
+  },
+  "booking": {
+    "step1Title": "Tour Type",
+    "step2Title": "Travel Details",
+    "step3Title": "Contact Info",
+    "step4Title": "Review & Submit",
+    "tourType": "Tour Type",
+    "destination": "Destination",
+    "travelDate": "Travel Date",
+    "travelers": "Number of Travelers",
+    "requirements": "Special Requirements",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone / WhatsApp",
+    "contactMethod": "Preferred Contact Method",
+    "submit": "Submit Inquiry",
+    "next": "Next",
+    "back": "Back",
+    "success": "Thank you! We'll get back to you within 2 hours."
+  },
+  "footer": {
+    "tagline": "Expert tour guides for India's Golden Triangle since 2010",
+    "destinations": "Destinations",
+    "popularTours": "Popular Tours",
+    "contactInfo": "Contact Info",
+    "copyright": "All rights reserved.",
+    "privacy": "Privacy Policy"
+  },
+  "common": {
+    "from": "From",
+    "perPerson": "per person",
+    "duration": "Duration",
+    "includes": "What's Included",
+    "excludes": "Not Included",
+    "highlights": "Highlights",
+    "itinerary": "Itinerary",
+    "faqs": "Frequently Asked Questions",
+    "relatedTours": "Related Tours",
+    "relatedAttractions": "Related Attractions",
+    "entryFee": "Entry Fee",
+    "timings": "Timings",
+    "closedOn": "Closed On",
+    "bestTime": "Best Time to Visit",
+    "visitDuration": "Duration",
+    "insiderTips": "Insider Tips",
+    "location": "Location",
+    "photoGallery": "Photo Gallery"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Fran\u00e7ais",
+    "de": "Deutsch",
+    "zh": "\u4e2d\u6587",
+    "es": "Espa\u00f1ol",
+    "ja": "\u65e5\u672c\u8a9e"
+  }
+}

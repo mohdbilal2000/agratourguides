@@ -1,0 +1,88 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import Section from '../../components/ui/Section.astro';
+import TourCard from '../../components/cards/TourCard.astro';
+import CTABanner from '../../components/sections/CTABanner.astro';
+import { getCollection } from 'astro:content';
+import { buildFAQSchema } from '../../lib/schema';
+import { SITE_NAME } from '../../lib/constants';
+
+const allTours = await getCollection('tours');
+const tours = allTours.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const tourImages: Record<string, string> = {
+  'golden-triangle-3-days': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80',
+  'golden-triangle-5-days': 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800&q=80',
+  'same-day-agra-from-delhi': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80',
+  'agra-overnight-from-delhi': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80',
+  'delhi-day-tour': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&q=80',
+  'jaipur-day-tour': 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800&q=80',
+};
+
+const categories = [
+  { value: 'all', label: 'All Tours' },
+  { value: 'golden-triangle', label: 'Golden Triangle' },
+  { value: 'day-trip', label: 'Day Trips' },
+  { value: 'multi-day', label: 'Multi-Day' },
+  { value: 'transfer', label: 'Transfers' },
+  { value: 'car-hire', label: 'Car Hire' },
+];
+
+const tourFaqs = [
+  { question: 'Can I customize a tour itinerary?', answer: 'Absolutely! All our tours are fully customizable. Tell us your interests, preferred pace, and must-see attractions, and we will design a personalized itinerary just for you.' },
+  { question: 'What is your cancellation policy?', answer: 'We offer free cancellation up to 48 hours before the tour start date. Cancellations within 48 hours may incur a 50% charge. No-shows are non-refundable.' },
+  { question: 'Are tours available in languages other than English?', answer: 'Yes! Our guides speak English, French, German, Spanish, and Hindi. Please mention your preferred language when booking.' },
+];
+
+const jsonLd = [buildFAQSchema(tourFaqs)];
+---
+
+<PageLayout
+  title={`Tours & Packages — ${SITE_NAME}`}
+  description="Browse our curated Golden Triangle tours. Day trips, multi-day packages, private guides, and custom itineraries for Agra, Delhi & Jaipur."
+  jsonLd={jsonLd}
+>
+  <Section>
+    <Container>
+      <div class="text-center mb-12">
+        <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          Tours & Packages
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Explore our handcrafted Golden Triangle tours. Every package includes a licensed guide, comfortable transport, and personalized attention to detail.
+        </p>
+      </div>
+
+      <!-- Category Filter (static, CSS-based) -->
+      <div class="flex flex-wrap justify-center gap-3 mb-12">
+        {categories.map((cat) => (
+          <span class="px-4 py-2 rounded-full text-sm font-medium bg-stone-100 text-stone-700 hover:bg-amber-100 hover:text-amber-800 cursor-pointer transition-colors dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-amber-900 dark:hover:text-amber-200">
+            {cat.label}
+          </span>
+        ))}
+      </div>
+
+      <!-- Tour Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {tours.map((tour) => (
+          <TourCard
+            title={tour.data.title}
+            slug={tour.data.slug}
+            image={tourImages[tour.data.slug] || tour.data.heroImage}
+            duration={tour.data.duration}
+            price={tour.data.priceFrom}
+            highlights={tour.data.highlights.slice(0, 3)}
+          />
+        ))}
+      </div>
+    </Container>
+  </Section>
+
+  <CTABanner
+    title="Don't See What You're Looking For?"
+    subtitle="We specialize in custom itineraries. Tell us your dream trip and we'll make it happen."
+    ctaText="Request Custom Tour"
+    ctaHref="/contact/"
+  />
+</PageLayout>

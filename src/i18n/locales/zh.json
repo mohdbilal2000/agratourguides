@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "home": "\u9996\u9875",
+    "agra": "\u963f\u683c\u62c9",
+    "delhi": "\u5fb7\u91cc",
+    "jaipur": "\u6591\u666e\u5c14",
+    "tours": "\u65c5\u6e38\u7ebf\u8def",
+    "guides": "\u65c5\u884c\u6307\u5357",
+    "about": "\u5173\u4e8e\u6211\u4eec",
+    "contact": "\u8054\u7cfb\u6211\u4eec",
+    "bookNow": "\u7acb\u5373\u9884\u8ba2"
+  },
+  "trust": {
+    "happyTravelers": "1000+\u6ee1\u610f\u6e38\u5ba2",
+    "licensed": "\u6301\u8bc1\u4e13\u4e1a\u5bfc\u6e38",
+    "support": "24\u5c0f\u65f6\u670d\u52a1",
+    "bestPrice": "\u6700\u4f18\u4ef7\u683c\u4fdd\u8bc1"
+  },
+  "cta": {
+    "getQuote": "\u514d\u8d39\u62a5\u4ef7",
+    "whatsapp": "WhatsApp\u54a8\u8be2",
+    "inquireNow": "\u7acb\u5373\u54a8\u8be2",
+    "viewDetails": "\u67e5\u770b\u8be6\u60c5",
+    "readMore": "\u9605\u8bfb\u66f4\u591a",
+    "explore": "\u63a2\u7d22",
+    "viewAllTours": "\u67e5\u770b\u6240\u6709\u7ebf\u8def",
+    "bookGuide": "\u9884\u7ea6\u5bfc\u6e38"
+  },
+  "languages": {
+    "en": "English",
+    "fr": "Fran\u00e7ais",
+    "de": "Deutsch",
+    "zh": "\u4e2d\u6587",
+    "es": "Espa\u00f1ol",
+    "ja": "\u65e5\u672c\u8a9e"
+  }
+}

@@ -1,0 +1,40 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown>[];
+}
+
+const { title, description, ogImage, jsonLd } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <Header />
+
+  <main class="pb-20 md:pb-0">
+    <slot />
+  </main>
+
+  <Footer />
+
+  {
+    jsonLd && jsonLd.length > 0 && jsonLd.map((ld) => (
+      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    ))
+  }
+
+  <!-- Sticky Booking CTA (mobile) -->
+  <div class="fixed bottom-0 inset-x-0 z-50 p-3 bg-white/90 backdrop-blur-md border-t border-sandstone-200 md:hidden">
+    <a
+      href="/contact"
+      class="block w-full rounded-lg bg-gold-600 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg hover:bg-gold-700 transition-colors"
+    >
+      Book Your Tour Now
+    </a>
+  </div>
+</BaseLayout>

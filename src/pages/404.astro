@@ -1,0 +1,36 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import { SITE_NAME } from '../lib/constants';
+---
+
+<PageLayout
+  title={`Page Not Found — ${SITE_NAME}`}
+  description="The page you're looking for doesn't exist. Explore our tours and guides for India's Golden Triangle."
+>
+  <Section>
+    <Container>
+      <div class="text-center py-20">
+        <h1 class="font-heading text-6xl md:text-8xl font-bold text-amber-600 mb-4">404</h1>
+        <h2 class="font-heading text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          Page Not Found
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-md mx-auto">
+          Looks like you've wandered off the tour route! Let's get you back on track.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/" class="px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-700 transition-colors">
+            Go Home
+          </a>
+          <a href="/tours/" class="px-6 py-3 border border-amber-600 text-amber-700 rounded-lg font-semibold hover:bg-amber-50 transition-colors dark:text-amber-400 dark:border-amber-400 dark:hover:bg-amber-900/20">
+            Browse Tours
+          </a>
+          <a href="/contact/" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-800">
+            Contact Us
+          </a>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

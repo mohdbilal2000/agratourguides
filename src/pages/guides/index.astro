@@ -1,0 +1,55 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Container from '../../components/ui/Container.astro';
+import Section from '../../components/ui/Section.astro';
+import GuideCard from '../../components/cards/GuideCard.astro';
+import CTABanner from '../../components/sections/CTABanner.astro';
+import { getCollection } from 'astro:content';
+import { SITE_NAME } from '../../lib/constants';
+
+const allGuides = await getCollection('guides');
+const guides = allGuides.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+
+const guideImages: Record<string, string> = {
+  'best-time-to-visit-taj-mahal': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
+  'delhi-to-agra-how-to-reach': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
+  'golden-triangle-itinerary-planning': 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
+};
+---
+
+<PageLayout
+  title={`Travel Guides — ${SITE_NAME}`}
+  description="Expert travel guides for India's Golden Triangle. Practical tips, itineraries, and insider knowledge for visiting Agra, Delhi, and Jaipur."
+>
+  <Section>
+    <Container>
+      <div class="text-center mb-12">
+        <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          Travel Guides & Tips
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Practical advice from local experts to help you plan the perfect Golden Triangle trip. Updated regularly with the latest information.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {guides.map((guide) => (
+          <GuideCard
+            title={guide.data.title}
+            slug={guide.data.slug}
+            image={guideImages[guide.data.slug] || guide.data.heroImage}
+            description={guide.data.description}
+            category={guide.data.category}
+          />
+        ))}
+      </div>
+    </Container>
+  </Section>
+
+  <CTABanner
+    title="Need Personalized Travel Advice?"
+    subtitle="Our local experts can help plan every detail of your Golden Triangle trip."
+    ctaText="Ask an Expert"
+    ctaHref="/contact/"
+  />
+</PageLayout>

@@ -1,0 +1,151 @@
+---
+const tours = [
+  {
+    image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80",
+    alt: "Taj Mahal at sunrise in Agra",
+    title: "Same Day Agra Tour from Delhi",
+    duration: "14 Hours",
+    price: "From $89",
+    highlights: ["Taj Mahal sunrise", "Agra Fort", "Mehtab Bagh"],
+    href: "/tours/same-day-agra-from-delhi/",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80",
+    alt: "Golden Triangle tour through Delhi, Agra and Jaipur",
+    title: "Golden Triangle 3-Day Tour",
+    duration: "3 Days",
+    price: "From $299",
+    highlights: ["Delhi, Agra & Jaipur", "Private car", "Expert guide"],
+    href: "/tours/golden-triangle-3-days/",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80",
+    alt: "Amber Fort in Jaipur, Rajasthan",
+    title: "Jaipur Royal Heritage Day Tour",
+    duration: "10 Hours",
+    price: "From $69",
+    highlights: ["Amber Fort", "Hawa Mahal", "City Palace"],
+    href: "/tours/jaipur-day-tour/",
+  },
+];
+---
+
+<section class="py-20 md:py-28 bg-stone-50">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Header row -->
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <div class="flex items-center gap-4 mb-4">
+          <span class="block h-px w-12 bg-gold-400"></span>
+          <span class="text-sm font-semibold tracking-widest uppercase text-gold-600">Explore</span>
+        </div>
+        <h2 class="font-heading text-3xl font-bold text-sandstone-900 sm:text-4xl lg:text-5xl">
+          Popular Tour Packages
+        </h2>
+        <p class="mt-3 text-lg font-accent italic text-sandstone-600 max-w-lg">
+          Handcrafted itineraries loved by travelers worldwide
+        </p>
+      </div>
+      <a
+        href="/tours"
+        class="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-gold-600 hover:text-gold-700 transition-colors"
+      >
+        View All Tours
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Tour cards: horizontal scroll on mobile, grid on desktop -->
+    <div class="no-scrollbar flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0">
+      {
+        tours.map((tour) => (
+          <div class="min-w-[300px] snap-center flex-shrink-0 md:min-w-0 group">
+            <div class="bg-white border border-sandstone-100 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-500">
+              <!-- Image container -->
+              <div class="relative aspect-[4/3] overflow-hidden">
+                <img
+                  src={tour.image}
+                  alt={tour.alt}
+                  class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <!-- Gradient overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-sandstone-950/50 via-transparent to-transparent"></div>
+
+                <!-- Duration badge -->
+                <span class="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-sandstone-800">
+                  <svg class="h-3.5 w-3.5 text-gold-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {tour.duration}
+                </span>
+
+                <!-- Price badge -->
+                <span class="absolute bottom-4 right-4 inline-flex items-center rounded-lg bg-gold-500 px-3 py-1.5 text-sm font-bold text-white shadow-lg">
+                  {tour.price}
+                </span>
+              </div>
+
+              <!-- Card body -->
+              <div class="p-6">
+                <h3 class="font-heading text-xl font-bold text-sandstone-900">
+                  {tour.title}
+                </h3>
+
+                <!-- Highlights -->
+                <ul class="mt-4 space-y-2">
+                  {tour.highlights.map((h) => (
+                    <li class="flex items-center gap-2 text-sm text-sandstone-700">
+                      <svg class="h-4 w-4 text-jade flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+
+                <!-- CTA button -->
+                <a
+                  href={tour.href}
+                  class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-amber-700"
+                >
+                  Book Now
+                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Mobile "View All" link -->
+    <div class="mt-8 text-center sm:hidden">
+      <a
+        href="/tours"
+        class="inline-flex items-center gap-1.5 text-sm font-semibold text-gold-600 hover:text-gold-700 transition-colors"
+      >
+        View All Tours
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Hide scrollbar utility -->
+<style>
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

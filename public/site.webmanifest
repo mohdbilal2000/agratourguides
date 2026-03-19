@@ -1,0 +1,16 @@
+{
+  "name": "Agra Tour Guides",
+  "short_name": "AgraTourGuides",
+  "description": "Expert tour guides for Agra, Delhi & Jaipur - Golden Triangle India",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFBEB",
+  "theme_color": "#D97706",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
