@@ -1,32 +1,62 @@
 ---
 import Logo from "../brand/Logo.astro";
 
+interface Props {
+  /**
+   * When true, header starts transparent (white text) and animates into a
+   * solid white bar on scroll — for pages with a dark cinematic hero.
+   * When false (default), header is always solid white with dark text —
+   * for inner pages where the content immediately after sits on a light bg.
+   */
+  transparent?: boolean;
+}
+
 interface NavItem {
   label: string;
   href: string;
 }
 
+const { transparent = false } = Astro.props;
+
 const navItems: NavItem[] = [
+  { label: "Tours", href: "/tours" },
+  { label: "Services", href: "/services" },
   { label: "Agra", href: "/agra" },
   { label: "Delhi", href: "/delhi" },
   { label: "Jaipur", href: "/jaipur" },
-  { label: "Tours", href: "/tours" },
+  { label: "Reviews", href: "/reviews" },
   { label: "Guides", href: "/guides" },
-  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
 const currentPath = Astro.url.pathname;
+
+// Always-solid header for inner pages: skip the transparent → scrolled animation
+// and just use white bg + dark text from page load.
+const headerClass = transparent
+  ? "fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent data-[scrolled]:bg-white/90 data-[scrolled]:backdrop-blur-xl data-[scrolled]:shadow-sm"
+  : "fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl shadow-sm border-b border-gray-100";
+
+const navLinkClass = transparent
+  ? "text-white data-[header-scrolled]:text-gray-700"
+  : "text-gray-700 hover:text-amber-700";
+
+const logoTextClass = transparent ? "text-white" : "text-gray-900";
+
+const hamburgerLineClass = transparent
+  ? "bg-white data-[header-scrolled]:bg-gray-800"
+  : "bg-gray-800";
 ---
 
 <header
-  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent data-[scrolled]:bg-white/80 data-[scrolled]:backdrop-blur-xl data-[scrolled]:shadow-sm"
+  class={headerClass}
+  data-transparent={transparent ? "" : null}
   id="site-header"
 >
   <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex h-16 items-center justify-between lg:h-20">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-2 shrink-0 text-white" data-logo-link>
+      <a href="/" class:list={["flex items-center gap-2 shrink-0", logoTextClass]} data-logo-link>
         <Logo size="sm" />
       </a>
 
@@ -40,7 +70,7 @@ const currentPath = Astro.url.pathname;
                 href={item.href}
                 class:list={[
                   "relative px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-300",
-                  "text-white data-[header-scrolled]:text-gray-700",
+                  navLinkClass,
                   "group",
                   isActive && "nav-active",
                 ]}
@@ -73,9 +103,9 @@ const currentPath = Astro.url.pathname;
         id="mobile-menu-btn"
       >
         <div class="flex flex-col items-center justify-center gap-1.5 w-6" id="hamburger-icon">
-          <span class="block h-0.5 w-6 bg-white transition-all duration-300 origin-center data-[header-scrolled]:bg-gray-800" data-hamburger-line="1"></span>
-          <span class="block h-0.5 w-6 bg-white transition-all duration-300 origin-center data-[header-scrolled]:bg-gray-800" data-hamburger-line="2"></span>
-          <span class="block h-0.5 w-4 bg-white transition-all duration-300 origin-center ml-auto data-[header-scrolled]:bg-gray-800" data-hamburger-line="3"></span>
+          <span class:list={["block h-0.5 w-6 transition-all duration-300 origin-center", hamburgerLineClass]} data-hamburger-line="1"></span>
+          <span class:list={["block h-0.5 w-6 transition-all duration-300 origin-center", hamburgerLineClass]} data-hamburger-line="2"></span>
+          <span class:list={["block h-0.5 w-4 transition-all duration-300 origin-center ml-auto", hamburgerLineClass]} data-hamburger-line="3"></span>
         </div>
       </button>
     </div>
@@ -151,50 +181,46 @@ const currentPath = Astro.url.pathname;
 
     if (!header || !menuBtn || !mobileMenu || !closeBtn) return;
 
-    // Scroll detection with requestAnimationFrame
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrolled = window.scrollY > 50;
-          if (scrolled) {
-            header.setAttribute("data-scrolled", "");
-          } else {
-            header.removeAttribute("data-scrolled");
-          }
-          // Update nav link colors
-          navLinks.forEach((link) => {
+    // Only run the scroll/transparency animation when header is in transparent
+    // mode (over a dark hero). Solid-mode headers stay solid white from load.
+    const isTransparent = header.hasAttribute("data-transparent");
+
+    if (isTransparent) {
+      let ticking = false;
+      const onScroll = () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const scrolled = window.scrollY > 50;
             if (scrolled) {
-              link.setAttribute("data-header-scrolled", "");
+              header.setAttribute("data-scrolled", "");
             } else {
-              link.removeAttribute("data-header-scrolled");
+              header.removeAttribute("data-scrolled");
             }
+            navLinks.forEach((link) => {
+              if (scrolled) link.setAttribute("data-header-scrolled", "");
+              else link.removeAttribute("data-header-scrolled");
+            });
+            hamburgerLines.forEach((line) => {
+              if (scrolled) line.setAttribute("data-header-scrolled", "");
+              else line.removeAttribute("data-header-scrolled");
+            });
+            if (logoLink) {
+              if (scrolled) {
+                logoLink.classList.remove("text-white");
+                logoLink.classList.add("text-gray-900");
+              } else {
+                logoLink.classList.remove("text-gray-900");
+                logoLink.classList.add("text-white");
+              }
+            }
+            ticking = false;
           });
-          // Update hamburger line colors
-          hamburgerLines.forEach((line) => {
-            if (scrolled) {
-              line.setAttribute("data-header-scrolled", "");
-            } else {
-              line.removeAttribute("data-header-scrolled");
-            }
-          });
-          // Update logo text color
-          if (logoLink) {
-            if (scrolled) {
-              logoLink.classList.remove("text-white");
-              logoLink.classList.add("text-gray-900");
-            } else {
-              logoLink.classList.remove("text-gray-900");
-              logoLink.classList.add("text-white");
-            }
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+          ticking = true;
+        }
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
 
     // Mobile menu toggle
     function openMenu() {

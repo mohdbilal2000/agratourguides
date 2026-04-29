@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { WHATSAPP_NUMBER_DIGITS } from "../../lib/constants";
 
 const TOUR_TYPES = [
   "Day Trip",
@@ -97,7 +98,25 @@ export default function BookingForm() {
   const prevStep = () => setStep((s) => Math.max(s - 1, 1));
 
   const handleSubmit = () => {
-    console.log("Booking form submitted:", form);
+    // Build a pre-filled WhatsApp message from the form. Email integration TODO.
+    const lines = [
+      "Hi! I would like to book a tour with Agra Tour Guides.",
+      "",
+      `Tour type: ${form.tourType || "not specified"}`,
+      `Destinations: ${form.destinations.join(", ") || "not specified"}`,
+      `Travel date: ${form.travelDate || "not specified"}`,
+      `Travellers: ${form.travelers}`,
+      ...(form.requirements ? [`Requirements: ${form.requirements}`] : []),
+      "",
+      `Name: ${form.name}`,
+      `Email: ${form.email}`,
+      ...(form.phone ? [`Phone: ${form.phone}`] : []),
+      `Preferred contact: ${form.contactMethod}`,
+    ];
+    const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent(lines.join("\n"))}`;
+    if (typeof window !== "undefined") {
+      window.open(waUrl, "_blank", "noopener,noreferrer");
+    }
     setSubmitted(true);
   };
 

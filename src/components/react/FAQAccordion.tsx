@@ -18,7 +18,7 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
   };
 
   return (
-    <div className="mx-auto w-full max-w-3xl divide-y divide-stone-200 dark:divide-stone-700">
+    <div className="mx-auto w-full max-w-3xl divide-y divide-stone-200">
       {items.map((item, index) => {
         const isOpen = openIndex === index;
 
@@ -26,9 +26,7 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
           <div
             key={index}
             className={`border-l-2 transition-colors ${
-              isOpen
-                ? "border-l-amber-500"
-                : "border-l-transparent"
+              isOpen ? "border-l-amber-500" : "border-l-transparent"
             }`}
           >
             <button
@@ -38,10 +36,8 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
               aria-expanded={isOpen}
             >
               <span
-                className={`text-base font-medium transition-colors md:text-lg ${
-                  isOpen
-                    ? "text-amber-700 dark:text-amber-400"
-                    : "text-stone-800 dark:text-stone-200"
+                className={`text-base font-semibold transition-colors md:text-lg ${
+                  isOpen ? "text-amber-700" : "text-gray-900"
                 }`}
               >
                 {item.question}
@@ -59,9 +55,7 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
                   strokeWidth={2}
                   stroke="currentColor"
                   className={`h-5 w-5 transition-colors ${
-                    isOpen
-                      ? "text-amber-600 dark:text-amber-400"
-                      : "text-stone-400 dark:text-stone-500"
+                    isOpen ? "text-amber-600" : "text-gray-500"
                   }`}
                 >
                   <path
@@ -82,7 +76,7 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
                   transition={{ duration: 0.25, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <div className="px-5 pb-5 text-sm leading-relaxed text-stone-600 md:text-base dark:text-stone-400">
+                  <div className="px-5 pb-5 text-sm leading-relaxed text-gray-700 md:text-base">
                     {item.answer}
                   </div>
                 </motion.div>

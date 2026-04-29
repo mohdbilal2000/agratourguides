@@ -1,11 +1,13 @@
 ---
-const tours = [
+import { usdToEur } from "../../lib/constants";
+
+const toursRaw = [
   {
     image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80",
     alt: "Taj Mahal at sunrise in Agra",
     title: "Same Day Agra Tour from Delhi",
     duration: "14 Hours",
-    price: "From $89",
+    priceUSD: 89,
     highlights: ["Taj Mahal sunrise", "Agra Fort", "Mehtab Bagh"],
     href: "/tours/same-day-agra-from-delhi/",
   },
@@ -14,7 +16,7 @@ const tours = [
     alt: "Golden Triangle tour through Delhi, Agra and Jaipur",
     title: "Golden Triangle 3-Day Tour",
     duration: "3 Days",
-    price: "From $299",
+    priceUSD: 299,
     highlights: ["Delhi, Agra & Jaipur", "Private car", "Expert guide"],
     href: "/tours/golden-triangle-3-days/",
   },
@@ -23,11 +25,17 @@ const tours = [
     alt: "Amber Fort in Jaipur, Rajasthan",
     title: "Jaipur Royal Heritage Day Tour",
     duration: "10 Hours",
-    price: "From $69",
+    priceUSD: 69,
     highlights: ["Amber Fort", "Hawa Mahal", "City Palace"],
     href: "/tours/jaipur-day-tour/",
   },
 ];
+
+const tours = toursRaw.map((t) => ({
+  ...t,
+  price: `From $${t.priceUSD}`,
+  priceSecondary: `€${usdToEur(t.priceUSD)}`,
+}));
 ---
 
 <section class="py-20 md:py-28 bg-stone-50">
@@ -84,8 +92,9 @@ const tours = [
                 </span>
 
                 <!-- Price badge -->
-                <span class="absolute bottom-4 right-4 inline-flex items-center rounded-lg bg-gold-500 px-3 py-1.5 text-sm font-bold text-white shadow-lg">
-                  {tour.price}
+                <span class="absolute bottom-4 right-4 inline-flex flex-col items-end rounded-lg bg-gold-500 px-3 py-1.5 text-white shadow-lg leading-tight">
+                  <span class="text-sm font-bold">{tour.price}</span>
+                  <span class="text-[10px] font-normal opacity-90">{tour.priceSecondary}</span>
                 </span>
               </div>
 

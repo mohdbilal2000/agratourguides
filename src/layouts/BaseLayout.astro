@@ -1,25 +1,36 @@
 ---
 import { ViewTransitions } from "astro:transitions";
 import "../styles/global.css";
+import { SITE_URL, SITE_NAME } from "../lib/constants";
 
 interface Props {
-  title: string;
-  description: string;
   lang?: string;
 }
 
-const { title, description, lang = "en" } = Astro.props;
+const { lang = "en" } = Astro.props;
 ---
 
 <!doctype html>
 <html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
-    <title>{title}</title>
+    <meta name="theme-color" content="#d97706" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)" />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
+    <meta name="application-name" content={SITE_NAME} />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} Travel Guides`} href={`${SITE_URL}/rss.xml`} />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+    <!-- Per-page head injection (SEOHead etc.) -->
+    <slot name="head" />
+
     <ViewTransitions />
   </head>
   <body class="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-body antialiased">

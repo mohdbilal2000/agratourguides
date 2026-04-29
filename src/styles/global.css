@@ -89,23 +89,10 @@
   --scrollbar-thumb-hover: var(--color-gold-500);
 }
 
-/* ── Dark Mode ───────────────────────────────── */
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --background: #1C1510;
-    --foreground: var(--color-sandstone-100);
-    --background-alt: var(--color-sandstone-950);
-    --foreground-muted: var(--color-sandstone-400);
-    --border: var(--color-sandstone-800);
-    --ring: var(--color-gold-400);
-    --selection-bg: var(--color-gold-800);
-    --selection-fg: var(--color-gold-100);
-    --scrollbar-track: var(--color-sandstone-950);
-    --scrollbar-thumb: var(--color-gold-700);
-    --scrollbar-thumb-hover: var(--color-gold-600);
-  }
-}
+/* ── Dark Mode (opt-in only via [data-theme="dark"]) ────────────────
+   Auto-dark via prefers-color-scheme is disabled because most section
+   backgrounds in this site are hardcoded light (bg-white / bg-stone-50).
+   Auto-flipping foreground tokens caused unreadable grey-on-cream text. */
 
 [data-theme="dark"] {
   --background: #1C1510;

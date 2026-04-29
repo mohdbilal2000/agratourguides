@@ -15,16 +15,44 @@ import FAQAccordion from '../components/react/FAQAccordion';
 import { buildOrganizationSchema, buildWebSiteSchema, buildFAQSchema } from '../lib/schema';
 import { SITE_NAME, SITE_DESCRIPTION } from '../lib/constants';
 
+const homeFaqs = [
+  {
+    question: 'How much does a Taj Mahal tour guide cost?',
+    answer: 'A private licensed Taj Mahal guide costs ₹1,800 (about $22 / €20) for a group of up to 5 people for a 1.5–2 hour tour. Foreigner monument entry (₹1,300 / $16) and the e-rickshaw to the gate (₹100 round-trip) are paid separately. Guide fee is fixed — no commission, no tipping pressure.'
+  },
+  {
+    question: 'What is the best time to visit the Taj Mahal?',
+    answer: 'October to March is peak season — pleasant 10–25°C, but the Taj also gets 30,000+ visitors per day. The single best time is sunrise (06:00 entry), when the marble glows pink-gold and crowds are 80% lower. The Taj is closed every Friday for Jumu\'ah prayer.'
+  },
+  {
+    question: 'Do I need a guide at the Taj Mahal or can I visit alone?',
+    answer: 'You can enter alone — only the ticket is mandatory. But without a guide you\'ll miss the inlay-stone meanings, the optical illusions in the minarets, the calligraphy translations, and the photo angles travellers come back wishing they\'d known. Most of our 81 reviews mention "didn\'t know I needed a guide until I had one."'
+  },
+  {
+    question: 'How do I book your Agra tour from abroad?',
+    answer: 'WhatsApp is the fastest channel — message us with your travel dates, group size and language preference, and you\'ll get a quote within 2 hours (we\'re online 06:00–22:00 IST). Booking is free; you only pay on the day of the tour, in cash (USD/EUR/INR all accepted) or by UPI.'
+  },
+  {
+    question: 'What languages do your guides speak?',
+    answer: 'We have in-house guides fluent in English, Hindi and Japanese. For French, Spanish, German, Italian, Russian, Arabic and Mandarin, we coordinate with vetted partner guides certified by the Ministry of Tourism — request the language when you message us and we\'ll confirm availability for your dates.'
+  },
+  {
+    question: 'What is the Golden Triangle and how many days do I need?',
+    answer: 'The Golden Triangle is India\'s most-booked circuit: Delhi → Agra → Jaipur, roughly 720 km in a triangle. Three days is the absolute minimum (one city per day with night travel). Five days is the comfortable pace and what 70% of our travellers choose. Seven days adds Fatehpur Sikri and a slower Jaipur.'
+  },
+  {
+    question: 'Are your guides government-licensed?',
+    answer: 'Yes. Every guide on our team holds a Ministry of Tourism (Government of India) licence and an Archaeological Survey of India (ASI) badge — the only legal credential to guide inside the Taj Mahal complex. Unlicensed "guides" loitering at the gate cannot enter with you and are common scams.'
+  },
+  {
+    question: 'Do you arrange the car/taxi as well, or just the guide?',
+    answer: 'Both. We have four service tiers: Guide-Only (you arrange transport), Guide + Cab (AC sedan or SUV with verified driver), Guide + Cab + Hotel (multi-day Golden Triangle), and Custom Itinerary (we plan everything). Cabs are background-checked, English-speaking drivers — not random app rides.'
+  },
+];
 const jsonLd = [
   buildOrganizationSchema(),
   buildWebSiteSchema(),
-  buildFAQSchema([
-    { question: 'What is the best time to visit the Taj Mahal?', answer: 'The best time to visit the Taj Mahal is from October to March when the weather is pleasant with temperatures between 10-25°C. Early morning visits at sunrise offer the most magical experience with fewer crowds and beautiful golden light.' },
-    { question: 'How do I book a tour guide in Agra?', answer: 'You can book a licensed tour guide through our website by filling the inquiry form, contacting us on WhatsApp, or calling directly. We recommend booking at least 48 hours in advance, especially during peak season (October-March).' },
-    { question: 'What is the Golden Triangle tour?', answer: 'The Golden Triangle is India\'s most popular tourist circuit connecting Delhi, Agra, and Jaipur. The route forms a triangle on the map covering approximately 720 km. Our guided tours range from 3 to 7 days.' },
-    { question: 'Are your tour guides licensed and certified?', answer: 'Yes, all our tour guides are licensed by the Ministry of Tourism, Government of India. They are multilingual, experienced professionals with deep knowledge of history, culture, and local traditions.' },
-    { question: 'What is included in your tour packages?', answer: 'Our tour packages typically include a licensed guide, air-conditioned vehicle, hotel accommodation (for multi-day tours), monument entry fees, and 24/7 support. Airport transfers, meals, and tips are available as add-ons.' },
-  ]),
+  buildFAQSchema(homeFaqs),
 ];
 
 const topAttractions = [
@@ -78,19 +106,13 @@ const topAttractions = [
   },
 ];
 
-const homeFaqs = [
-  { question: 'What is the best time to visit the Taj Mahal?', answer: 'The best time to visit the Taj Mahal is from October to March when the weather is pleasant with temperatures between 10-25°C. Early morning visits at sunrise offer the most magical experience with fewer crowds and beautiful golden light.' },
-  { question: 'How do I book a tour guide in Agra?', answer: 'You can book a licensed tour guide through our website by filling the inquiry form, contacting us on WhatsApp, or calling directly. We recommend booking at least 48 hours in advance, especially during peak season (October-March).' },
-  { question: 'What is the Golden Triangle tour?', answer: 'The Golden Triangle is India\'s most popular tourist circuit connecting Delhi, Agra, and Jaipur. The route forms a triangle on the map covering approximately 720 km. Our guided tours range from 3 to 7 days covering major monuments, local culture, and hidden gems.' },
-  { question: 'Are your tour guides licensed and certified?', answer: 'Yes, all our tour guides are licensed by the Ministry of Tourism, Government of India. They are multilingual, experienced professionals with deep knowledge of history, culture, and local traditions of the Golden Triangle region.' },
-  { question: 'What is included in your tour packages?', answer: 'Our tour packages typically include a licensed guide, air-conditioned vehicle, hotel accommodation (for multi-day tours), monument entry fees, and 24/7 support. Airport transfers, meals, and tips are available as add-ons.' },
-];
 ---
 
 <PageLayout
   title={`${SITE_NAME} — Expert Tour Guides for Agra, Delhi & Jaipur`}
   description={SITE_DESCRIPTION}
   jsonLd={jsonLd}
+  transparentHeader
 >
   <!-- 1. Cinematic Hero -->
   <HeroSection />

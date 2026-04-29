@@ -2,39 +2,82 @@
 import BaseLayout from "./BaseLayout.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
+import SEOHead from "../components/seo/SEOHead.astro";
+import { SITE_URL, DEFAULT_OG_IMAGE, WHATSAPP_NUMBER_DIGITS } from "../lib/constants";
+
+interface HreflangAlternate {
+  hreflang: string;
+  href: string;
+}
 
 interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  ogType?: string;
   jsonLd?: Record<string, unknown>[];
+  canonical?: string;
+  noindex?: boolean;
+  hreflangAlternates?: HreflangAlternate[];
+  /**
+   * Pass true on pages that begin with a full-bleed dark hero (homepage,
+   * city pages, attraction pages, about). Default false renders a solid
+   * white header so links are visible on inner pages.
+   */
+  transparentHeader?: boolean;
 }
 
-const { title, description, ogImage, jsonLd } = Astro.props;
+const {
+  title,
+  description,
+  ogImage,
+  ogType,
+  jsonLd,
+  canonical,
+  noindex,
+  hreflangAlternates,
+  transparentHeader = false,
+} = Astro.props;
+
+const resolvedCanonical = canonical ?? new URL(Astro.url.pathname, SITE_URL).href;
+const resolvedOg = ogImage
+  ? ogImage.startsWith("http") ? ogImage : `${SITE_URL}${ogImage}`
+  : `${SITE_URL}${DEFAULT_OG_IMAGE}`;
 ---
 
-<BaseLayout title={title} description={description}>
-  <Header />
+<BaseLayout>
+  <SEOHead
+    slot="head"
+    title={title}
+    description={description}
+    canonical={resolvedCanonical}
+    ogImage={resolvedOg}
+    ogType={ogType}
+    jsonLd={jsonLd}
+    noindex={noindex}
+    hreflangAlternates={hreflangAlternates}
+  />
 
-  <main class="pb-20 md:pb-0">
+  <Header transparent={transparentHeader} />
+
+  <main class:list={["pb-20 md:pb-0", !transparentHeader && "pt-16 lg:pt-20"]}>
     <slot />
   </main>
 
   <Footer />
 
-  {
-    jsonLd && jsonLd.length > 0 && jsonLd.map((ld) => (
-      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
-    ))
-  }
-
-  <!-- Sticky Booking CTA (mobile) -->
+  <!-- Sticky Booking CTA (mobile) — WhatsApp deep-link for fastest conversion -->
   <div class="fixed bottom-0 inset-x-0 z-50 p-3 bg-white/90 backdrop-blur-md border-t border-sandstone-200 md:hidden">
     <a
-      href="/contact"
-      class="block w-full rounded-lg bg-gold-600 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg hover:bg-gold-700 transition-colors"
+      href={`https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent("Hi! I would like to book a tour with Agra Tour Guides.")}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center justify-center gap-2 w-full rounded-lg bg-emerald-600 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg hover:bg-emerald-700 transition-colors"
     >
-      Book Your Tour Now
+      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
+      </svg>
+      WhatsApp Us — Quote in 2 hours
     </a>
   </div>
 </BaseLayout>

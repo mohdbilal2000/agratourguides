@@ -15,6 +15,7 @@ const jsonLd = [buildOrganizationSchema()];
   title={`About Us — ${SITE_NAME}`}
   description="Meet the team behind Agra Tour Guides. Licensed, multilingual tour guides with decades of experience in Agra, Delhi, and Jaipur's Golden Triangle."
   jsonLd={jsonLd}
+  transparentHeader
 >
   <HeroSection
     title="About Agra Tour Guides"
@@ -25,33 +26,38 @@ const jsonLd = [buildOrganizationSchema()];
   <Section class="bg-white">
     <Container>
       <div class="max-w-3xl mx-auto prose prose-lg prose-stone max-w-none">
-        <h2 class="font-heading">Who Are We?</h2>
+        <h2 class="font-heading">Who we are</h2>
         <p>
-          We are a team of government-licensed tour guides based in Agra, specializing in the Golden Triangle circuit — Delhi, Agra, and Jaipur. With over 15 years of experience, we have guided thousands of travelers from around the world through India's most iconic heritage sites.
+          Agra Tour Guides is a small, government-licensed travel agency based in Tajganj, the neighbourhood that wakes up every morning to the silhouette of the Taj Mahal. Our team is led by Pawan Agarwal — a Ministry of Tourism-licensed guide with a 5.0★ Google rating from 81+ travellers across 30+ countries — and supported by a tight network of fellow ASI-badged guides, English-speaking drivers, and partner hotels we personally trust.
+        </p>
+        <p>
+          We are not an aggregator. We don't resell tours from other agencies, we don't take shop commissions, and we don't pad quotes with hidden surcharges. What you see on our pricing page is what you pay.
         </p>
 
-        <h2 class="font-heading">Why Choose Us?</h2>
+        <h2 class="font-heading">Why travellers from 30+ countries pick us</h2>
         <ul>
-          <li><strong>Licensed & Certified</strong> — All guides hold credentials from the Ministry of Tourism, Government of India</li>
-          <li><strong>Multilingual</strong> — We offer tours in English, French, German, Spanish, and Hindi</li>
-          <li><strong>Local Expertise</strong> — Born and raised in the Golden Triangle, we share insider knowledge you won't find in guidebooks</li>
-          <li><strong>Personalized Service</strong> — Every itinerary is customized to your interests, pace, and budget</li>
-          <li><strong>Best Price Guarantee</strong> — Book directly with us and skip the aggregator markups</li>
+          <li><strong>Licensed and accountable</strong> — every in-house guide carries a Ministry of Tourism licence and an ASI badge (the only legal credential to enter the Taj Mahal complex with you).</li>
+          <li><strong>Languages we speak in-house</strong> — English, Hindi, Japanese. French, Spanish, German, Italian, Russian, Arabic, Mandarin and Korean coordinated with vetted partners on request.</li>
+          <li><strong>Real reviews, no curation</strong> — every Google review is on our <a href="/reviews/">reviews page</a>, unedited.</li>
+          <li><strong>Foreigner-first transparent pricing</strong> in USD, EUR and INR — no quote-haggling, no commission detours.</li>
+          <li><strong>Owner-led communication</strong> — when you message us, you're not in a call-centre queue.</li>
         </ul>
 
-        <h2 class="font-heading">Our Mission</h2>
+        <h2 class="font-heading">Our promise</h2>
         <p>
-          We believe that great travel experiences come from authentic human connections. Our mission is to bring India's rich history and vibrant culture to life through storytelling, local insights, and genuine hospitality. Every tour is more than a sightseeing trip — it's a journey through centuries of history told by someone who lives and breathes it.
+          We sell time and stories — not tickets. Our job is to compress decades of Mughal, Rajput and Sufi history into the few hours you have at a monument, and to make sure you leave with photos you'll show people for years. If we can't deliver that on a given day, we'll tell you up-front.
         </p>
 
-        <h2 class="font-heading">What We Offer</h2>
+        <h2 class="font-heading">What we offer</h2>
         <ul>
-          <li><strong>Private Tour Guide Services</strong> — Dedicated guides for the Taj Mahal, Agra Fort, and all major monuments</li>
-          <li><strong>Multi-Day Tour Packages</strong> — Golden Triangle tours from 3 to 7 days with hotel, transport, and guide</li>
-          <li><strong>Day Trips & Transfers</strong> — Same-day Agra from Delhi, Jaipur day tours, airport transfers</li>
-          <li><strong>Car Hire</strong> — Comfortable AC vehicles with experienced drivers</li>
-          <li><strong>Custom Itineraries</strong> — Tell us what you want, and we'll design the perfect trip</li>
+          <li><strong>Guide-Only tours</strong> — from $22 for the Taj Mahal, group up to 5.</li>
+          <li><strong>Guide + AC Cab</strong> — same-day Agra from Delhi, from $89 per person.</li>
+          <li><strong>Golden Triangle all-inclusive</strong> — Delhi → Agra → Jaipur, 3 to 7 days, from $299.</li>
+          <li><strong>Custom itineraries</strong> — Rajasthan, Varanasi, Khajuraho, Himalayas, photography-focused, family-friendly.</li>
+          <li><strong>Add-ons</strong> — sunrise photography, marble-inlay workshop, food tours, heritage hotels.</li>
         </ul>
+
+        <p class="text-sm text-gray-500 italic">Page last updated April 2026.</p>
       </div>
     </Container>
   </Section>
@@ -59,9 +65,9 @@ const jsonLd = [buildOrganizationSchema()];
   <TrustBadges />
 
   <CTABanner
-    title="Ready to Explore with a Local Expert?"
-    subtitle="Get in touch and let us create your perfect Golden Triangle itinerary."
+    title="Ready to explore with a local expert?"
+    subtitle="WhatsApp us your dates and we'll send a quote within 2 hours. No deposit required for day tours."
     ctaText="Contact Us"
-    ctaHref="/contact/"
+    ctaLink="/contact/"
   />
 </PageLayout>

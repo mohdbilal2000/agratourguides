@@ -1,4 +1,6 @@
 ---
+import { usdToEur, usdToInr } from "../../lib/constants";
+
 interface Props {
   title: string;
   slug: string;
@@ -22,6 +24,11 @@ const currencySymbols: Record<string, string> = {
   INR: "₹",
 };
 const symbol = currencySymbols[currency] || currency + " ";
+
+// Build secondary EUR + INR for USD-priced tours so foreign travellers see the comparable rate immediately.
+const showMulti = currency === "USD";
+const eur = showMulti ? usdToEur(price) : null;
+const inr = showMulti ? usdToInr(price) : null;
 ---
 
 <a
@@ -57,9 +64,11 @@ const symbol = currencySymbols[currency] || currency + " ";
     )}
 
     <!-- Price Tag — bottom right of image -->
-    <div class="absolute bottom-0 right-0 bg-amber-500 text-white font-bold px-4 py-2 rounded-tl-xl text-lg shadow-lg">
-      <span class="text-xs font-normal opacity-90 mr-0.5">from</span>
-      {symbol}{price}
+    <div class="absolute bottom-0 right-0 bg-amber-500 text-white font-bold px-4 py-2 rounded-tl-xl shadow-lg">
+      <div class="text-lg leading-tight"><span class="text-xs font-normal opacity-90 mr-0.5">from</span>{symbol}{price}</div>
+      {showMulti && (
+        <div class="text-[10px] font-normal opacity-90 leading-tight">€{eur} · ₹{inr}</div>
+      )}
     </div>
   </div>
 

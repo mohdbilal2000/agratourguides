@@ -1,0 +1,71 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { buildOrganizationSchema, buildBreadcrumbSchema } from '../lib/schema';
+import { SITE_NAME, SITE_URL, CONTACT_EMAIL } from '../lib/constants';
+
+const pageUrl = `${SITE_URL}/terms/`;
+const lastUpdated = "April 29, 2026";
+
+const jsonLd = [
+  buildOrganizationSchema(),
+  buildBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Terms', url: pageUrl },
+  ]),
+];
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Terms' },
+];
+---
+
+<PageLayout
+  title={`Terms of Service — ${SITE_NAME}`}
+  description={`Booking terms, cancellation policy, and conditions for tours run by ${SITE_NAME}.`}
+  jsonLd={jsonLd}
+>
+  <Section class="bg-white">
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+      <article class="prose prose-stone max-w-3xl mx-auto mt-6">
+        <h1 class="font-heading text-3xl md:text-4xl font-bold text-gray-900">Terms of Service</h1>
+        <p class="text-sm text-gray-500">Last updated: {lastUpdated}</p>
+
+        <h2>1. Booking and confirmation</h2>
+        <p>A tour is confirmed only after we send a written confirmation (WhatsApp or email) listing the date, time, group size, language and price. Verbal or implied bookings are not binding.</p>
+
+        <h2>2. Pricing</h2>
+        <p>Prices are quoted in USD, EUR and INR using the mid-market rate at quote time. Monument entry fees, optional meals, and tips for drivers are not included unless explicitly listed. All prices include GST where applicable.</p>
+
+        <h2>3. Payment</h2>
+        <p>For day tours: payment in cash on the day of the tour, in any accepted currency (USD, EUR, GBP, AUD, INR). For multi-day Golden Triangle and custom itineraries: a 25% advance to confirm hotels and drivers, balance on day one of the tour.</p>
+
+        <h2>4. Cancellation</h2>
+        <ul>
+          <li><strong>Day tours:</strong> Free cancellation up to 24 hours before tour start. Full advance refund (if any).</li>
+          <li><strong>Multi-day tours:</strong> Free cancellation up to 7 days before. 50% refund 3-7 days. No refund within 72 hours, except for documented medical or flight-disruption emergencies.</li>
+          <li><strong>Force majeure:</strong> If the Taj Mahal closes (Friday or unforeseen government order), or your flight is cancelled, we reschedule at no charge or refund 100% — your choice.</li>
+        </ul>
+
+        <h2>5. Liability</h2>
+        <p>We carry standard tourism liability insurance. We are not responsible for: (a) personal injury caused by traveller negligence at heritage sites; (b) loss of belongings due to traveller carelessness; (c) delays caused by traffic, weather, or government action. We strongly recommend personal travel insurance.</p>
+
+        <h2>6. Photography</h2>
+        <p>Phone photos taken during the tour are free and yours to keep. With your consent, we may use 1-2 anonymised photos on social media to promote our work. Tell us in advance if you do not consent — no questions asked.</p>
+
+        <h2>7. Conduct</h2>
+        <p>India has dress-code conventions at religious sites. Our guide will brief you. We reserve the right to terminate a tour without refund in cases of harassment, intoxication, or behaviour that endangers staff or fellow travellers.</p>
+
+        <h2>8. Disputes</h2>
+        <p>Any dispute is governed by the laws of India and subject to courts in Agra, Uttar Pradesh. We always prefer to resolve issues directly — message us first.</p>
+
+        <h2>Contact</h2>
+        <p>Questions about these terms: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+      </article>
+    </Container>
+  </Section>
+</PageLayout>

@@ -1,0 +1,176 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Container from '../components/ui/Container.astro';
+import Section from '../components/ui/Section.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import CTABanner from '../components/sections/CTABanner.astro';
+import {
+  buildOrganizationSchema,
+  buildBreadcrumbSchema,
+  buildFAQSchema,
+} from '../lib/schema';
+import { SITE_NAME, SITE_URL } from '../lib/constants';
+
+const pageUrl = `${SITE_URL}/faq/`;
+const lastUpdated = "April 2026";
+
+const faqs = [
+  // PRICING & BOOKING
+  {
+    category: "Pricing & Booking",
+    question: "How much does a private Taj Mahal tour guide cost?",
+    answer: "A licensed private guide costs ₹1,800 (about $22 / €20) for a group of up to 5 people, for a 1.5–2 hour tour inside the Taj Mahal. The fee is fixed regardless of nationality. Foreigner monument entry tickets (₹1,300 / $16) and the e-rickshaw to the gate (₹100 round-trip) are paid separately at the gate.",
+  },
+  {
+    category: "Pricing & Booking",
+    question: "How do I book from outside India?",
+    answer: "WhatsApp is the fastest channel — message us with your travel dates, group size and language preference, and you'll receive a quote within 2 hours during 06:00–22:00 IST. Booking is free; you pay only on the day of the tour, in cash (USD/EUR/GBP/AUD/INR) or by UPI/bank transfer.",
+  },
+  {
+    category: "Pricing & Booking",
+    question: "What payment methods do you accept?",
+    answer: "Cash in any major currency at the day's mid-market rate. UPI or Indian bank transfer if you're already in India. Wise/Revolut transfers to our INR account work well for advances. PayPal on request (adds 4.4% gateway fee). We do not accept American Express to avoid the surcharge.",
+  },
+  {
+    category: "Pricing & Booking",
+    question: "Do you charge cancellation fees?",
+    answer: "Day tours: free cancellation up to 24 hours before, full refund of any advance. Multi-day Golden Triangle: free cancellation up to 7 days, 50% refund 3–7 days, no refund within 72 hours unless documented flight cancellation or medical emergency. Read full terms on our /terms page.",
+  },
+  // TIMING & LOGISTICS
+  {
+    category: "Timing & Logistics",
+    question: "What is the best time of day to visit the Taj Mahal?",
+    answer: "Sunrise (entry at 06:00) is unanimously the best time — soft pink-gold light on the marble, 80% fewer crowds than midday, and cool temperatures. Sunset is second best for warm light without the early wake-up. The Taj is closed every Friday for Jumu'ah prayer; plan around it.",
+  },
+  {
+    category: "Timing & Logistics",
+    question: "What is the best month to visit Agra?",
+    answer: "October to March is peak season — temperatures 10–25°C, dry, perfect for sightseeing. Avoid May-June (40-45°C heat) and July-September (monsoon humidity). December has the prettiest cool fog; February has the cleanest air. Foreigners get the same monument prices year-round.",
+  },
+  {
+    category: "Timing & Logistics",
+    question: "How long should I spend in Agra?",
+    answer: "Minimum: 6-8 hours (same-day from Delhi covers Taj Mahal + Agra Fort). Comfortable: 1 night in Agra to see Taj at sunrise, Agra Fort, and Mehtab Bagh at sunset. Ideal: 2 nights to add Fatehpur Sikri (40 km away, a UNESCO ghost city most travellers regret missing).",
+  },
+  {
+    category: "Timing & Logistics",
+    question: "How far is Agra from Delhi?",
+    answer: "By Yamuna Expressway: 230 km, 3-3.5 hours by private car (₹3,000-5,000 one way). By Gatimaan Express train: 1 hour 40 minutes, ₹1,500-2,500 in chair-car. By Vande Bharat: 2 hours, modern AC. Same-day round trips by car are routine — we do them often.",
+  },
+  // GUIDES
+  {
+    category: "Guides",
+    question: "Are your guides government-licensed?",
+    answer: "Yes. Every guide on our team holds a Ministry of Tourism (Government of India) licence and an Archaeological Survey of India (ASI) badge. This is the only legal credential to guide inside the Taj Mahal complex. Unlicensed touts loitering at the gate cannot enter with you and are common scams to avoid.",
+  },
+  {
+    category: "Guides",
+    question: "What languages do your guides speak?",
+    answer: "We have in-house guides fluent in English, Hindi and Japanese. For French, Spanish, German, Italian, Russian, Arabic, Mandarin and Korean, we coordinate with vetted partner guides also certified by the Ministry of Tourism. Request the language when you message us.",
+  },
+  {
+    category: "Guides",
+    question: "Will I get the same guide that has the 5-star reviews?",
+    answer: "Pawan Agarwal — the founder and most-reviewed guide on our Google profile — leads many tours personally. For dates he's already booked, we assign other licensed guides on our team trained to the same standard. Tell us if you specifically want Pawan and we'll confirm availability for your dates.",
+  },
+  // ON-TOUR
+  {
+    category: "On-tour",
+    question: "Will my guide pressure me to buy from shops?",
+    answer: "No. We are a flat-fee service — your guide is paid the same whether or not you buy anything. We will show you marble-inlay workshops and carpet factories on request because reviewers love them, but there is zero commission and zero pressure. If pressured, message us mid-tour and we'll address it.",
+  },
+  {
+    category: "On-tour",
+    question: "What should I wear at the Taj Mahal?",
+    answer: "Comfortable, modest clothing — shoulders and knees covered is respectful. Slip-on shoes are easiest because shoe covers are required at the mausoleum entrance (or remove them entirely). Sunglasses, a hat, and a small water bottle are smart. No food, tripods, or large bags allowed inside.",
+  },
+  {
+    category: "On-tour",
+    question: "Are tickets included in the tour price?",
+    answer: "No — monument entry tickets are paid separately at the gate (or pre-booked online). Foreigner ticket: ₹1,300 ($16) for the Taj Mahal. We pre-book your tickets at no extra charge so you skip the queue. The mausoleum mainroom (where the cenotaphs are) is an extra ₹200.",
+  },
+  // GOLDEN TRIANGLE
+  {
+    category: "Golden Triangle",
+    question: "What is the Golden Triangle?",
+    answer: "India's most-booked tourist circuit: Delhi → Agra → Jaipur, roughly 720 km in a triangle on the map. Delhi has Mughal monuments and modern India; Agra has the Taj Mahal; Jaipur has Rajput forts and the Pink City bazaars. Three to seven days is the typical span.",
+  },
+  {
+    category: "Golden Triangle",
+    question: "How many days do I need for the Golden Triangle?",
+    answer: "Three days is the absolute minimum (one city per day, with night travel — exhausting). Five days is the comfortable pace, and what 70% of our travellers choose: Delhi (1.5 days), Agra (1 day), Jaipur (2 days). Seven days lets you add Fatehpur Sikri and a slower Jaipur with Amber Fort sunrise.",
+  },
+];
+
+const grouped = faqs.reduce<Record<string, typeof faqs>>((acc, f) => {
+  acc[f.category] = acc[f.category] ?? [];
+  acc[f.category].push(f);
+  return acc;
+}, {});
+
+const jsonLd = [
+  buildOrganizationSchema(),
+  buildBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'FAQ', url: pageUrl },
+  ]),
+  buildFAQSchema(faqs.map((f) => ({ question: f.question, answer: f.answer }))),
+];
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'FAQ' },
+];
+---
+
+<PageLayout
+  title={`Taj Mahal Tour FAQ — Pricing, Timing, Guides | ${SITE_NAME}`}
+  description="Honest answers to the questions foreign travellers actually ask: how much does a Taj Mahal guide cost, when to visit, how to book from abroad, what to wear, and how to avoid tout scams."
+  jsonLd={jsonLd}
+>
+  <Section class="bg-gradient-to-b from-amber-50 to-white">
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+      <header class="text-center max-w-3xl mx-auto mb-12 mt-6">
+        <p class="text-sm font-semibold uppercase tracking-widest text-amber-600 mb-3">Frequently Asked Questions</p>
+        <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          Honest answers to traveller questions
+        </h1>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          Built from the questions our 81+ verified-review travellers actually asked us — pricing, scams, timing, what to wear, and how the booking really works.
+        </p>
+        <p class="mt-3 text-xs text-gray-500">Updated {lastUpdated}</p>
+      </header>
+    </Container>
+  </Section>
+
+  <Section class="bg-white">
+    <Container>
+      <div class="max-w-3xl mx-auto">
+        {Object.entries(grouped).map(([category, items]) => (
+          <div class="mb-12">
+            <h2 class="font-heading text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-amber-200">{category}</h2>
+            <div class="space-y-4">
+              {items.map((f) => (
+                <details class="group bg-amber-50/60 rounded-xl p-5 border border-amber-100">
+                  <summary class="font-semibold text-gray-900 cursor-pointer flex items-center justify-between gap-4">
+                    {f.question}
+                    <svg class="h-5 w-5 text-amber-600 group-open:rotate-180 transition-transform shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                  </summary>
+                  <p class="text-sm text-gray-700 mt-3 leading-relaxed">{f.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </Section>
+
+  <CTABanner
+    title="Still have a question?"
+    subtitle="Message us on WhatsApp — we usually reply within 30 minutes during business hours (06:00–22:00 IST)."
+    ctaText="Ask on WhatsApp"
+    ctaLink="/contact/"
+  />
+</PageLayout>

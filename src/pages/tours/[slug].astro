@@ -11,7 +11,7 @@ import FAQAccordion from '../../components/react/FAQAccordion';
 import BookingForm from '../../components/react/BookingForm';
 import { getCollection, render } from 'astro:content';
 import { buildTouristTripSchema, buildFAQSchema, buildBreadcrumbSchema } from '../../lib/schema';
-import { SITE_NAME, SITE_URL } from '../../lib/constants';
+import { SITE_NAME, SITE_URL, WHATSAPP_NUMBER_DIGITS, usdToEur, usdToInr } from '../../lib/constants';
 
 export async function getStaticPaths() {
   const tours = await getCollection('tours');
@@ -67,6 +67,7 @@ const jsonLd = [
   title={`${tour.data.metaTitle} — ${SITE_NAME}`}
   description={tour.data.metaDescription}
   jsonLd={jsonLd}
+  transparentHeader
 >
   <HeroSection
     title={tour.data.title}
@@ -168,18 +169,20 @@ const jsonLd = [
             <div class="text-center mb-4">
               <p class="text-sm text-gray-500">Starting from</p>
               <p class="text-4xl font-bold text-amber-600">${tour.data.priceFrom}</p>
-              <p class="text-sm text-gray-500">per person</p>
+              <p class="text-xs text-gray-600 mt-1">€{usdToEur(tour.data.priceFrom)} · ₹{usdToInr(tour.data.priceFrom).toLocaleString("en-IN")}</p>
+              <p class="text-sm text-gray-500 mt-1">per person</p>
             </div>
-            <div class="text-sm text-gray-600 space-y-2 mb-6">
+            <div class="text-sm text-gray-700 space-y-2 mb-6">
               <p class="flex justify-between"><span>Duration:</span> <strong>{tour.data.duration}</strong></p>
               <p class="flex justify-between"><span>Group Size:</span> <strong>Private</strong></p>
-              <p class="flex justify-between"><span>Languages:</span> <strong>EN, FR, DE</strong></p>
+              <p class="flex justify-between"><span>Languages:</span> <strong>EN, HI, JP</strong></p>
+              <p class="flex justify-between"><span>Rating:</span> <strong>5.0★ on Google</strong></p>
             </div>
-            <a href="#booking" class="block w-full text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-700 transition-colors mb-3">
-              Inquire Now
+            <a href={`https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent(`Hi! I'm interested in the ${tour.data.title} tour. My dates: ___, group size: ___.`)}`} class="block w-full text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition-colors mb-3" target="_blank" rel="noopener noreferrer">
+              WhatsApp — Quote in 2 hours
             </a>
-            <a href={`https://wa.me/919999999999?text=Hi! I'm interested in the ${tour.data.title}`} class="block w-full text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition-colors" target="_blank" rel="noopener noreferrer">
-              WhatsApp Us
+            <a href="#booking" class="block w-full text-center px-6 py-3 border-2 border-amber-600 text-amber-700 rounded-lg font-semibold hover:bg-amber-50 transition-colors">
+              Use Booking Form
             </a>
           </div>
         </aside>

@@ -1,6 +1,14 @@
-import { SITE_NAME, SITE_URL } from "./constants";
-
-// --- Type definitions for function parameters ---
+import {
+  SITE_NAME,
+  SITE_URL,
+  CONTACT_PHONE,
+  CONTACT_EMAIL,
+  WHATSAPP_NUMBER,
+  REVIEW_RATING,
+  REVIEW_COUNT,
+  LANGUAGES_SPOKEN,
+  GOOGLE_REVIEWS_URL,
+} from "./constants";
 
 interface BreadcrumbItem {
   name: string;
@@ -56,17 +64,37 @@ interface GuideSchemaInput {
   url: string;
 }
 
-// --- Schema builder functions ---
+export interface ReviewItem {
+  author: string;
+  country?: string;
+  rating: number;
+  text: string;
+  datePublished: string;
+}
+
+const ORG_ID = `${SITE_URL}#organization`;
 
 export function buildOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
+    "@id": ORG_ID,
     name: SITE_NAME,
+    alternateName: ["Agra Tour Guide", "Taj Mahal Tour Guide Agra"],
     url: SITE_URL,
-    logo: `${SITE_URL}/images/logo.png`,
+    logo: {
+      "@type": "ImageObject",
+      url: `${SITE_URL}/images/logo.png`,
+      width: 512,
+      height: 512,
+    },
+    image: `${SITE_URL}/images/og-default.jpg`,
     description:
-      "Expert licensed tour guides for Agra, Delhi & Jaipur. Book private tours of the Taj Mahal, Golden Triangle & more.",
+      "Government-licensed Agra-based tour agency specialising in private Taj Mahal tours, Agra Fort, and Golden Triangle itineraries (Delhi-Agra-Jaipur). 5.0 stars on Google. English, Hindi & Japanese-speaking guides.",
+    foundingLocation: {
+      "@type": "Place",
+      name: "Agra, Uttar Pradesh, India",
+    },
     address: {
       "@type": "PostalAddress",
       streetAddress: "Tajganj",
@@ -75,27 +103,51 @@ export function buildOrganizationSchema() {
       postalCode: "282001",
       addressCountry: "IN",
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 27.1751,
+      longitude: 78.0421,
+    },
     areaServed: [
+      { "@type": "City", name: "Agra", "@id": "https://www.wikidata.org/wiki/Q43332" },
+      { "@type": "City", name: "Delhi", "@id": "https://www.wikidata.org/wiki/Q1353" },
+      { "@type": "City", name: "Jaipur", "@id": "https://www.wikidata.org/wiki/Q173387" },
+      { "@type": "City", name: "Fatehpur Sikri" },
+      { "@type": "TouristDestination", name: "Golden Triangle, India" },
+    ],
+    knowsLanguage: LANGUAGES_SPOKEN as unknown as string[],
+    priceRange: "$$",
+    currenciesAccepted: "INR, USD, EUR",
+    paymentAccepted: "Cash, Credit Card, UPI, Bank Transfer",
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      opens: "06:00",
+      closes: "21:00",
+    },
+    contactPoint: [
       {
-        "@type": "City",
-        name: "Delhi",
+        "@type": "ContactPoint",
+        telephone: CONTACT_PHONE,
+        contactType: "reservations",
+        availableLanguage: LANGUAGES_SPOKEN as unknown as string[],
+        areaServed: ["IN", "GB", "US", "FR", "DE", "JP", "AU"],
       },
       {
-        "@type": "City",
-        name: "Agra",
-      },
-      {
-        "@type": "City",
-        name: "Jaipur",
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: CONTACT_EMAIL,
+        availableLanguage: LANGUAGES_SPOKEN as unknown as string[],
       },
     ],
-    contactPoint: {
-      "@type": "ContactPoint",
-      telephone: "+91-9999-999-999",
-      contactType: "reservations",
-      availableLanguage: ["English", "Hindi"],
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: REVIEW_RATING,
+      reviewCount: REVIEW_COUNT,
+      bestRating: 5,
+      worstRating: 1,
     },
-    sameAs: [] as string[],
+    sameAs: [GOOGLE_REVIEWS_URL].filter((u) => !u.includes("REPLACE_ME")),
   };
 }
 
@@ -103,16 +155,11 @@ export function buildWebSiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${SITE_URL}#website`,
     name: SITE_NAME,
     url: SITE_URL,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
+    publisher: { "@id": ORG_ID },
+    inLanguage: "en",
   };
 }
 
@@ -178,6 +225,7 @@ export function buildTouristTripSchema(tour: TourSchemaInput) {
     name: tour.title,
     description: tour.description,
     touristType: "Sightseeing",
+    provider: { "@id": ORG_ID },
     itinerary: {
       "@type": "ItemList",
       numberOfItems: tour.itinerary.length,
@@ -193,6 +241,14 @@ export function buildTouristTripSchema(tour: TourSchemaInput) {
       price: tour.priceFrom,
       priceCurrency: tour.currency,
       availability: "https://schema.org/InStock",
+      validFrom: new Date().toISOString().split("T")[0],
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: REVIEW_RATING,
+      reviewCount: REVIEW_COUNT,
+      bestRating: 5,
+      worstRating: 1,
     },
     url: tour.url,
   };
@@ -220,8 +276,9 @@ export function buildArticleSchema(guide: GuideSchemaInput) {
     headline: guide.title,
     description: guide.description,
     author: {
-      "@type": "Person",
-      name: guide.author,
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
     },
     datePublished: guide.publishedAt.toISOString(),
     dateModified: guide.updatedAt.toISOString(),
@@ -230,12 +287,14 @@ export function buildArticleSchema(guide: GuideSchemaInput) {
       : `${SITE_URL}${guide.heroImage}`,
     publisher: {
       "@type": "Organization",
+      "@id": ORG_ID,
       name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
         url: `${SITE_URL}/images/logo.png`,
       },
     },
+    mainEntityOfPage: guide.url,
     url: guide.url,
   };
 }
@@ -245,4 +304,30 @@ export function buildSpeakableSchema(cssSelectors: string[]) {
     "@type": "SpeakableSpecification",
     cssSelector: cssSelectors,
   };
+}
+
+export function buildReviewSchema(review: ReviewItem) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    itemReviewed: { "@id": ORG_ID },
+    author: {
+      "@type": "Person",
+      name: review.author,
+      ...(review.country ? { nationality: { "@type": "Country", name: review.country } } : {}),
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: review.rating,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    reviewBody: review.text,
+    datePublished: review.datePublished,
+    publisher: { "@type": "Organization", name: "Google" },
+  };
+}
+
+export function buildReviewsCollectionSchema(reviews: ReviewItem[]) {
+  return reviews.map(buildReviewSchema);
 }
