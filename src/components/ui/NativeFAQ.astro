@@ -1,0 +1,88 @@
+---
+/**
+ * Server-rendered FAQ list using native <details>/<summary> elements.
+ * Every Q&A pair is in the HTML at build time — fully crawlable by LLM
+ * scrapers that don't execute JS, and accessible via the browser's
+ * built-in disclosure semantics (focusable, keyboard-navigable, ARIA).
+ *
+ * Each item emits Question + Answer microdata for FAQPage parsers, plus
+ * .speakable-question / .speakable-answer classes so the page-level
+ * SpeakableSpecification (declared in JSON-LD) targets the right nodes.
+ */
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FAQ[];
+  idPrefix?: string;
+  /** Render the first item open by default — useful when there's one most-asked Q. */
+  firstOpen?: boolean;
+}
+
+const { items, idPrefix = "faq", firstOpen = false } = Astro.props;
+---
+
+<div class="divide-y divide-[var(--border)]" itemscope itemtype="https://schema.org/FAQPage">
+  {items.map((f, i) => (
+    <details
+      class="native-faq group"
+      id={`${idPrefix}-${i + 1}`}
+      open={firstOpen && i === 0}
+      itemscope
+      itemprop="mainEntity"
+      itemtype="https://schema.org/Question"
+    >
+      <summary class="native-faq-summary flex items-start justify-between gap-4 py-5 cursor-pointer list-none">
+        <span
+          itemprop="name"
+          class="speakable-question text-balance text-[var(--foreground)] font-medium"
+          style="font-size: var(--text-lg); font-variation-settings: 'opsz' 24, 'SOFT' 20;"
+        >
+          {f.question}
+        </span>
+        <span aria-hidden="true" class="native-faq-icon shrink-0 mt-1.5 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--border)] text-[var(--foreground-muted)] transition-transform">
+          <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <path d="M12 5v14M5 12h14" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </summary>
+      <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+        <p itemprop="text" class="speakable-answer pb-6 -mt-2 text-[var(--foreground-muted)] leading-relaxed text-pretty">
+          {f.answer}
+        </p>
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  .native-faq-summary::-webkit-details-marker {
+    display: none;
+  }
+  .native-faq[open] .native-faq-icon {
+    transform: rotate(45deg);
+    border-color: var(--color-gold-500);
+    color: var(--color-gold-700);
+  }
+  .native-faq-summary:focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* Smooth height animation when supported (Chrome 129+, Safari 18.2+) */
+  @supports (interpolate-size: allow-keywords) {
+    .native-faq {
+      interpolate-size: allow-keywords;
+    }
+    .native-faq::details-content {
+      height: 0;
+      overflow: clip;
+      transition: height 280ms cubic-bezier(0.25, 1, 0.5, 1), content-visibility 280ms allow-discrete;
+    }
+    .native-faq[open]::details-content {
+      height: auto;
+    }
+  }
+</style>

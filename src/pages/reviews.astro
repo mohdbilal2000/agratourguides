@@ -9,6 +9,7 @@ import {
   buildBreadcrumbSchema,
   buildReviewsCollectionSchema,
   buildFAQSchema,
+  buildGraph,
 } from '../lib/schema';
 import {
   SITE_NAME,
@@ -37,13 +38,15 @@ const reviewFaqs = [
 ];
 
 const jsonLd = [
-  buildOrganizationSchema(),
-  buildBreadcrumbSchema([
-    { name: 'Home', url: SITE_URL },
-    { name: 'Reviews', url: pageUrl },
+  buildGraph([
+    buildOrganizationSchema(),
+    buildBreadcrumbSchema([
+      { name: 'Home', url: SITE_URL },
+      { name: 'Reviews', url: pageUrl },
+    ]),
+    ...buildReviewsCollectionSchema(REAL_REVIEWS),
+    buildFAQSchema(reviewFaqs),
   ]),
-  ...buildReviewsCollectionSchema(REAL_REVIEWS),
-  buildFAQSchema(reviewFaqs),
 ];
 
 const flagMap: Record<string, string> = {

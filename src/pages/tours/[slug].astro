@@ -7,10 +7,10 @@ import CTABanner from '../../components/sections/CTABanner.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import Badge from '../../components/ui/Badge.astro';
 import TourCard from '../../components/cards/TourCard.astro';
-import FAQAccordion from '../../components/react/FAQAccordion';
+import NativeFAQ from '../../components/ui/NativeFAQ.astro';
 import BookingForm from '../../components/react/BookingForm';
 import { getCollection, render } from 'astro:content';
-import { buildTouristTripSchema, buildFAQSchema, buildBreadcrumbSchema } from '../../lib/schema';
+import { buildTouristTripSchema, buildFAQSchema, buildBreadcrumbSchema, buildOrganizationSchema, buildGraph } from '../../lib/schema';
 import { SITE_NAME, SITE_URL, WHATSAPP_NUMBER_DIGITS, usdToEur, usdToInr } from '../../lib/constants';
 
 export async function getStaticPaths() {
@@ -45,20 +45,23 @@ const breadcrumbs = [
 ];
 
 const jsonLd = [
-  buildTouristTripSchema({
-    title: tour.data.title,
-    description: tour.data.description,
-    itinerary: tour.data.itinerary,
-    priceFrom: tour.data.priceFrom,
-    currency: tour.data.currency,
-    duration: tour.data.duration,
-    url: `${SITE_URL}/tours/${tour.data.slug}/`,
-  }),
-  buildFAQSchema(tour.data.faqs),
-  buildBreadcrumbSchema([
-    { name: 'Home', url: SITE_URL },
-    { name: 'Tours', url: `${SITE_URL}/tours/` },
-    { name: tour.data.title, url: `${SITE_URL}/tours/${tour.data.slug}/` },
+  buildGraph([
+    buildOrganizationSchema(),
+    buildTouristTripSchema({
+      title: tour.data.title,
+      description: tour.data.description,
+      itinerary: tour.data.itinerary,
+      priceFrom: tour.data.priceFrom,
+      currency: tour.data.currency,
+      duration: tour.data.duration,
+      url: `${SITE_URL}/tours/${tour.data.slug}/`,
+    }),
+    buildFAQSchema(tour.data.faqs),
+    buildBreadcrumbSchema([
+      { name: 'Home', url: SITE_URL },
+      { name: 'Tours', url: `${SITE_URL}/tours/` },
+      { name: tour.data.title, url: `${SITE_URL}/tours/${tour.data.slug}/` },
+    ]),
   ]),
 ];
 ---
@@ -211,7 +214,7 @@ const jsonLd = [
           Frequently Asked Questions
         </h2>
         <div class="max-w-3xl mx-auto">
-          <FAQAccordion items={tour.data.faqs} client:visible />
+          <NativeFAQ items={tour.data.faqs} />
         </div>
       </Container>
     </Section>

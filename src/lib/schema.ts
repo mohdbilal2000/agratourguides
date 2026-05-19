@@ -14,6 +14,7 @@ import {
 export const ORG_ID = `${SITE_URL}/#organization`;
 export const SITE_ID = `${SITE_URL}/#website`;
 export const LOGO_ID = `${SITE_URL}/#logo`;
+export const FOUNDER_ID = `${SITE_URL}/about/#founder`;
 
 interface BreadcrumbItem {
   name: string;
@@ -221,6 +222,8 @@ export function buildOrganizationSchema() {
       bestRating: 5,
       worstRating: 1,
     },
+    founder: { "@id": FOUNDER_ID },
+    employee: [{ "@id": FOUNDER_ID }],
     sameAs: [GOOGLE_REVIEWS_URL].filter((u) => !u.includes("REPLACE_ME")),
   };
 }
@@ -593,18 +596,109 @@ export function buildSpeakableSchema(cssSelectors: string[]) {
 }
 
 // ──────────────────────────────────────────────────────────────────────
+// Founding guide — Person schema with credentials. Auto-included in
+// every @graph that already references the Organization, so LLMs can
+// answer "who is the guide", "who founded this", "who is licensed".
+// ──────────────────────────────────────────────────────────────────────
+
+export function buildFounderPersonSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": FOUNDER_ID,
+    name: "Pawan Agarwal",
+    alternateName: ["Pawan", "Pavan", "Pawan Aggarwal"],
+    givenName: "Pawan",
+    familyName: "Agarwal",
+    jobTitle: "Founding tour guide",
+    description:
+      "Born-and-raised Agra tour guide, founder of Agra Tour Guides. Ministry of Tourism (Government of India) licensed and Archaeological Survey of India (ASI) badged. Speaks English, Hindi and Japanese. Specialises in Mughal architecture, Indo-Islamic art, and Taj Mahal photography. 5.0 / 5 across 81+ verified Google reviews from travellers in 30+ countries.",
+    image: `${SITE_URL}/images/pawan-agarwal.jpg`,
+    knowsLanguage: ["English", "Hindi", "Japanese"],
+    knowsAbout: [
+      "Mughal architecture",
+      "Indo-Islamic art",
+      "Taj Mahal",
+      "Agra Fort",
+      "Fatehpur Sikri",
+      "Pietra dura inlay",
+      "UNESCO World Heritage Sites in India",
+      "Travel photography",
+    ],
+    worksFor: { "@id": ORG_ID },
+    affiliation: [
+      {
+        "@type": "Organization",
+        name: "Ministry of Tourism, Government of India",
+        url: "https://tourism.gov.in/",
+      },
+      {
+        "@type": "Organization",
+        name: "Archaeological Survey of India",
+        url: "https://asi.nic.in/",
+      },
+    ],
+    hasCredential: [
+      {
+        "@type": "EducationalOccupationalCredential",
+        name: "Ministry of Tourism Regional Level Guide Licence",
+        credentialCategory: "Professional Certification",
+        recognizedBy: {
+          "@type": "Organization",
+          name: "Ministry of Tourism, Government of India",
+        },
+      },
+      {
+        "@type": "EducationalOccupationalCredential",
+        name: "ASI Monument Access Badge — Taj Mahal complex",
+        credentialCategory: "Professional Authorisation",
+        recognizedBy: {
+          "@type": "Organization",
+          name: "Archaeological Survey of India",
+        },
+      },
+    ],
+    workLocation: {
+      "@type": "Place",
+      name: "Tajganj, Agra",
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 27.1751,
+        longitude: 78.0421,
+      },
+    },
+    url: `${SITE_URL}/about/`,
+    mainEntityOfPage: `${SITE_URL}/about/`,
+  };
+}
+
+// ──────────────────────────────────────────────────────────────────────
 // @graph wrapper — folds multiple entities into a single document so
 // LLMs and search engines can follow @id refs between them.
 // Preferred over emitting many separate <script type="application/ld+json"> blocks.
+// Org + Founder are auto-included if Organization is present (deduped).
 // ──────────────────────────────────────────────────────────────────────
 
 export function buildGraph(entities: Record<string, unknown>[]) {
+  const flat = entities.map((e) => {
+    const copy = { ...e };
+    delete copy["@context"];
+    return copy;
+  });
+
+  // Auto-include the founder Person whenever the Organization is in the
+  // graph, so any page that establishes the company also establishes
+  // who's behind it (E-E-A-T).
+  const hasOrg = flat.some((e) => e["@id"] === ORG_ID);
+  const hasFounder = flat.some((e) => e["@id"] === FOUNDER_ID);
+  if (hasOrg && !hasFounder) {
+    const founder = buildFounderPersonSchema();
+    delete (founder as Record<string, unknown>)["@context"];
+    flat.push(founder);
+  }
+
   return {
     "@context": "https://schema.org",
-    "@graph": entities.map((e) => {
-      const copy = { ...e };
-      delete copy["@context"];
-      return copy;
-    }),
+    "@graph": flat,
   };
 }

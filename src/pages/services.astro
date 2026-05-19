@@ -8,6 +8,7 @@ import {
   buildOrganizationSchema,
   buildBreadcrumbSchema,
   buildFAQSchema,
+  buildGraph,
 } from '../lib/schema';
 import { SITE_NAME, SITE_URL, WHATSAPP_NUMBER_DIGITS } from '../lib/constants';
 
@@ -163,12 +164,14 @@ const servicesFaqs = [
 ];
 
 const jsonLd = [
-  buildOrganizationSchema(),
-  buildBreadcrumbSchema([
-    { name: 'Home', url: SITE_URL },
-    { name: 'Services', url: pageUrl },
+  buildGraph([
+    buildOrganizationSchema(),
+    buildBreadcrumbSchema([
+      { name: 'Home', url: SITE_URL },
+      { name: 'Services', url: pageUrl },
+    ]),
+    buildFAQSchema(servicesFaqs),
   ]),
-  buildFAQSchema(servicesFaqs),
 ];
 
 const breadcrumbs = [

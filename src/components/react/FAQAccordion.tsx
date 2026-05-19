@@ -36,9 +36,11 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
               aria-expanded={isOpen}
             >
               <span
-                className={`text-base font-semibold transition-colors md:text-lg ${
+                className={`speakable-question text-base font-semibold transition-colors md:text-lg ${
                   isOpen ? "text-amber-700" : "text-gray-900"
                 }`}
+                itemScope
+                itemProp="name"
               >
                 {item.question}
               </span>
@@ -76,7 +78,7 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
                   transition={{ duration: 0.25, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <div className="px-5 pb-5 text-sm leading-relaxed text-gray-700 md:text-base">
+                  <div className="speakable-answer px-5 pb-5 text-sm leading-relaxed text-gray-700 md:text-base">
                     {item.answer}
                   </div>
                 </motion.div>

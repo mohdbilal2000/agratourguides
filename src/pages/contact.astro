@@ -3,10 +3,18 @@ import PageLayout from '../layouts/PageLayout.astro';
 import Container from '../components/ui/Container.astro';
 import Section from '../components/ui/Section.astro';
 import BookingForm from '../components/react/BookingForm';
-import { buildOrganizationSchema } from '../lib/schema';
-import { SITE_NAME, CONTACT_EMAIL, CONTACT_PHONE, WHATSAPP_NUMBER } from '../lib/constants';
+import { buildOrganizationSchema, buildBreadcrumbSchema, buildGraph } from '../lib/schema';
+import { SITE_NAME, SITE_URL, CONTACT_EMAIL, CONTACT_PHONE, WHATSAPP_NUMBER } from '../lib/constants';
 
-const jsonLd = [buildOrganizationSchema()];
+const jsonLd = [
+  buildGraph([
+    buildOrganizationSchema(),
+    buildBreadcrumbSchema([
+      { name: 'Home', url: SITE_URL },
+      { name: 'Contact', url: `${SITE_URL}/contact/` },
+    ]),
+  ]),
+];
 ---
 
 <PageLayout

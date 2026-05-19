@@ -8,11 +8,11 @@ import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import Badge from '../../components/ui/Badge.astro';
 import AttractionCard from '../../components/cards/AttractionCard.astro';
 import TourCard from '../../components/cards/TourCard.astro';
-import FAQAccordion from '../../components/react/FAQAccordion';
+import NativeFAQ from '../../components/ui/NativeFAQ.astro';
 import PhotoGallery from '../../components/react/PhotoGallery';
 import InteractiveMap from '../../components/react/InteractiveMap';
 import { getCollection, render } from 'astro:content';
-import { buildTouristAttractionSchema, buildFAQSchema, buildBreadcrumbSchema } from '../../lib/schema';
+import { buildTouristAttractionSchema, buildFAQSchema, buildBreadcrumbSchema, buildOrganizationSchema, buildGraph } from '../../lib/schema';
 import { SITE_NAME, SITE_URL } from '../../lib/constants';
 
 export async function getStaticPaths() {
@@ -86,19 +86,22 @@ const breadcrumbs = [
 ];
 
 const jsonLd = [
-  buildTouristAttractionSchema({
-    title: attraction.data.title,
-    description: attraction.data.description,
-    location: attraction.data.location,
-    visitInfo: attraction.data.visitInfo,
-    heroImage: attraction.data.heroImage,
-    url: `${SITE_URL}/${attraction.data.city}/${attraction.data.slug}/`,
-  }),
-  buildFAQSchema(attraction.data.faqs),
-  buildBreadcrumbSchema([
-    { name: 'Home', url: SITE_URL },
-    { name: cityName, url: `${SITE_URL}/${attraction.data.city}/` },
-    { name: attraction.data.title, url: `${SITE_URL}/${attraction.data.city}/${attraction.data.slug}/` },
+  buildGraph([
+    buildOrganizationSchema(),
+    buildTouristAttractionSchema({
+      title: attraction.data.title,
+      description: attraction.data.description,
+      location: attraction.data.location,
+      visitInfo: attraction.data.visitInfo,
+      heroImage: attraction.data.heroImage,
+      url: `${SITE_URL}/${attraction.data.city}/${attraction.data.slug}/`,
+    }),
+    buildFAQSchema(attraction.data.faqs),
+    buildBreadcrumbSchema([
+      { name: 'Home', url: SITE_URL },
+      { name: cityName, url: `${SITE_URL}/${attraction.data.city}/` },
+      { name: attraction.data.title, url: `${SITE_URL}/${attraction.data.city}/${attraction.data.slug}/` },
+    ]),
   ]),
 ];
 
@@ -273,7 +276,7 @@ const mapMarkers = [{
           Frequently Asked Questions
         </h2>
         <div class="max-w-3xl mx-auto">
-          <FAQAccordion items={attraction.data.faqs} client:visible />
+          <NativeFAQ items={attraction.data.faqs} />
         </div>
       </Container>
     </Section>

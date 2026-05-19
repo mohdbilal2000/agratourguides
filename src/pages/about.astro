@@ -1,76 +1,183 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
-import Container from '../components/ui/Container.astro';
-import Section from '../components/ui/Section.astro';
-import HeroSection from '../components/sections/HeroSection.astro';
-import CTABanner from '../components/sections/CTABanner.astro';
-import TrustBadges from '../components/sections/TrustBadges.astro';
-import { buildOrganizationSchema } from '../lib/schema';
-import { SITE_NAME } from '../lib/constants';
+import PageLayout from "../layouts/PageLayout.astro";
+import Container from "../components/ui/Container.astro";
+import Section from "../components/ui/Section.astro";
+import SectionHeader from "../components/ui/SectionHeader.astro";
+import AnswerBlock from "../components/ui/AnswerBlock.astro";
+import Reveal from "../components/ui/Reveal.astro";
+import Breadcrumbs from "../components/layout/Breadcrumbs.astro";
+import HeroSection from "../components/sections/HeroSection.astro";
+import CTABanner from "../components/sections/CTABanner.astro";
+import TrustBadges from "../components/sections/TrustBadges.astro";
+import {
+  buildOrganizationSchema,
+  buildBreadcrumbSchema,
+  buildFAQSchema,
+  buildFounderPersonSchema,
+  buildGraph,
+} from "../lib/schema";
+import { SITE_NAME, SITE_URL } from "../lib/constants";
 
-const jsonLd = [buildOrganizationSchema()];
+const pageUrl = `${SITE_URL}/about/`;
+
+const aboutFaqs = [
+  {
+    question: "Who runs Agra Tour Guides?",
+    answer:
+      "Pawan Agarwal founded the agency and remains the lead guide. Born and raised in Tajganj — the neighbourhood that overlooks the Taj Mahal — Pawan holds a Ministry of Tourism (Government of India) regional guide licence and an Archaeological Survey of India badge, the only legal credential permitting a guide to enter the Taj complex with travellers.",
+  },
+  {
+    question: "Are you the same as a Google search result called 'Pawan Tour Guide'?",
+    answer:
+      "Yes — Pawan Agarwal, Pawan Tour Guide, Agra Tour Guide and Pawan Aggarwal are all the same person and the same agency. Our Google Business listing carries the 5.0 / 5 rating from 81+ verified reviews you'll see across this site. We use 'Agra Tour Guides' as the umbrella name when working with a small team of partner guides.",
+  },
+  {
+    question: "What does 'government-licensed' actually mean in India?",
+    answer:
+      "It means an active, dated photo-ID card issued by the Ministry of Tourism after a multi-day exam on history, art, architecture and visitor handling. Plus an ASI badge re-issued annually that physically permits the guide to enter the Taj complex with non-Indian travellers. Unlicensed 'guides' at the gate cannot enter the marble area at all.",
+  },
+  {
+    question: "Do you employ guides, or are they freelancers?",
+    answer:
+      "Our in-house team (English, Hindi, Japanese) is on a salaried retainer — they're our colleagues, not contractors. For French, Spanish, German, Italian, Russian, Arabic, Mandarin and Korean we coordinate vetted licensed partner guides we've worked with for years. Either way, the person you meet is whoever we promised on WhatsApp, with credentials.",
+  },
+  {
+    question: "How do I verify you're a real agency before sending money?",
+    answer:
+      "You don't send money. Booking is free; you pay only on the day of the tour, in cash (USD/EUR/INR all accepted) or by UPI. If you want extra reassurance, our 5.0 / 5 Google Business listing has 81+ reviews with reviewer names and countries; cross-check there. We also accept Wise/Revolut transfers post-tour for travellers who'd rather skip the cash.",
+  },
+  {
+    question: "Where exactly are you based?",
+    answer:
+      "Tajganj, Agra, Uttar Pradesh 282001 — a walk from the East Gate of the Taj Mahal. We meet most travellers at their hotel lobby or at the monument gate; we don't run a walk-in office. Postal and phone details are in the footer and on every page; WhatsApp is the fastest channel.",
+  },
+];
+
+const jsonLd = [
+  buildGraph([
+    buildOrganizationSchema(),
+    buildFounderPersonSchema(),
+    buildBreadcrumbSchema([
+      { name: "Home", url: SITE_URL + "/" },
+      { name: "About", url: pageUrl },
+    ]),
+    buildFAQSchema(aboutFaqs),
+  ]),
+];
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "About" },
+];
+
+const lastUpdated = "April 2026";
 ---
 
 <PageLayout
-  title={`About Us — ${SITE_NAME}`}
-  description="Meet the team behind Agra Tour Guides. Licensed, multilingual tour guides with decades of experience in Agra, Delhi, and Jaipur's Golden Triangle."
+  title={`About us — ${SITE_NAME}`}
+  description="Meet Pawan Agarwal — founder of Agra Tour Guides, born-and-raised Tajganj resident, Ministry of Tourism licensed, ASI badged. The team, the credentials, the promise."
   jsonLd={jsonLd}
   transparentHeader
+  articlePublished="2024-01-15T00:00:00.000Z"
+  articleModified={new Date().toISOString()}
+  articleAuthor="Pawan Agarwal"
 >
   <HeroSection
     eyebrow="About us"
     leadIn="The people who'll"
     punch="meet you at the gate."
-    lede="Licensed, born-and-raised local guides sharing the real stories behind India's greatest monuments."
+    lede="Founded and run by Pawan Agarwal — Ministry-of-Tourism-licensed, ASI-badged, born in Tajganj. Sharing the real stories behind India's greatest monuments."
     backgroundImage="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1920&q=80"
     backgroundAlt="Visitors with a licensed guide at the Taj Mahal central platform"
   />
 
-  <Section class="bg-white">
+  <Section class="bg-[var(--background)] py-20 md:py-28">
     <Container>
-      <div class="max-w-3xl mx-auto prose prose-lg prose-stone max-w-none">
-        <h2 class="font-heading">Who we are</h2>
-        <p>
-          Agra Tour Guides is a small, government-licensed travel agency based in Tajganj, the neighbourhood that wakes up every morning to the silhouette of the Taj Mahal. Our team is led by Pawan Agarwal — a Ministry of Tourism-licensed guide with a 5.0★ Google rating from 81+ travellers across 30+ countries — and supported by a tight network of fellow ASI-badged guides, English-speaking drivers, and partner hotels we personally trust.
-        </p>
-        <p>
-          We are not an aggregator. We don't resell tours from other agencies, we don't take shop commissions, and we don't pad quotes with hidden surcharges. What you see on our pricing page is what you pay.
-        </p>
+      <Breadcrumbs items={breadcrumbs} />
+      <Reveal variant="fade" class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <aside class="lg:col-span-4 lg:sticky lg:top-32 lg:self-start space-y-3">
+          <p class="eyebrow"><span aria-hidden="true" class="block h-px w-8 bg-current opacity-70"></span> By Pawan Agarwal</p>
+          <p class="text-mono text-sm text-[var(--foreground-subtle)]">
+            <time datetime="2024-01-15">Published January 2024</time> · <time>Updated {lastUpdated}</time>
+          </p>
+          <p class="text-sm text-[var(--foreground-muted)] max-w-prose">
+            Ministry of Tourism licence holder · ASI badge holder · 12 years at the Taj · English · Hindi · Japanese
+          </p>
+        </aside>
 
-        <h2 class="font-heading">Why travellers from 30+ countries pick us</h2>
-        <ul>
-          <li><strong>Licensed and accountable</strong> — every in-house guide carries a Ministry of Tourism licence and an ASI badge (the only legal credential to enter the Taj Mahal complex with you).</li>
-          <li><strong>Languages we speak in-house</strong> — English, Hindi, Japanese. French, Spanish, German, Italian, Russian, Arabic, Mandarin and Korean coordinated with vetted partners on request.</li>
-          <li><strong>Real reviews, no curation</strong> — every Google review is on our <a href="/reviews/">reviews page</a>, unedited.</li>
-          <li><strong>Foreigner-first transparent pricing</strong> in USD, EUR and INR — no quote-haggling, no commission detours.</li>
-          <li><strong>Owner-led communication</strong> — when you message us, you're not in a call-centre queue.</li>
-        </ul>
+        <article class="lg:col-span-8 prose prose-lg max-w-none" itemscope itemtype="https://schema.org/AboutPage">
+          <h2 class="text-balance" style="font-size: var(--text-3xl); font-variation-settings: 'opsz' 72;">
+            Who we are
+          </h2>
+          <p>
+            Agra Tour Guides is a small, government-licensed travel agency based in Tajganj — the neighbourhood that wakes up every morning to the silhouette of the Taj Mahal. The team is led by <strong>Pawan Agarwal</strong>, a Ministry of Tourism-licensed guide with a 5.0 / 5 Google rating from 81+ travellers across 30+ countries, and supported by a tight network of fellow ASI-badged guides, English-speaking drivers, and partner hotels we personally trust.
+          </p>
+          <p>
+            We are not an aggregator. We don't resell tours from other agencies, we don't take shop commissions, and we don't pad quotes with hidden surcharges. What you see on our pricing page is what you pay — in <abbr title="United States Dollar">USD</abbr>, <abbr title="Euro">EUR</abbr> or <abbr title="Indian Rupee">INR</abbr>.
+          </p>
 
-        <h2 class="font-heading">Our promise</h2>
-        <p>
-          We sell time and stories — not tickets. Our job is to compress decades of Mughal, Rajput and Sufi history into the few hours you have at a monument, and to make sure you leave with photos you'll show people for years. If we can't deliver that on a given day, we'll tell you up-front.
-        </p>
+          <h2 class="text-balance mt-12" style="font-size: var(--text-3xl); font-variation-settings: 'opsz' 72;">
+            Why travellers from 30+ countries pick us
+          </h2>
+          <ul>
+            <li><strong>Licensed and accountable</strong> — every in-house guide carries a Ministry of Tourism licence and an <a href="https://asi.nic.in/" target="_blank" rel="noopener">ASI</a> badge (the only legal credential to enter the Taj Mahal complex with you).</li>
+            <li><strong>Languages we speak in-house</strong> — English, Hindi, Japanese. French, Spanish, German, Italian, Russian, Arabic, Mandarin and Korean coordinated with vetted partners on request.</li>
+            <li><strong>Real reviews, no curation</strong> — every Google review is on our <a href="/reviews/">reviews page</a>, unedited.</li>
+            <li><strong>Foreigner-first transparent pricing</strong> in USD, EUR and INR — no quote-haggling, no commission detours.</li>
+            <li><strong>Owner-led communication</strong> — when you message us, you're not in a call-centre queue.</li>
+          </ul>
 
-        <h2 class="font-heading">What we offer</h2>
-        <ul>
-          <li><strong>Guide-Only tours</strong> — from $22 for the Taj Mahal, group up to 5.</li>
-          <li><strong>Guide + AC Cab</strong> — same-day Agra from Delhi, from $89 per person.</li>
-          <li><strong>Golden Triangle all-inclusive</strong> — Delhi → Agra → Jaipur, 3 to 7 days, from $299.</li>
-          <li><strong>Custom itineraries</strong> — Rajasthan, Varanasi, Khajuraho, Himalayas, photography-focused, family-friendly.</li>
-          <li><strong>Add-ons</strong> — sunrise photography, marble-inlay workshop, food tours, heritage hotels.</li>
-        </ul>
+          <h2 class="text-balance mt-12" style="font-size: var(--text-3xl); font-variation-settings: 'opsz' 72;">
+            Our promise
+          </h2>
+          <p>
+            We sell time and stories — not tickets. Our job is to compress decades of Mughal, Rajput and Sufi history into the few hours you have at a monument, and to make sure you leave with photos you'll show people for years. If we can't deliver that on a given day, we'll tell you up-front.
+          </p>
 
-        <p class="text-sm text-gray-500 italic">Page last updated April 2026.</p>
-      </div>
+          <h2 class="text-balance mt-12" style="font-size: var(--text-3xl); font-variation-settings: 'opsz' 72;">
+            What we offer
+          </h2>
+          <ul>
+            <li><strong><a href="/services/">Guide-Only tours</a></strong> — from $22 for the Taj Mahal, group up to 5.</li>
+            <li><strong><a href="/services/">Guide + AC Cab</a></strong> — same-day Agra from Delhi, from $89 per person.</li>
+            <li><strong><a href="/car-hire/">Car Hire</a></strong> — chauffeur-driven, driver-only, sedan from $49/day.</li>
+            <li><strong><a href="/tours/golden-triangle-5-days/">Golden Triangle all-inclusive</a></strong> — Delhi → Agra → Jaipur, 3 to 7 days, from $299.</li>
+            <li><strong>Custom itineraries</strong> — Rajasthan, Varanasi, Khajuraho, Himalayas, photography-focused, family-friendly.</li>
+          </ul>
+        </article>
+      </Reveal>
     </Container>
   </Section>
+
+  <section class="bg-[var(--background-alt)] py-20 md:py-28" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="about-faq">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
+        <Reveal variant="fade" class="lg:col-span-4 lg:sticky lg:top-32 lg:self-start">
+          <SectionHeader
+            eyebrow="About us · FAQ"
+            heading="The questions travellers ask before they trust us."
+            lede="Founder, credentials, location, payment — every honest concern, addressed."
+            align="left"
+            as="h2"
+          />
+        </Reveal>
+        <div class="lg:col-span-8">
+          <div class="divide-y divide-[var(--border)]">
+            {aboutFaqs.map((f, i) => (
+              <AnswerBlock question={f.question} answer={f.answer} id={`about-faq-${i + 1}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </Container>
+  </section>
 
   <TrustBadges />
 
   <CTABanner
     title="Ready to explore with a local expert?"
-    subtitle="WhatsApp us your dates and we'll send a quote within 2 hours. No deposit required for day tours."
-    ctaText="Contact Us"
+    subtitle="WhatsApp us your dates — we'll send a quote within two hours. No deposit required for day tours."
+    ctaText="Contact us"
     ctaLink="/contact/"
   />
 </PageLayout>

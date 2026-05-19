@@ -1,55 +1,158 @@
 ---
-import PageLayout from '../../layouts/PageLayout.astro';
-import Container from '../../components/ui/Container.astro';
-import Section from '../../components/ui/Section.astro';
-import GuideCard from '../../components/cards/GuideCard.astro';
-import CTABanner from '../../components/sections/CTABanner.astro';
-import { getCollection } from 'astro:content';
-import { SITE_NAME } from '../../lib/constants';
+import PageLayout from "../../layouts/PageLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import Section from "../../components/ui/Section.astro";
+import SectionHeader from "../../components/ui/SectionHeader.astro";
+import AnswerBlock from "../../components/ui/AnswerBlock.astro";
+import Reveal from "../../components/ui/Reveal.astro";
+import Breadcrumbs from "../../components/layout/Breadcrumbs.astro";
+import GuideCard from "../../components/cards/GuideCard.astro";
+import CTABanner from "../../components/sections/CTABanner.astro";
+import { getCollection } from "astro:content";
+import {
+  buildOrganizationSchema,
+  buildBreadcrumbSchema,
+  buildItemListSchema,
+  buildFAQSchema,
+  buildGraph,
+} from "../../lib/schema";
+import { SITE_NAME, SITE_URL } from "../../lib/constants";
 
-const allGuides = await getCollection('guides');
+const allGuides = await getCollection("guides");
 const guides = allGuides.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 
 const guideImages: Record<string, string> = {
-  'best-time-to-visit-taj-mahal': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
-  'delhi-to-agra-how-to-reach': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
-  'golden-triangle-itinerary-planning': 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
+  "best-time-to-visit-taj-mahal": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80",
+  "delhi-to-agra-how-to-reach": "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80",
+  "golden-triangle-itinerary-planning": "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80",
 };
+
+const pageUrl = `${SITE_URL}/guides/`;
+
+const indexFaqs = [
+  {
+    question: "How often are these travel guides updated?",
+    answer:
+      "Every guide carries a visible 'last updated' date. We review each article quarterly against on-the-ground reality — entry fees, train timings, monument closure days, road works. When a fact changes, the article is republished with the new date so search engines and AI assistants pick up the freshest version.",
+  },
+  {
+    question: "Who writes the guides?",
+    answer:
+      "Each guide is authored by Pawan Agarwal, our founding Ministry of Tourism-licensed guide, drawing on 12 years of leading travellers through the Golden Triangle. Where claims need verification (prices, opening hours, official rules) we cite the Archaeological Survey of India, Indian Railways, or the relevant tourism ministry directly.",
+  },
+  {
+    question: "Can I use these guides if I'm not booking a tour with you?",
+    answer:
+      "Yes — they're free, no signup, no paywall, no email capture. We publish them because most of what they contain (Friday closures, taxi scams, what to wear, how to pick a sunrise slot) is the same advice we give to friends visiting India. If they help and you'd like a guide, you know where to find us.",
+  },
+  {
+    question: "Where can I ask a question that's not covered in any guide?",
+    answer:
+      "WhatsApp us on +91 99999 99999 between 06:00 and 22:00 IST. Most questions get answered within an hour, even from travellers who haven't booked. We use those questions to write the next guide, so you're helping future travellers too.",
+  },
+];
+
+const itemList = buildItemListSchema(
+  "Agra Tour Guides — travel-guide articles",
+  guides.map((g) => ({
+    name: g.data.title,
+    url: `${SITE_URL}/guides/${g.data.slug}/`,
+    description: g.data.description,
+    image: guideImages[g.data.slug],
+  })),
+);
+
+const jsonLd = [
+  buildGraph([
+    buildOrganizationSchema(),
+    buildBreadcrumbSchema([
+      { name: "Home", url: SITE_URL + "/" },
+      { name: "Travel guides", url: pageUrl },
+    ]),
+    itemList,
+    buildFAQSchema(indexFaqs),
+  ]),
+];
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Travel guides" },
+];
+
+const lastUpdated = "April 2026";
 ---
 
 <PageLayout
   title={`Travel Guides — ${SITE_NAME}`}
-  description="Expert travel guides for India's Golden Triangle. Practical tips, itineraries, and insider knowledge for visiting Agra, Delhi, and Jaipur."
+  description="Practical, dated, locally-written travel guides for Agra, Delhi & Jaipur. Best time to visit the Taj, Delhi-to-Agra options, Golden Triangle itinerary planning. By a govt-licensed guide."
+  jsonLd={jsonLd}
 >
-  <Section class="bg-white">
+  <Section class="bg-[var(--background)] pt-28 md:pt-36 pb-16">
     <Container>
-      <div class="text-center mb-12">
-        <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Travel Guides & Tips
-        </h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Practical advice from local experts to help you plan the perfect Golden Triangle trip. Updated regularly with the latest information.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {guides.map((guide) => (
-          <GuideCard
-            title={guide.data.title}
-            slug={guide.data.slug}
-            image={guideImages[guide.data.slug] || guide.data.heroImage}
-            description={guide.data.description}
-            category={guide.data.category}
-          />
-        ))}
-      </div>
+      <Breadcrumbs items={breadcrumbs} />
+      <Reveal variant="fade" class="mt-8 max-w-3xl">
+        <SectionHeader
+          eyebrow={`Travel guides · Updated ${lastUpdated}`}
+          heading="Practical India advice, dated and signed."
+          lede="Written by Pawan Agarwal — Ministry of Tourism-licensed guide based in Tajganj, Agra. No marketing fluff, no SEO filler. Just what travellers actually ask before they fly."
+          align="left"
+          as="h1"
+        />
+      </Reveal>
     </Container>
   </Section>
 
+  <Section class="bg-[var(--background-alt)] py-16 md:py-20" aria-labelledby="guide-list">
+    <Container>
+      <h2 id="guide-list" class="sr-only">All guides</h2>
+      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" role="list">
+        {guides.map((guide) => (
+          <li class="target-auto">
+            <GuideCard
+              title={guide.data.title}
+              slug={guide.data.slug}
+              image={guideImages[guide.data.slug] || guide.data.heroImage}
+              description={guide.data.description}
+              category={guide.data.category}
+            />
+            <p class="mt-2 text-xs text-[var(--foreground-subtle)] text-mono">
+              <time datetime={guide.data.updatedAt.toISOString()}>
+                Updated {guide.data.updatedAt.toLocaleDateString("en-GB", { month: "short", year: "numeric" })}
+              </time>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </Section>
+
+  <section class="bg-[var(--background)] py-20 md:py-28" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="guides-faq">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
+        <Reveal variant="fade" class="lg:col-span-4 lg:sticky lg:top-32 lg:self-start">
+          <SectionHeader
+            eyebrow="About these guides"
+            heading="Editorial standards & how to use them."
+            lede="Dated, locally-sourced, free."
+            align="left"
+            as="h2"
+          />
+        </Reveal>
+        <div class="lg:col-span-8">
+          <div class="divide-y divide-[var(--border)]">
+            {indexFaqs.map((f, i) => (
+              <AnswerBlock question={f.question} answer={f.answer} id={`guides-faq-${i + 1}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </Container>
+  </section>
+
   <CTABanner
-    title="Need Personalized Travel Advice?"
-    subtitle="Our local experts can help plan every detail of your Golden Triangle trip."
-    ctaText="Ask an Expert"
-    ctaHref="/contact/"
+    title="Need a specific question answered?"
+    subtitle="WhatsApp us — most travellers get an answer within the hour, no booking required."
+    ctaText="Ask Pawan"
+    ctaLink="/contact/"
   />
 </PageLayout>

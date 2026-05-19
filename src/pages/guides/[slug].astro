@@ -5,9 +5,9 @@ import Section from '../../components/ui/Section.astro';
 import CTABanner from '../../components/sections/CTABanner.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import GuideCard from '../../components/cards/GuideCard.astro';
-import FAQAccordion from '../../components/react/FAQAccordion';
+import NativeFAQ from '../../components/ui/NativeFAQ.astro';
 import { getCollection, render } from 'astro:content';
-import { buildArticleSchema, buildFAQSchema, buildBreadcrumbSchema } from '../../lib/schema';
+import { buildArticleSchema, buildFAQSchema, buildBreadcrumbSchema, buildOrganizationSchema, buildHowToSchema, buildGraph } from '../../lib/schema';
 import { SITE_NAME, SITE_URL } from '../../lib/constants';
 
 export async function getStaticPaths() {
@@ -38,21 +38,43 @@ const breadcrumbs = [
   { label: guide.data.title },
 ];
 
+// HowTo schema for "how-to-reach" category guides — LLMs love step lists.
+const howToEntity = guide.data.category === "how-to-reach"
+  ? buildHowToSchema({
+      name: guide.data.title,
+      description: guide.data.description,
+      url: `${SITE_URL}/guides/${guide.data.slug}/`,
+      totalTime: "PT4H",
+      estimatedCost: { currency: "USD", value: 25 },
+      steps: [
+        { name: "Choose your transport mode", text: "Decide between Gatimaan Express train (fastest), private AC cab (most flexible), or Volvo bus (cheapest)." },
+        { name: "Book your ticket / arrange the cab", text: "Trains: IRCTC.co.in or station counter; cabs: message us; buses: UP SRTC counter at Sarai Kale Khan ISBT." },
+        { name: "Arrive at the departure point", text: "For trains, Hazrat Nizamuddin Station 30 min before departure. For cabs, hotel-pickup is included." },
+        { name: "Travel 200-230 km via Yamuna Expressway", text: "3 hrs 30 min by cab, 1 hr 40 min by Gatimaan train. Three toll plazas on the expressway." },
+        { name: "Arrive at Agra Cantt or your Agra hotel", text: "Agra Cantt station is 5 km from the Taj Mahal — a ₹150 e-rickshaw ride or our pre-arranged driver." },
+      ],
+    })
+  : null;
+
 const jsonLd = [
-  buildArticleSchema({
-    title: guide.data.title,
-    description: guide.data.description,
-    author: guide.data.author,
-    publishedAt: guide.data.publishedAt,
-    updatedAt: guide.data.updatedAt,
-    heroImage: guide.data.heroImage,
-    url: `${SITE_URL}/guides/${guide.data.slug}/`,
-  }),
-  buildFAQSchema(guide.data.faqs),
-  buildBreadcrumbSchema([
-    { name: 'Home', url: SITE_URL },
-    { name: 'Guides', url: `${SITE_URL}/guides/` },
-    { name: guide.data.title, url: `${SITE_URL}/guides/${guide.data.slug}/` },
+  buildGraph([
+    buildOrganizationSchema(),
+    buildArticleSchema({
+      title: guide.data.title,
+      description: guide.data.description,
+      author: guide.data.author,
+      publishedAt: guide.data.publishedAt,
+      updatedAt: guide.data.updatedAt,
+      heroImage: guide.data.heroImage,
+      url: `${SITE_URL}/guides/${guide.data.slug}/`,
+    }),
+    ...(howToEntity ? [howToEntity] : []),
+    buildFAQSchema(guide.data.faqs),
+    buildBreadcrumbSchema([
+      { name: 'Home', url: SITE_URL },
+      { name: 'Guides', url: `${SITE_URL}/guides/` },
+      { name: guide.data.title, url: `${SITE_URL}/guides/${guide.data.slug}/` },
+    ]),
   ]),
 ];
 ---
@@ -107,7 +129,7 @@ const jsonLd = [
           Frequently Asked Questions
         </h2>
         <div class="max-w-3xl mx-auto">
-          <FAQAccordion items={guide.data.faqs} client:visible />
+          <NativeFAQ items={guide.data.faqs} />
         </div>
       </Container>
     </Section>

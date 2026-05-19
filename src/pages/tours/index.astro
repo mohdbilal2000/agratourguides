@@ -1,88 +1,178 @@
 ---
-import PageLayout from '../../layouts/PageLayout.astro';
-import Container from '../../components/ui/Container.astro';
-import Section from '../../components/ui/Section.astro';
-import TourCard from '../../components/cards/TourCard.astro';
-import CTABanner from '../../components/sections/CTABanner.astro';
-import { getCollection } from 'astro:content';
-import { buildFAQSchema } from '../../lib/schema';
-import { SITE_NAME } from '../../lib/constants';
+import PageLayout from "../../layouts/PageLayout.astro";
+import Container from "../../components/ui/Container.astro";
+import Section from "../../components/ui/Section.astro";
+import SectionHeader from "../../components/ui/SectionHeader.astro";
+import AnswerBlock from "../../components/ui/AnswerBlock.astro";
+import Reveal from "../../components/ui/Reveal.astro";
+import Breadcrumbs from "../../components/layout/Breadcrumbs.astro";
+import TourCard from "../../components/cards/TourCard.astro";
+import CTABanner from "../../components/sections/CTABanner.astro";
+import { getCollection } from "astro:content";
+import {
+  buildOrganizationSchema,
+  buildBreadcrumbSchema,
+  buildItemListSchema,
+  buildFAQSchema,
+  buildGraph,
+} from "../../lib/schema";
+import { SITE_NAME, SITE_URL, usdToEur } from "../../lib/constants";
 
-const allTours = await getCollection('tours');
+const allTours = await getCollection("tours");
 const tours = allTours.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 
 const tourImages: Record<string, string> = {
-  'golden-triangle-3-days': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80',
-  'golden-triangle-5-days': 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800&q=80',
-  'same-day-agra-from-delhi': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80',
-  'agra-overnight-from-delhi': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80',
-  'delhi-day-tour': 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&q=80',
-  'jaipur-day-tour': 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800&q=80',
+  "golden-triangle-3-days": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80",
+  "golden-triangle-5-days": "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800&q=80",
+  "same-day-agra-from-delhi": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80",
+  "agra-overnight-from-delhi": "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800&q=80",
+  "delhi-day-tour": "https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&q=80",
+  "jaipur-day-tour": "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=800&q=80",
 };
 
-const categories = [
-  { value: 'all', label: 'All Tours' },
-  { value: 'golden-triangle', label: 'Golden Triangle' },
-  { value: 'day-trip', label: 'Day Trips' },
-  { value: 'multi-day', label: 'Multi-Day' },
-  { value: 'transfer', label: 'Transfers' },
-  { value: 'car-hire', label: 'Car Hire' },
-];
-
 const tourFaqs = [
-  { question: 'Can I customize a tour itinerary?', answer: 'Absolutely! All our tours are fully customizable. Tell us your interests, preferred pace, and must-see attractions, and we will design a personalized itinerary just for you.' },
-  { question: 'What is your cancellation policy?', answer: 'We offer free cancellation up to 48 hours before the tour start date. Cancellations within 48 hours may incur a 50% charge. No-shows are non-refundable.' },
-  { question: 'Are tours available in languages other than English?', answer: 'Yes! Our guides speak English, French, German, Spanish, and Hindi. Please mention your preferred language when booking.' },
+  {
+    question: "Can I customize a tour itinerary?",
+    answer:
+      "Yes — every tour on this page is a starting template, not a fixed package. WhatsApp us your dates, group size, must-see monuments and pace preference; we adjust the route, add or drop stops, and re-quote within two hours. About 60% of our travellers ultimately book a customised version of one of these tours.",
+  },
+  {
+    question: "What's your cancellation policy across all tours?",
+    answer:
+      "Free cancellation up to 24 hours before the tour start for day tours; 72 hours for multi-day Golden Triangle packages. Inside those windows we charge only the costs already paid out — hotel deposits, train tickets — never our guide fee. Flight delays and genuine emergencies are always reschedulable at no charge.",
+  },
+  {
+    question: "Are tours available in languages other than English?",
+    answer:
+      "In-house guides speak English, Hindi and Japanese fluently. For French, Spanish, German, Italian, Russian, Arabic, Mandarin or Korean we coordinate vetted partner guides — all government-licensed — with 48 hours' notice. Request the language when you message us; we'll confirm availability for your specific dates and tour.",
+  },
+  {
+    question: "How early should I book in peak season?",
+    answer:
+      "October to March is peak season. Two weeks' lead time is comfortable for day tours; one month for the Golden Triangle. December sunrise Taj slots often book out 5–7 days ahead. For April to September we accept same-day bookings most of the time — just WhatsApp us and we'll confirm a guide for the next morning.",
+  },
+  {
+    question: "Is monument entry included in the tour price?",
+    answer:
+      "On Guide-Only tours: no — you buy your foreigner ticket (₹1,300 for the Taj) at the gate. On Guide + Cab and Golden Triangle packages, entry tickets are pre-booked online so you skip the queue. We never inflate ticket prices; the printed receipt matches the published government rate to the rupee.",
+  },
 ];
 
-const jsonLd = [buildFAQSchema(tourFaqs)];
+const itemList = buildItemListSchema(
+  "Agra Tour Guides — published tour itineraries",
+  tours.map((t) => ({
+    name: t.data.title,
+    url: `${SITE_URL}/tours/${t.data.slug}/`,
+    description: `${t.data.duration}. From ${t.data.currency === "USD" ? "$" : ""}${t.data.priceFrom}. ${t.data.description.slice(0, 110)}${t.data.description.length > 110 ? "…" : ""}`,
+    image: tourImages[t.data.slug] || t.data.heroImage,
+  })),
+);
+
+const pageUrl = `${SITE_URL}/tours/`;
+
+const jsonLd = [
+  buildGraph([
+    buildOrganizationSchema(),
+    buildBreadcrumbSchema([
+      { name: "Home", url: SITE_URL + "/" },
+      { name: "Tours", url: pageUrl },
+    ]),
+    itemList,
+    buildFAQSchema(tourFaqs),
+  ]),
+];
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Tours" },
+];
+
+const categories = [
+  { value: "all", label: "All tours" },
+  { value: "golden-triangle", label: "Golden Triangle" },
+  { value: "day-trip", label: "Day trips" },
+  { value: "multi-day", label: "Multi-day" },
+];
+
+const lastUpdated = "April 2026";
 ---
 
 <PageLayout
-  title={`Tours & Packages — ${SITE_NAME}`}
-  description="Browse our curated Golden Triangle tours. Day trips, multi-day packages, private guides, and custom itineraries for Agra, Delhi & Jaipur."
+  title={`Tours & itineraries — ${SITE_NAME}`}
+  description="Six published tours from a 5.0★ Agra agency. Same-day Agra from Delhi ($89), Golden Triangle 3 days ($299), Golden Triangle 5 days, Jaipur day tour. Custom routes on request."
   jsonLd={jsonLd}
 >
-  <Section class="bg-white">
+  <Section class="bg-[var(--background)] pt-28 md:pt-36 pb-16">
     <Container>
-      <div class="text-center mb-12">
-        <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Tours & Packages
-        </h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          Explore our handcrafted Golden Triangle tours. Every package includes a licensed guide, comfortable transport, and personalized attention to detail.
-        </p>
-      </div>
+      <Breadcrumbs items={breadcrumbs} />
+      <Reveal variant="fade" class="mt-8 max-w-3xl">
+        <SectionHeader
+          eyebrow={`Tours · Updated ${lastUpdated}`}
+          heading="Six itineraries we'd run for our own families."
+          lede="Each tour is a starting template — adjust pace, stops and languages by message. Pricing in USD, EUR, INR is published per page; no surge, no holiday markups."
+          align="left"
+          as="h1"
+        />
+      </Reveal>
+    </Container>
+  </Section>
 
-      <!-- Category Filter (static, CSS-based) -->
-      <div class="flex flex-wrap justify-center gap-3 mb-12">
+  <Section class="bg-[var(--background-alt)] py-16 md:py-20" aria-labelledby="tour-list">
+    <Container>
+      <h2 id="tour-list" class="sr-only">All published tours</h2>
+
+      <div class="flex flex-wrap gap-2 mb-10">
         {categories.map((cat) => (
-          <span class="px-4 py-2 rounded-full text-sm font-medium bg-stone-100 text-stone-700 hover:bg-amber-100 hover:text-amber-800 cursor-pointer transition-colors">
+          <span class="px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-[var(--background)] text-[var(--foreground-muted)] border border-[var(--border)]">
             {cat.label}
           </span>
         ))}
       </div>
 
-      <!-- Tour Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" role="list">
         {tours.map((tour) => (
-          <TourCard
-            title={tour.data.title}
-            slug={tour.data.slug}
-            image={tourImages[tour.data.slug] || tour.data.heroImage}
-            duration={tour.data.duration}
-            price={tour.data.priceFrom}
-            highlights={tour.data.highlights.slice(0, 3)}
-          />
+          <li class="target-auto">
+            <TourCard
+              title={tour.data.title}
+              slug={tour.data.slug}
+              image={tourImages[tour.data.slug] || tour.data.heroImage}
+              duration={tour.data.duration}
+              price={tour.data.priceFrom}
+              highlights={tour.data.highlights.slice(0, 3)}
+            />
+          </li>
         ))}
-      </div>
+      </ul>
     </Container>
   </Section>
 
+  <section class="bg-[var(--background)] py-20 md:py-28" itemscope itemtype="https://schema.org/FAQPage" aria-labelledby="tours-faq">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
+        <Reveal variant="fade" class="lg:col-span-4 lg:sticky lg:top-32 lg:self-start">
+          <SectionHeader
+            eyebrow="Tours FAQ"
+            heading="Customisation, cancellation, languages, lead time."
+            lede="Plain answers to the five questions most travellers ask before booking."
+            align="left"
+            as="h2"
+          />
+        </Reveal>
+        <div class="lg:col-span-8">
+          <div class="divide-y divide-[var(--border)]">
+            {tourFaqs.map((f, i) => (
+              <AnswerBlock question={f.question} answer={f.answer} id={`tours-faq-${i + 1}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </Container>
+  </section>
+
   <CTABanner
-    title="Don't See What You're Looking For?"
-    subtitle="We specialize in custom itineraries. Tell us your dream trip and we'll make it happen."
-    ctaText="Request Custom Tour"
-    ctaHref="/contact/"
+    title="Don't see exactly what you want?"
+    subtitle="We custom-build itineraries — Rajasthan, Varanasi, photography-focused, multi-week. Tell us what you have in mind."
+    ctaText="Request custom tour"
+    ctaLink="/contact/"
   />
 </PageLayout>

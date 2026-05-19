@@ -8,6 +8,7 @@ import {
   buildOrganizationSchema,
   buildBreadcrumbSchema,
   buildFAQSchema,
+  buildGraph,
 } from '../lib/schema';
 import { SITE_NAME, SITE_URL } from '../lib/constants';
 
@@ -109,12 +110,14 @@ const grouped = faqs.reduce<Record<string, typeof faqs>>((acc, f) => {
 }, {});
 
 const jsonLd = [
-  buildOrganizationSchema(),
-  buildBreadcrumbSchema([
-    { name: 'Home', url: SITE_URL },
-    { name: 'FAQ', url: pageUrl },
+  buildGraph([
+    buildOrganizationSchema(),
+    buildBreadcrumbSchema([
+      { name: 'Home', url: SITE_URL },
+      { name: 'FAQ', url: pageUrl },
+    ]),
+    buildFAQSchema(faqs.map((f) => ({ question: f.question, answer: f.answer }))),
   ]),
-  buildFAQSchema(faqs.map((f) => ({ question: f.question, answer: f.answer }))),
 ];
 
 const breadcrumbs = [
