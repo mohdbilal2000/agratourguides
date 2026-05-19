@@ -241,7 +241,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.08;
   letter-spacing: -0.02em;
   text-wrap: balance;
-  color: var(--foreground);
+  /* color inherits from body / surrounding context so dark-section overrides work */
 }
 
 h1 {
@@ -383,21 +383,17 @@ p {
    Applied to anchors and buttons by default; opt out with .target-tight
    ────────────────────────────────────────────── */
 
-a, button {
+/* Touch-target floor for tap-able elements. Block-level layout primitives
+   (ul, nav, ol, dialog) opt out by being explicitly typed below. Headers
+   and other containers can wrap a, button in a context that needs the
+   `target-auto` class which removes the floor without changing display. */
+a:not(.target-auto):not(.target-auto *), button:not(.target-auto):not(.target-auto *) {
   min-height: 44px;
-  display: inline-flex;
-  align-items: center;
 }
 
-a.target-tight,
-button.target-tight,
-nav a,
-.target-auto,
-.target-auto a,
-.target-auto button {
-  min-height: auto;
-  display: inline;
-}
+a, button { display: inline-flex; align-items: center; }
+a.target-auto, .target-auto a, button.target-auto, .target-auto button { display: inline; }
+nav a, ul a, li a { min-height: auto; }
 
 /* ──────────────────────────────────────────────
    Motion — scroll-driven CSS animations (no JS)
@@ -464,17 +460,18 @@ nav a,
 
 .kinetic-headline > span {
   display: inline-block;
-  clip-path: inset(0 0 110% 0);
-  transform: translateY(0.4em);
+  /* No clip-path — it eats descenders (j, g, p) at narrow line-heights. */
+  transform: translateY(0.5em);
   opacity: 0;
+  filter: blur(2px);
   animation: kinetic-reveal var(--duration-cinematic) var(--ease-out-expo) forwards;
 }
 
 @keyframes kinetic-reveal {
   to {
-    clip-path: inset(0);
     transform: translateY(0);
     opacity: 1;
+    filter: blur(0);
   }
 }
 
@@ -526,7 +523,6 @@ nav a,
   .kinetic-headline > span {
     opacity: 1 !important;
     transform: none !important;
-    clip-path: none !important;
     filter: none !important;
   }
 }

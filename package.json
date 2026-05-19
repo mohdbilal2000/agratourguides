@@ -39,6 +39,7 @@
     "@types/leaflet": "^1.9.21",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "playwright": "^1.60.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.2.2"
   }

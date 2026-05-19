@@ -1,160 +1,161 @@
 ---
+/**
+ * Editorial tours rail. Snap-scroll on mobile, 3-col grid on desktop.
+ * Cards lean editorial: large photo, eyebrow with category + duration,
+ * Fraunces headline, single-line summary, price in JetBrains mono.
+ */
+import { Image } from "astro:assets";
 import { usdToEur } from "../../lib/constants";
+import SectionHeader from "../ui/SectionHeader.astro";
+import Reveal from "../ui/Reveal.astro";
 
-const toursRaw = [
+interface Tour {
+  href: string;
+  image: string;
+  alt: string;
+  title: string;
+  summary: string;
+  duration: string;
+  category: string;
+  priceUSD: number;
+}
+
+const tours: Tour[] = [
   {
-    image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80",
-    alt: "Taj Mahal at sunrise in Agra",
-    title: "Same Day Agra Tour from Delhi",
-    duration: "14 Hours",
-    priceUSD: 89,
-    highlights: ["Taj Mahal sunrise", "Agra Fort", "Mehtab Bagh"],
     href: "/tours/same-day-agra-from-delhi/",
+    image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1200&q=85&auto=format&fit=crop",
+    alt: "Taj Mahal at first light",
+    title: "Same-day Agra from Delhi",
+    summary: "Yamuna Expressway at dawn. Sunrise Taj. Agra Fort. Back by dinner.",
+    duration: "14 hours",
+    category: "Day trip",
+    priceUSD: 89,
   },
   {
-    image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80",
-    alt: "Golden Triangle tour through Delhi, Agra and Jaipur",
-    title: "Golden Triangle 3-Day Tour",
-    duration: "3 Days",
-    priceUSD: 299,
-    highlights: ["Delhi, Agra & Jaipur", "Private car", "Expert guide"],
     href: "/tours/golden-triangle-3-days/",
+    image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=1200&q=85&auto=format&fit=crop",
+    alt: "Amber Fort hillside in Jaipur",
+    title: "Golden Triangle, three days",
+    summary: "Delhi to Agra to Jaipur. The classic arc, paced for travellers who plan to come back.",
+    duration: "3 days",
+    category: "Multi-day",
+    priceUSD: 299,
   },
   {
-    image: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80",
-    alt: "Amber Fort in Jaipur, Rajasthan",
-    title: "Jaipur Royal Heritage Day Tour",
-    duration: "10 Hours",
-    priceUSD: 69,
-    highlights: ["Amber Fort", "Hawa Mahal", "City Palace"],
     href: "/tours/jaipur-day-tour/",
+    image: "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=1200&q=85&auto=format&fit=crop",
+    alt: "Hawa Mahal facade in Jaipur",
+    title: "Jaipur in a day",
+    summary: "Amber Fort at first light, then Hawa Mahal, City Palace and Jantar Mantar before sunset.",
+    duration: "10 hours",
+    category: "Day trip",
+    priceUSD: 69,
   },
 ];
-
-const tours = toursRaw.map((t) => ({
-  ...t,
-  price: `From $${t.priceUSD}`,
-  priceSecondary: `€${usdToEur(t.priceUSD)}`,
-}));
 ---
 
-<section class="py-20 md:py-28 bg-stone-50">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <!-- Header row -->
-    <div class="flex items-end justify-between mb-12">
-      <div>
-        <div class="flex items-center gap-4 mb-4">
-          <span class="block h-px w-12 bg-gold-400"></span>
-          <span class="text-sm font-semibold tracking-widest uppercase text-gold-600">Explore</span>
-        </div>
-        <h2 class="font-heading text-3xl font-bold text-sandstone-900 sm:text-4xl lg:text-5xl">
-          Popular Tour Packages
-        </h2>
-        <p class="mt-3 text-lg font-accent italic text-sandstone-600 max-w-lg">
-          Handcrafted itineraries loved by travelers worldwide
-        </p>
-      </div>
+<section class="py-24 md:py-32 bg-[var(--background-alt)]" aria-labelledby="tours-heading">
+  <div class="mx-auto max-w-[var(--site-max)] px-4 sm:px-6 lg:px-8">
+
+    <div class="flex items-end justify-between gap-6 mb-12 md:mb-16">
+      <Reveal variant="fade">
+        <SectionHeader
+          eyebrow="Featured tours"
+          heading="Three itineraries we'd book ourselves."
+          lede="The most-asked tours, paced the way locals would do them."
+          align="left"
+          as="h2"
+        />
+      </Reveal>
       <a
-        href="/tours"
-        class="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-gold-600 hover:text-gold-700 transition-colors"
+        href="/tours/"
+        class="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-gold-700)] hover:text-[var(--color-gold-800)] transition-colors shrink-0 mb-2 target-auto"
       >
-        View All Tours
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        All tours
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
     </div>
 
-    <!-- Tour cards: horizontal scroll on mobile, grid on desktop -->
-    <div class="no-scrollbar -mx-4 flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 pb-4 md:mx-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:px-0 md:pb-0">
-      {
-        tours.map((tour) => (
-          <div class="w-[80vw] max-w-[320px] snap-start flex-shrink-0 md:w-auto md:max-w-none group">
-            <div class="bg-white border border-sandstone-100 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-500">
-              <!-- Image container -->
-              <div class="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={tour.image}
-                  alt={tour.alt}
-                  class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <!-- Gradient overlay -->
-                <div class="absolute inset-0 bg-gradient-to-t from-sandstone-950/50 via-transparent to-transparent"></div>
-
-                <!-- Duration badge -->
-                <span class="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-sandstone-800">
-                  <svg class="h-3.5 w-3.5 text-gold-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {tour.duration}
-                </span>
-
-                <!-- Price badge -->
-                <span class="absolute bottom-4 right-4 inline-flex flex-col items-end rounded-lg bg-gold-500 px-3 py-1.5 text-white shadow-lg leading-tight">
-                  <span class="text-sm font-bold">{tour.price}</span>
-                  <span class="text-[10px] font-normal opacity-90">{tour.priceSecondary}</span>
-                </span>
-              </div>
-
-              <!-- Card body -->
-              <div class="p-6">
-                <h3 class="font-heading text-xl font-bold text-sandstone-900">
-                  {tour.title}
-                </h3>
-
-                <!-- Highlights -->
-                <ul class="mt-4 space-y-2">
-                  {tour.highlights.map((h) => (
-                    <li class="flex items-center gap-2 text-sm text-sandstone-700">
-                      <svg class="h-4 w-4 text-jade flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-
-                <!-- CTA button -->
-                <a
-                  href={tour.href}
-                  class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-amber-700"
-                >
-                  Book Now
-                  <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </a>
+    <ul
+      class="
+        flex md:grid md:grid-cols-3
+        gap-5 md:gap-7
+        overflow-x-auto md:overflow-visible
+        snap-x snap-mandatory md:snap-none
+        -mx-4 md:mx-0 px-4 md:px-0
+        no-scrollbar
+        target-auto
+      "
+      role="list"
+    >
+      {tours.map((t, i) => (
+        <li
+          class="reveal w-[80vw] max-w-[340px] md:w-auto md:max-w-none flex-shrink-0 snap-start target-auto"
+          style={`animation-delay: ${i * 100}ms;`}
+        >
+          <a
+            href={t.href}
+            class="group block h-full overflow-hidden rounded-2xl bg-[var(--background)] border border-[var(--border)] hover-lift target-auto"
+          >
+            <div class="relative aspect-[4/5] md:aspect-[5/6] overflow-hidden bg-[var(--color-sandstone-100)]">
+              <Image
+                src={t.image}
+                alt={t.alt}
+                width={1200}
+                height={1500}
+                widths={[400, 640, 960, 1200]}
+                sizes="(max-width: 768px) 80vw, 30vw"
+                format="webp"
+                quality={82}
+                loading="lazy"
+                class="h-full w-full object-cover img-zoom"
+              />
+              <div class="absolute inset-x-0 top-0 p-4 flex items-center justify-between text-[11px] tracking-widest uppercase font-semibold text-white/95">
+                <span class="rounded-full bg-black/40 backdrop-blur-md px-3 py-1.5">{t.category}</span>
+                <span class="rounded-full bg-black/40 backdrop-blur-md px-3 py-1.5">{t.duration}</span>
               </div>
             </div>
-          </div>
-        ))
-      }
-    </div>
 
-    <!-- Mobile "View All" link -->
-    <div class="mt-8 text-center sm:hidden">
+            <div class="flex flex-col gap-3 p-6 md:p-7">
+              <h3 class="text-balance" style="font-size: var(--text-2xl); font-variation-settings: 'opsz' 32, 'SOFT' 30;">
+                {t.title}
+              </h3>
+              <p class="text-sm text-[var(--foreground-muted)] leading-relaxed text-pretty">
+                {t.summary}
+              </p>
+              <div class="mt-2 flex items-baseline justify-between border-t border-[var(--border)] pt-4">
+                <div>
+                  <span class="block text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)]">From</span>
+                  <span class="text-mono text-lg text-[var(--foreground)]" style="font-variation-settings: 'wght' 500;">
+                    ${t.priceUSD}
+                    <span class="text-xs text-[var(--foreground-subtle)] ml-1">/ €{usdToEur(t.priceUSD)}</span>
+                  </span>
+                </div>
+                <span class="inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-gold-700)] group-hover:text-[var(--color-gold-800)] transition-colors target-auto">
+                  Plan
+                  <svg class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="mt-10 text-center md:hidden">
       <a
-        href="/tours"
-        class="inline-flex items-center gap-1.5 text-sm font-semibold text-gold-600 hover:text-gold-700 transition-colors"
+        href="/tours/"
+        class="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-gold-700)] hover:text-[var(--color-gold-800)] transition-colors target-auto"
       >
-        View All Tours
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        All tours
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
     </div>
   </div>
 </section>
-
-<!-- Hide scrollbar utility -->
-<style>
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-</style>

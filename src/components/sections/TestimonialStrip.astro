@@ -1,17 +1,17 @@
 ---
+/**
+ * Editorial review column. One large featured quote that anchors the
+ * section, with two smaller supporting reviews below. Replaces the
+ * three-equal-card grid — single hero quote reads as confident, not
+ * insecure.
+ *
+ * Markup uses schema.org/Review microdata so the quotes are crawlable
+ * even before the page-level JSON-LD is read.
+ */
 import { REAL_REVIEWS } from "../../lib/reviews";
-import { GOOGLE_REVIEWS_URL, REVIEW_COUNT, REVIEW_RATING } from "../../lib/constants";
-
-// Hand-pick the strongest, geographically-diverse reviews for the homepage strip.
-// Order is shuffled monthly via review-rotation logic; pick first 6 here.
-const featured = [
-  REAL_REVIEWS.find((r) => r.author === "Klára Holubová"),
-  REAL_REVIEWS.find((r) => r.author === "Karin Stehr"),
-  REAL_REVIEWS.find((r) => r.author === "Mike Cordery"),
-  REAL_REVIEWS.find((r) => r.author === "Priyam Bortamuli"),
-  REAL_REVIEWS.find((r) => r.author === "Lorenzo Valentino"),
-  REAL_REVIEWS.find((r) => r.author === "David Price"),
-].filter(Boolean);
+import { REVIEW_COUNT, REVIEW_RATING } from "../../lib/constants";
+import Reveal from "../ui/Reveal.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
 
 const flagMap: Record<string, string> = {
   "Czech Republic": "\u{1F1E8}\u{1F1FF}",
@@ -28,113 +28,122 @@ const flagMap: Record<string, string> = {
   Canada: "\u{1F1E8}\u{1F1E6}",
   Belgium: "\u{1F1E7}\u{1F1EA}",
   Singapore: "\u{1F1F8}\u{1F1EC}",
-  Mauritius: "\u{1F1F2}\u{1F1FA}",
-  Malaysia: "\u{1F1F2}\u{1F1FE}",
+  "United Arab Emirates": "\u{1F1E6}\u{1F1EA}",
+  Ireland: "\u{1F1EE}\u{1F1EA}",
+  "South Africa": "\u{1F1FF}\u{1F1E6}",
   Egypt: "\u{1F1EA}\u{1F1EC}",
   Oman: "\u{1F1F4}\u{1F1F2}",
-  "United Arab Emirates": "\u{1F1E6}\u{1F1EA}",
-  Kenya: "\u{1F1F0}\u{1F1EA}",
-  "South Africa": "\u{1F1FF}\u{1F1E6}",
   Iran: "\u{1F1EE}\u{1F1F7}",
-  Ireland: "\u{1F1EE}\u{1F1EA}",
+  Kenya: "\u{1F1F0}\u{1F1EA}",
+  Malaysia: "\u{1F1F2}\u{1F1FE}",
+  Mauritius: "\u{1F1F2}\u{1F1FA}",
 };
 
-const colors = ["bg-amber-500", "bg-emerald-600", "bg-rose-500", "bg-indigo-500", "bg-orange-500", "bg-teal-600"];
+// Hero quote: Mike Cordery, Australia — long, specific, multi-claim ("creative
+// photographer, funny storyteller, knowledgeable historian, fluent Japanese").
+const hero = REAL_REVIEWS.find((r) => r.author === "Mike Cordery")!;
 
-function initials(name: string) {
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-}
+// Supporting quotes: shorter, geographically diverse.
+const supporting = [
+  REAL_REVIEWS.find((r) => r.author === "Klára Holubová")!,
+  REAL_REVIEWS.find((r) => r.author === "Karin Stehr")!,
+];
 ---
 
-<section class="py-20 md:py-28 bg-sandstone-50">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <!-- Section header -->
-    <div class="text-center mb-16">
-      <div class="flex items-center justify-center gap-4 mb-4">
-        <span class="block h-px w-12 bg-gold-400"></span>
-        <span class="text-sm font-semibold tracking-widest uppercase text-gold-600">Verified Reviews</span>
-        <span class="block h-px w-12 bg-gold-400"></span>
-      </div>
-      <h2 class="font-heading text-3xl font-bold text-sandstone-900 sm:text-4xl lg:text-5xl">
-        {REVIEW_RATING.toFixed(1)}★ from {REVIEW_COUNT} Travelers on Google
-      </h2>
-      <p class="mx-auto mt-4 max-w-xl text-lg font-accent italic text-sandstone-700">
-        Real reviews from real travellers — verified on our Google Business profile.
-      </p>
-    </div>
+<section class="py-24 md:py-32 bg-[var(--background)]" aria-labelledby="reviews-heading">
+  <div class="mx-auto max-w-[var(--site-max)] px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
 
-    <!-- Testimonial grid -->
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-      {
-        featured.map((t, i) => t && (
-          <article class="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-500 flex flex-col" itemscope itemtype="https://schema.org/Review">
-            <meta itemprop="datePublished" content={t.datePublished} />
+      {/* Left rail: section context */}
+      <Reveal variant="fade" class="lg:col-span-4 lg:sticky lg:top-32 lg:self-start">
+        <Eyebrow>Reviews</Eyebrow>
+        <h2 id="reviews-heading" class="mt-5 text-balance" style="font-size: var(--text-4xl); font-variation-settings: 'opsz' 96, 'SOFT' 50;">
+          {REVIEW_RATING.toFixed(1)} / 5 from
+          <em class="italic font-normal text-[var(--foreground-muted)]" style="font-variation-settings: 'opsz' 72, 'WONK' 1;">
+            {REVIEW_COUNT}+ travellers
+          </em>
+          across 30+ countries.
+        </h2>
+        <p class="mt-5 text-pretty text-[var(--foreground-muted)] leading-relaxed">
+          Every review here is verified on our Google Business Profile. No edits, no curation tricks — read all of them in full on the reviews page.
+        </p>
+        <a href="/reviews/" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-gold-700)] hover:text-[var(--color-gold-800)] transition-colors target-auto">
+          Read all {REVIEW_COUNT}+ reviews
+          <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </Reveal>
+
+      {/* Right column: hero quote + supporting */}
+      <div class="lg:col-span-8 flex flex-col gap-10">
+        <Reveal class="relative">
+          <figure itemscope itemtype="https://schema.org/Review" class="relative pl-8 md:pl-12">
+            <meta itemprop="datePublished" content={hero.datePublished} />
             <div itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
-              <meta itemprop="ratingValue" content={String(t.rating)} />
+              <meta itemprop="ratingValue" content={String(hero.rating)} />
               <meta itemprop="bestRating" content="5" />
             </div>
-            <!-- Quote icon -->
-            <svg class="h-10 w-10 text-gold-400 mb-6 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C9.591 11.69 11 13.163 11 15c0 1.933-1.567 3.5-3.5 3.5-1.196 0-2.311-.603-2.917-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C19.591 11.69 21 13.163 21 15c0 1.933-1.567 3.5-3.5 3.5-1.196 0-2.311-.603-2.917-1.179z" />
-            </svg>
-
-            <!-- Review text -->
-            <blockquote class="flex-1">
-              <p class="text-sandstone-800 text-base leading-relaxed italic" itemprop="reviewBody">
-                &ldquo;{t.text}&rdquo;
-              </p>
+            {/* Editorial quotation mark — Fraunces italic, big, gold */}
+            <span
+              aria-hidden="true"
+              class="absolute left-0 top-0 leading-none text-[var(--color-gold-400)] italic select-none"
+              style="font-family: var(--font-display); font-size: clamp(4rem, 8vw, 7rem); font-variation-settings: 'opsz' 144, 'WONK' 1;"
+            >“</span>
+            <blockquote
+              itemprop="reviewBody"
+              class="text-balance text-[var(--foreground)] leading-snug"
+              style="font-size: var(--text-3xl); font-variation-settings: 'opsz' 72, 'SOFT' 50;"
+            >
+              {hero.text}
             </blockquote>
-
-            <!-- Stars -->
-            <div class="flex gap-1 mt-6" aria-label="5 out of 5 stars">
-              {Array.from({ length: 5 }).map(() => (
-                <svg class="h-5 w-5 text-gold-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </div>
-
-            <!-- Divider -->
-            <div class="h-px bg-sandstone-100 my-6"></div>
-
-            <!-- Reviewer info -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                <div class={`flex h-11 w-11 items-center justify-center rounded-full text-sm font-bold text-white ${colors[i % colors.length]}`}>
-                  {initials(t.author)}
-                </div>
-                <div>
-                  <p class="text-sm font-bold text-sandstone-900" itemprop="name">{t.author}</p>
-                  <p class="text-xs text-sandstone-700">{t.country ? `${flagMap[t.country] ?? ""} ${t.country}` : ""}</p>
-                </div>
+            <figcaption class="mt-7 flex items-center justify-between gap-4 border-t border-[var(--border)] pt-5">
+              <div itemprop="author" itemscope itemtype="https://schema.org/Person" class="flex items-center gap-3">
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-gold-100)] text-[var(--color-gold-800)] text-sm font-bold">
+                  {hero.author.split(" ").slice(0, 2).map((p) => p[0]).join("")}
+                </span>
+                <span>
+                  <span itemprop="name" class="block text-sm font-semibold text-[var(--foreground)]">{hero.author}</span>
+                  <span class="block text-xs text-[var(--foreground-muted)]">
+                    {hero.country ? `${flagMap[hero.country] ?? ""} ${hero.country}` : ""}
+                  </span>
+                </span>
               </div>
-              <!-- Source badge -->
-              <span class="inline-flex items-center gap-1.5 rounded-full bg-sandstone-50 px-3 py-1 text-xs font-medium text-sandstone-600 border border-sandstone-100">
+              <span class="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-[var(--foreground-subtle)]">
                 <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
                   <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
-                Google
+                Verified on Google
               </span>
-            </div>
-          </article>
-        ))
-      }
-    </div>
+            </figcaption>
+          </figure>
+        </Reveal>
 
-    <div class="text-center mt-12">
-      <a href="/reviews/" class="inline-flex items-center gap-2 rounded-full bg-amber-500 px-7 py-3 text-sm font-semibold uppercase tracking-wider text-white shadow-lg shadow-amber-500/25 transition-all duration-300 hover:bg-amber-400 hover:shadow-xl">
-        Read All {REVIEW_COUNT} Reviews
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-      </a>
+        {/* Supporting reviews — quieter, two-up */}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2 border-t border-[var(--border)]">
+          {supporting.map((r, i) => (
+            <Reveal variant="fade" class="pt-8" style={`animation-delay: ${(i + 1) * 100}ms;`}>
+              <figure itemscope itemtype="https://schema.org/Review">
+                <meta itemprop="datePublished" content={r.datePublished} />
+                <div itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                  <meta itemprop="ratingValue" content={String(r.rating)} />
+                  <meta itemprop="bestRating" content="5" />
+                </div>
+                <blockquote itemprop="reviewBody" class="text-pretty text-[var(--foreground)] leading-relaxed" style="font-size: var(--text-base);">
+                  <span class="text-[var(--color-gold-500)] italic" aria-hidden="true">“</span>{r.text}<span class="text-[var(--color-gold-500)] italic" aria-hidden="true">”</span>
+                </blockquote>
+                <figcaption itemprop="author" itemscope itemtype="https://schema.org/Person" class="mt-4 text-xs text-[var(--foreground-muted)]">
+                  <span itemprop="name" class="font-semibold text-[var(--foreground)]">{r.author}</span>
+                  {r.country && <> · {flagMap[r.country] ?? ""} {r.country}</>}
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -1,191 +1,141 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
-import HeroSection from '../components/sections/HeroSection.astro';
-import TrustBadges from '../components/sections/TrustBadges.astro';
-import FeatureGrid from '../components/sections/FeatureGrid.astro';
-import BentoDestinations from '../components/sections/BentoDestinations.astro';
-import PopularTours from '../components/sections/PopularTours.astro';
-import WhyChooseUs from '../components/sections/WhyChooseUs.astro';
-import TestimonialStrip from '../components/sections/TestimonialStrip.astro';
-import CTABanner from '../components/sections/CTABanner.astro';
-import Container from '../components/ui/Container.astro';
-import Section from '../components/ui/Section.astro';
-import AttractionCard from '../components/cards/AttractionCard.astro';
-import FAQAccordion from '../components/react/FAQAccordion';
-import { buildOrganizationSchema, buildWebSiteSchema, buildFAQSchema } from '../lib/schema';
-import { SITE_NAME, SITE_DESCRIPTION } from '../lib/constants';
+import PageLayout from "../layouts/PageLayout.astro";
+import HeroSection from "../components/sections/HeroSection.astro";
+import TrustBadges from "../components/sections/TrustBadges.astro";
+import BentoDestinations from "../components/sections/BentoDestinations.astro";
+import PopularTours from "../components/sections/PopularTours.astro";
+import WhyChooseUs from "../components/sections/WhyChooseUs.astro";
+import TestimonialStrip from "../components/sections/TestimonialStrip.astro";
+import CTABanner from "../components/sections/CTABanner.astro";
+import SectionHeader from "../components/ui/SectionHeader.astro";
+import Reveal from "../components/ui/Reveal.astro";
+import AnswerBlock from "../components/ui/AnswerBlock.astro";
+import {
+  buildOrganizationSchema,
+  buildWebSiteSchema,
+  buildFAQSchema,
+  buildBreadcrumbSchema,
+  buildGraph,
+} from "../lib/schema";
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from "../lib/constants";
 
 const homeFaqs = [
   {
-    question: 'How much does a Taj Mahal tour guide cost?',
-    answer: 'A private licensed Taj Mahal guide costs ₹1,800 (about $22 / €20) for a group of up to 5 people for a 1.5–2 hour tour. Foreigner monument entry (₹1,300 / $16) and the e-rickshaw to the gate (₹100 round-trip) are paid separately. Guide fee is fixed — no commission, no tipping pressure.'
+    question: "How much does a Taj Mahal tour guide cost?",
+    answer:
+      "A private licensed Taj Mahal guide costs ₹1,800 (about $22 / €20) for a group of up to 5 people for a 1.5–2 hour tour. Foreigner monument entry (₹1,300 / $16) and the e-rickshaw to the gate (₹100 round-trip) are paid separately. Guide fee is fixed — no commission, no tipping pressure.",
   },
   {
-    question: 'What is the best time to visit the Taj Mahal?',
-    answer: 'October to March is peak season — pleasant 10–25°C, but the Taj also gets 30,000+ visitors per day. The single best time is sunrise (06:00 entry), when the marble glows pink-gold and crowds are 80% lower. The Taj is closed every Friday for Jumu\'ah prayer.'
+    question: "What is the best time to visit the Taj Mahal?",
+    answer:
+      "October to March is peak season — pleasant 10–25°C, but the Taj also gets 30,000+ visitors per day. The single best time is sunrise (06:00 entry), when the marble glows pink-gold and crowds are roughly 80% lower. The Taj is closed every Friday for Jumu'ah prayer.",
   },
   {
-    question: 'Do I need a guide at the Taj Mahal or can I visit alone?',
-    answer: 'You can enter alone — only the ticket is mandatory. But without a guide you\'ll miss the inlay-stone meanings, the optical illusions in the minarets, the calligraphy translations, and the photo angles travellers come back wishing they\'d known. Most of our 81 reviews mention "didn\'t know I needed a guide until I had one."'
+    question: "Do I need a guide at the Taj Mahal or can I visit alone?",
+    answer:
+      "You can enter alone — only the ticket is mandatory. But without a guide you'll miss the inlay-stone meanings, the optical illusions in the minarets, the calligraphy translations, and the photo angles travellers come back wishing they'd known. Most of our 81 reviews mention \"didn't know I needed a guide until I had one.\"",
   },
   {
-    question: 'How do I book your Agra tour from abroad?',
-    answer: 'WhatsApp is the fastest channel — message us with your travel dates, group size and language preference, and you\'ll get a quote within 2 hours (we\'re online 06:00–22:00 IST). Booking is free; you only pay on the day of the tour, in cash (USD/EUR/INR all accepted) or by UPI.'
+    question: "How do I book your Agra tour from abroad?",
+    answer:
+      "WhatsApp is the fastest channel — message us with travel dates, group size and language preference, and you'll get a quote within two hours (we're online 06:00–22:00 IST). Booking is free; you pay on the day of the tour, in cash (USD/EUR/INR all accepted) or by UPI.",
   },
   {
-    question: 'What languages do your guides speak?',
-    answer: 'We have in-house guides fluent in English, Hindi and Japanese. For French, Spanish, German, Italian, Russian, Arabic and Mandarin, we coordinate with vetted partner guides certified by the Ministry of Tourism — request the language when you message us and we\'ll confirm availability for your dates.'
+    question: "What languages do your guides speak?",
+    answer:
+      "In-house guides are fluent in English, Hindi and Japanese. For French, Spanish, German, Italian, Russian, Arabic and Mandarin, we coordinate with vetted partner guides certified by the Ministry of Tourism — request the language when you message us and we'll confirm availability for your dates.",
   },
   {
-    question: 'What is the Golden Triangle and how many days do I need?',
-    answer: 'The Golden Triangle is India\'s most-booked circuit: Delhi → Agra → Jaipur, roughly 720 km in a triangle. Three days is the absolute minimum (one city per day with night travel). Five days is the comfortable pace and what 70% of our travellers choose. Seven days adds Fatehpur Sikri and a slower Jaipur.'
+    question: "What is the Golden Triangle and how many days do I need?",
+    answer:
+      "The Golden Triangle is India's most-booked circuit: Delhi → Agra → Jaipur, roughly 720 km arranged in a triangle. Three days is the absolute minimum (one city per day with night travel). Five days is the comfortable pace and what 70% of our travellers choose. Seven days adds Fatehpur Sikri and a slower Jaipur.",
   },
   {
-    question: 'Are your guides government-licensed?',
-    answer: 'Yes. Every guide on our team holds a Ministry of Tourism (Government of India) licence and an Archaeological Survey of India (ASI) badge — the only legal credential to guide inside the Taj Mahal complex. Unlicensed "guides" loitering at the gate cannot enter with you and are common scams.'
+    question: "Are your guides government-licensed?",
+    answer:
+      "Yes. Every guide on our team holds a Ministry of Tourism (Government of India) licence and an Archaeological Survey of India (ASI) badge — the only legal credential to guide inside the Taj Mahal complex. Unlicensed \"guides\" loitering at the gate cannot enter with you and are a common scam.",
   },
   {
-    question: 'Do you arrange the car/taxi as well, or just the guide?',
-    answer: 'Both. We have four service tiers: Guide-Only (you arrange transport), Guide + Cab (AC sedan or SUV with verified driver), Guide + Cab + Hotel (multi-day Golden Triangle), and Custom Itinerary (we plan everything). Cabs are background-checked, English-speaking drivers — not random app rides.'
+    question: "Do you arrange the car/taxi as well, or just the guide?",
+    answer:
+      "Both. We have four service tiers: Guide-Only (you arrange transport), Guide + Cab (AC sedan or SUV with verified driver), Guide + Cab + Hotel (multi-day Golden Triangle), and Custom Itinerary (we plan everything). Cabs are background-checked, English-speaking drivers — not random app rides.",
   },
 ];
+
+// @graph composition — every entity linked by @id so LLMs and search
+// engines see a single connected document instead of disjoint JSON-LD blocks.
 const jsonLd = [
-  buildOrganizationSchema(),
-  buildWebSiteSchema(),
-  buildFAQSchema(homeFaqs),
+  buildGraph([
+    buildOrganizationSchema(),
+    buildWebSiteSchema(),
+    buildFAQSchema(homeFaqs),
+    buildBreadcrumbSchema([{ name: "Home", url: SITE_URL + "/" }]),
+  ]),
 ];
 
-const topAttractions = [
-  {
-    title: 'Taj Mahal',
-    slug: 'taj-mahal',
-    city: 'agra',
-    image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=600&q=80',
-    description: 'One of the Seven Wonders of the World — an ivory-white marble mausoleum and UNESCO World Heritage Site.',
-    rating: 4.9,
-  },
-  {
-    title: 'Amber Fort',
-    slug: 'amber-fort',
-    city: 'jaipur',
-    image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80',
-    description: 'A majestic hilltop fort known for its artistic Hindu-Rajput architecture and Maota Lake views.',
-    rating: 4.8,
-  },
-  {
-    title: 'Red Fort',
-    slug: 'red-fort',
-    city: 'delhi',
-    image: 'https://images.unsplash.com/photo-1587474260584-136574528ed5?w=600&q=80',
-    description: 'A UNESCO World Heritage Site and iconic symbol of India built from red sandstone by Shah Jahan.',
-    rating: 4.7,
-  },
-  {
-    title: 'Hawa Mahal',
-    slug: 'hawa-mahal',
-    city: 'jaipur',
-    image: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?w=600&q=80',
-    description: 'The Palace of Winds features 953 small windows — a masterpiece of Rajput architecture.',
-    rating: 4.7,
-  },
-  {
-    title: 'Qutub Minar',
-    slug: 'qutub-minar',
-    city: 'delhi',
-    image: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=80',
-    description: 'A 73-meter UNESCO World Heritage victory tower — the tallest brick minaret in the world.',
-    rating: 4.6,
-  },
-  {
-    title: 'Agra Fort',
-    slug: 'agra-fort',
-    city: 'agra',
-    image: 'https://images.pexels.com/photos/3881104/pexels-photo-3881104.jpeg?w=600&q=80',
-    description: 'A powerful Mughal fortress with stunning palaces, audience halls, and mosque interiors.',
-    rating: 4.7,
-  },
-];
-
+const heroImage =
+  "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=2400&q=85&auto=format&fit=crop";
 ---
 
 <PageLayout
-  title={`${SITE_NAME} — Expert Tour Guides for Agra, Delhi & Jaipur`}
+  title={`${SITE_NAME} — Private Taj Mahal tours & Golden Triangle itineraries`}
   description={SITE_DESCRIPTION}
   jsonLd={jsonLd}
+  preloadImage={heroImage}
   transparentHeader
 >
-  <!-- 1. Cinematic Hero -->
-  <HeroSection />
+  {/* 1. Cinematic hero — single primary decision above the fold */}
+  <HeroSection backgroundImage={heroImage} />
 
-  <!-- 2. Trust Badges (social proof bar) -->
+  {/* 2. Quiet trust strip — first anchor after the visual punch */}
   <TrustBadges />
 
-  <!-- 3. Feature Grid (Our Services) -->
-  <FeatureGrid />
-
-  <!-- 4. Bento Grid Destinations -->
+  {/* 3. Destinations — editorial 2-up bento with a feature card */}
   <BentoDestinations />
 
-  <!-- 5. Popular Tours (horizontal scroll on mobile) -->
+  {/* 4. Tours — editorial cards, snap-rail on mobile, grid on desktop */}
   <PopularTours />
 
-  <!-- 6. Why Choose Us (split layout) -->
+  {/* 5. Story — calm split section establishing E-E-A-T */}
   <WhyChooseUs />
 
-  <!-- 7. Must-Visit Attractions -->
-  <Section id="attractions" class="bg-gray-950">
-    <Container>
-      <div class="text-center mb-16">
-        <p class="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-3">ICONIC LANDMARKS</p>
-        <h2 class="font-heading text-3xl md:text-5xl font-bold text-white mb-4">
-          Must-Visit Attractions
-        </h2>
-        <div class="w-16 h-1 bg-gradient-to-r from-amber-400 to-orange-500 mx-auto rounded-full mb-6"></div>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto font-accent italic">
-          From UNESCO World Heritage Sites to architectural marvels across three historic cities
-        </p>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {topAttractions.map((attraction) => (
-          <AttractionCard {...attraction} />
-        ))}
-      </div>
-      <div class="text-center mt-12">
-        <a href="/agra/" class="inline-flex items-center gap-2 text-amber-400 font-semibold hover:text-amber-300 transition-colors group">
-          Explore All Attractions
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>
-        </a>
-      </div>
-    </Container>
-  </Section>
-
-  <!-- 8. Testimonials -->
+  {/* 6. Reviews — one hero quote anchored by two supporting */}
   <TestimonialStrip />
 
-  <!-- 9. FAQs -->
-  <Section id="faqs" class="bg-stone-50">
-    <Container>
-      <div class="text-center mb-16">
-        <p class="text-sm font-semibold uppercase tracking-widest text-amber-600 mb-3">GOT QUESTIONS?</p>
-        <h2 class="font-heading text-3xl md:text-5xl font-bold text-gray-900 mb-4">
-          Frequently Asked Questions
-        </h2>
-        <div class="w-16 h-1 bg-gradient-to-r from-amber-400 to-orange-500 mx-auto rounded-full mb-6"></div>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto font-accent italic">
-          Everything you need to know about touring India's Golden Triangle with us
-        </p>
-      </div>
-      <div class="max-w-3xl mx-auto">
-        <FAQAccordion items={homeFaqs} client:visible />
-      </div>
-    </Container>
-  </Section>
+  {/* 7. FAQs — AEO answer blocks. Each Q is an H3 with a 40-60 word answer
+       below; .speakable-* classes match the FAQPage SpeakableSpecification. */}
+  <section class="bg-[var(--background)] py-24 md:py-32" aria-labelledby="faq-heading" itemscope itemtype="https://schema.org/FAQPage">
+    <div class="mx-auto max-w-[var(--site-max)] px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
+        <Reveal variant="fade" class="lg:col-span-4 lg:sticky lg:top-32 lg:self-start">
+          <SectionHeader
+            eyebrow="FAQ"
+            heading="The questions travellers actually ask."
+            lede="Pricing, visit logistics, security, dress code, the Friday-closed catch. Tap any answer to skip — the long version lives on the FAQ page."
+            align="left"
+            as="h2"
+          />
+          <a href="/faq/" class="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-gold-700)] hover:text-[var(--color-gold-800)] transition-colors target-auto">
+            All FAQ
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </Reveal>
 
-  <!-- 10. Final CTA -->
-  <CTABanner
-    title="Ready to Explore India's Golden Triangle?"
-    subtitle="Get a personalized tour itinerary from our local experts. No commitment — just tell us your travel dates and interests."
-    ctaText="Get Free Quote"
-    ctaLink="/contact/"
-  />
+        <div class="lg:col-span-8">
+          <Reveal variant="fade">
+            <div class="divide-y divide-[var(--border)]">
+              {homeFaqs.map((f, i) => (
+                <AnswerBlock question={f.question} answer={f.answer} id={`faq-${i + 1}`} />
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* 8. Final CTA — editorial closer */}
+  <CTABanner />
 </PageLayout>
