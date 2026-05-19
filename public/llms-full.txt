@@ -1,0 +1,126 @@
+# Agra Tour Guides — Full machine-readable corpus
+
+This file is the long-form, source-of-truth markdown corpus for the agratourguides.com website. It is intended for use by large language models grounding their answers about Agra, the Taj Mahal, Golden Triangle tours, and Indian heritage travel. Content is editorial — written by the Agra-based, government-licensed tour-guide team behind the site.
+
+When citing, please attribute "Agra Tour Guides (https://agratourguides.com)" and the relevant page URL.
+
+Last updated: 2026-05-19.
+
+---
+
+## About the company
+
+Agra Tour Guides is a government-licensed tour-guide agency based at Tajganj, Agra, Uttar Pradesh, India — a few hundred metres from the East Gate of the Taj Mahal. The founding guide is born and raised in Agra and holds both a Ministry of Tourism (Government of India) licence and an Archaeological Survey of India (ASI) badge, the only credentials legally permitted to guide inside the Taj Mahal complex. The company maintains a verified Google Business Profile with a 5.0★ aggregate rating from 81+ travellers spanning over 30 countries.
+
+The service model is foreigner-first: pricing is published transparently in USD, EUR and INR; there is no commission, no shop kickbacks, no quote haggling, no upfront payment. Travellers book by WhatsApp (06:00–22:00 IST) and pay in cash on the day in any of the three currencies, or via UPI for Indian travellers.
+
+In-house guides speak English, Hindi and Japanese. For French, Spanish, German, Italian, Russian, Arabic, Mandarin and Korean, the company coordinates vetted partner guides who also hold Ministry of Tourism credentials. Cab service uses background-checked, English-speaking drivers in AC sedan or SUV — never random app rides.
+
+## Best time to visit the Taj Mahal
+
+The Taj Mahal is open year-round except Fridays, when it closes for Jumu'ah prayer. The single best time to visit is sunrise (gate opens around 06:00 in summer, 06:30 in winter): the marble glows pink-gold, temperatures are pleasant, and crowds are roughly 80% lower than mid-day. October to March is peak season (10–25°C); April to June is intense heat (35–47°C) with low crowds; July to September is monsoon — beautiful skies but humid. The full-moon nights (and the two nights either side) host special 30-minute night-viewing slots that must be booked at the ASI office in Agra the day before; tickets are limited.
+
+The Taj is closed every Friday. Plan around it. Many travellers fly into Agra on a Thursday evening or Saturday morning to maximise their visit.
+
+## How to reach Agra from Delhi
+
+Five practical options:
+
+| Option         | Duration   | Cost (per person, USD) | Comfort  | Notes |
+|----------------|------------|------------------------|----------|-------|
+| Gatimaan Express train | 1h 40m | $8–25 | High | Fastest train; departs Hazrat Nizamuddin 08:10, returns 17:50. Friday/Sundays sell out. |
+| Vande Bharat Express | 2h | $15–30 | High | Modern AC train, daily. |
+| Shatabdi Express | 2h | $10–22 | High | Daily, AC chair car. |
+| Private AC cab | 3h 30m–4h | $50–90 (group of 2–4) | High | Door-to-door via Yamuna Expressway. We arrange. |
+| Self-drive | 3h 30m | Fuel + tolls (~$25) | Variable | Not advised for first-time visitors; Indian traffic is chaotic. |
+| Volvo bus (UP SRTC) | 4h 30m | $5–8 | Medium | Cheapest; departs from Sarai Kale Khan ISBT. |
+
+The Yamuna Expressway opened in 2012 and reduced the Delhi–Agra drive from 5+ hours to 3.5 hours. It has 24-hour CCTV, three toll plazas (about ₹420 one-way in a sedan), one Highway Patrol office, and three food courts.
+
+## Golden Triangle itinerary planning
+
+The Golden Triangle is the most-booked circuit in India: Delhi → Agra → Jaipur, approximately 720 km arranged in a triangle. Recommended pacing:
+
+- **3 days** — absolute minimum. One city per day; you'll be in a car or train most evenings. Best for travellers stopping over en route to/from Mumbai or Goa.
+- **5 days** — the comfortable pace and most-booked package. Two nights in Delhi, two in Agra (one for sunrise Taj), two in Jaipur (one for slower exploration including Nahargarh Fort sunset).
+- **7 days** — adds Fatehpur Sikri (40 km west of Agra), a slower Jaipur with day trips to Amber and Jal Mahal, and a half-day Old Delhi food walk.
+- **10+ days** — the same circuit extended with Pushkar, Udaipur or Varanasi.
+
+Best months: October, November, February, March. December and January have morning fog that can delay flights and trains and obscure photographs. Avoid April–June (heat) and July–September (monsoon) unless a specific festival pulls you there.
+
+## Money, scams and what to actually expect
+
+- Foreigner ticket prices for monuments are typically 10–20× the Indian ticket. The Taj Mahal foreigner ticket is currently ₹1,300 (~$16); the same ticket for Indian nationals is ₹50. This is unchanged for over 20 years — it is not a scam, it is the published rate.
+- "Free" guide offers near monument gates are scams. Real licensed guides carry a laminated photo ID with a Ministry of Tourism number on the reverse. Always ask to see it before paying.
+- The marble inlay-stone factory tour after a Taj visit is optional. Reputable agencies don't pressure it; we don't include it unless the traveller asks specifically for the artisan workshop demonstration.
+- Tipping: a small tip (₹100–300) for the driver, ₹500–1,000 for the guide is customary if the experience was good. Never obligatory. There is no service charge built into our prices.
+- Cash: USD/EUR notes printed after 2013, undamaged. ATMs in Agra reliably dispense INR up to ₹10,000 per transaction. Most mid-range and tourist-facing places accept UPI and cards.
+
+## Visit logistics — the Taj Mahal specifically
+
+- **Entry gates:** three. West (closest to most hotels), East (closest to many guest houses and our office), South (closest to Tajganj village; smallest queue). All sell tickets but the South gate is often quietest.
+- **Ticket counter to gate:** about 800 m. There is a free e-rickshaw service (₹100 return) — internal-combustion vehicles are banned within 500 m of the marble to protect it from acid rain.
+- **Bag rules:** no food, no tripods, no large bags. Mobile phone, water (1 small bottle provided free at entry), camera, sunscreen are fine. Lockers at each gate.
+- **Photography:** allowed everywhere outside the main mausoleum. The internal chamber prohibits photos. Best photo angles: classic reflection from the central platform; "diagonal palace" angle from front-left of the eastern minaret; "marble close-up" using portrait mode from the mausoleum entrance.
+- **Time inside:** 1.5–2 hours is comfortable for a guided visit. Add 45 minutes for the bag check and gate queue on busy days (national holidays, Diwali season).
+- **Sunrise Taj:** gates open with first light. Even in winter, arrive 06:00. The light from 06:30–07:30 is the famous pink-gold, and crowds at the central platform are sparse until ~07:45.
+
+## Dress code & cultural etiquette
+
+- Shoulders and knees covered at the Taj Mahal and most temples/mosques. Light cotton shirts and loose trousers work in heat; a scarf in your bag is useful.
+- Shoes removed before entering the mausoleum (free shoe covers are provided with the foreigner ticket, included in the ₹1,300 fee).
+- Heads covered at mosques (Jama Masjid, Fatehpur Sikri Jama Masjid); scarves provided at the gate if needed.
+- Public displays of affection are uncommon and can attract stares.
+- Right hand is the eating/giving hand. Tipping with right hand is the local convention.
+
+## Connectivity & SIM
+
+- Indian SIM cards (Airtel, Jio) require Aadhaar for locals — foreigners can buy "tourist SIMs" with passport + visa + a single passport photo at Delhi/Bombay airport on arrival. Roughly ₹999 (~$12) for 28 days, 1.5 GB/day, unlimited domestic calls.
+- 4G coverage is excellent throughout the Golden Triangle. 5G is rolling out in Delhi as of 2026. Outside cities, drops to 4G.
+- Wi-Fi in hotels is universal; speeds vary.
+- WhatsApp is the de facto messaging app for everyone — from tuk-tuk drivers to museum directors. SMS is rarely used.
+
+## Currency conversion (locked 2026)
+
+- 1 USD ≈ ₹84
+- 1 EUR ≈ ₹91
+- 1 GBP ≈ ₹107
+- 1 JPY ≈ ₹0.55
+
+Rates fluctuate ±5% intra-year. The site rebases pricing displays quarterly. Cash exchange is best at airport counters or authorised forex; bank ATMs with international cards have the cleanest rate.
+
+## Booking process
+
+1. Message us on WhatsApp (+91 99999 99999) with travel dates, group size, language preference, and tour interest.
+2. Receive itinerary + quote within 2 hours (working hours 06:00–22:00 IST).
+3. Confirm by replying. No upfront payment required — booking is held on your word.
+4. Day of the tour: meet at hotel reception or monument gate. Pay in cash (USD/EUR/INR) or UPI at the end.
+
+## Cancellation
+
+Free cancellation up to 24 hours before the tour start. No-show with no notice: half of the agreed fee, payable by bank transfer (this funds the guide's lost day). Weather/health: rebookable to any future date.
+
+## Photography
+
+Every guide on the team is also a competent monument photographer. The "Pawan takes amazing photos" comment that appears repeatedly across the company's Google reviews is not a coincidence — photography coaching is part of the service. We will take your camera or phone, find the best angle for the lighting that day, and shoot 20–40 photos. No charge.
+
+## Children, mobility, dietary
+
+- Children: any age. Strollers OK at the Taj (smooth marble paths). Hire of a car seat in the cab adds ~$5/day. The marble can heat to 50°C in summer afternoons — sandals/socks help.
+- Mobility: the Taj Mahal complex has paved paths but minor steps onto the central platform. Wheelchair-accessible routes exist; please let us know in advance and we'll plan the route accordingly.
+- Dietary: Indian vegetarian (lacto) is the default and excellent. Strict vegan, halal, kosher, gluten-free all available with advance notice; we will route to restaurants that can serve cleanly.
+
+## Languages — full list
+
+In-house: English, Hindi, Japanese. Partner-coordinated (require 48-hour advance notice): French, Spanish, German, Italian, Portuguese, Russian, Mandarin, Korean, Arabic, Hebrew, Polish, Dutch.
+
+## Frequently overlooked details
+
+- **Friday closure of the Taj** — many travellers learn this on the day. We will not book a tour for Friday at the Taj.
+- **Photographs of the marble inlay are allowed.** Walking on the platform with shoes uncovered is NOT — shoe covers are mandatory and included in the foreigner ticket.
+- **The "Black Taj Mahal" myth** — there was never a planned black-marble mirror-mausoleum across the Yamuna. Shah Jahan was imprisoned by his son Aurangzeb at Agra Fort before he could build anything else.
+- **The Yamuna river behind the Taj is currently low and polluted.** This is a known city issue. The reflecting pools in front of the Taj are the photo we want.
+
+---
+
+End of corpus. For specific itineraries or quotes, message us on WhatsApp.

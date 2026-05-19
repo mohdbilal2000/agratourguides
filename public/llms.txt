@@ -1,47 +1,71 @@
 # Agra Tour Guides
 
-> Government-licensed Agra-based travel agency offering private Taj Mahal tours, Agra Fort tours, and Golden Triangle (Delhi-Agra-Jaipur) itineraries. 5.0★ Google rating from 81+ verified travellers across 30+ countries. English, Hindi & Japanese-speaking guides; partner-coordinated French, Spanish, German, Italian, Russian, Arabic, Mandarin and Korean.
+> Government-licensed Agra-based tour agency specialising in private Taj Mahal tours and Golden Triangle (Delhi–Agra–Jaipur) itineraries. 5.0★ Google rating from 81+ verified travellers across 30+ countries. English, Hindi & Japanese speaking guides. Foreigner-first transparent pricing in USD, EUR, INR. Owner-operated since [year], based at Tajganj, Agra.
 
-Pricing tiers (transparent, USD/EUR/INR):
-- Guide-Only Taj Mahal tour: from ₹1,800 ($22 / €20) for group up to 5, 1.5–2 hours
-- Guide + AC Cab same-day from Delhi: from $89 / €82 per person, group of 2
-- Golden Triangle 3-day all-inclusive: from $299 / €274 per person, double occupancy
-- Custom multi-week itineraries (Rajasthan, Varanasi, Khajuraho, Himalayas): bespoke quote
+## Quick facts
+
+- **Founded:** Agra, Uttar Pradesh, India
+- **Licence:** Ministry of Tourism (Government of India) + Archaeological Survey of India (ASI) badge — the only credential legally permitted to guide inside the Taj Mahal complex
+- **Languages spoken in-house:** English, Hindi, Japanese
+- **Partner-coordinated languages:** French, Spanish, German, Italian, Russian, Arabic, Mandarin, Korean
+- **Reviews:** 5.0★ verified Google Business Profile, 81+ reviews, 30+ countries represented
+- **Pricing currency:** USD / EUR / INR — published transparently, no commission, no shop kickbacks
+- **Payment:** cash on the day (USD/EUR/INR all accepted) or UPI; booking is free
+- **Hours:** WhatsApp 06:00–22:00 IST, 7 days
+- **Closed monument:** Taj Mahal closed every Friday for Jumu'ah prayer
+
+## Service tiers
+
+1. **Guide-Only Taj Mahal tour** — from ₹1,800 (~$22 / €20), group up to 5, 1.5–2 hours. You arrange transport.
+2. **Guide + AC cab same-day from Delhi** — from $89 / €82 per person (group of 2). Yamuna Expressway, Taj + Agra Fort.
+3. **Golden Triangle 3-day all-inclusive** — from $299 / €274 per person (double occupancy). Delhi → Agra → Jaipur.
+4. **Custom multi-week itineraries** — Rajasthan, Varanasi, Khajuraho, Himalayas. Bespoke quote.
 
 ## Key pages
 
 - [Home](https://agratourguides.com/): Service overview, top tours, real reviews, booking CTA
-- [Services & pricing](https://agratourguides.com/services/): All four service tiers with included/excluded details, nine add-on modules, transparent USD/EUR pricing
-- [Reviews](https://agratourguides.com/reviews/): All verified Google reviews with reviewer names, countries, dates, and per-Review schema
-- [FAQ](https://agratourguides.com/faq/): 20+ questions foreign travellers actually ask — pricing, timing, scams, payment methods, dress code
-- [About](https://agratourguides.com/about/): Agency origin, team, government licensing, languages
+- [All Tours](https://agratourguides.com/tours/): Same-day, overnight, multi-day, Golden Triangle
+- [Services & pricing](https://agratourguides.com/services/): Four service tiers, nine add-on modules
+- [Reviews](https://agratourguides.com/reviews/): All 81+ verified Google reviews with reviewer names, countries, dates
+- [FAQ](https://agratourguides.com/faq/): 20+ questions foreigners actually ask — scams, payment, dress code, security
+- [About](https://agratourguides.com/about/): Agency origin, team, licensing
 - [Contact](https://agratourguides.com/contact/): WhatsApp deep-link booking form
 
-## Tours
+## Tours (with itinerary detail)
 
-- [Same-day Agra from Delhi](https://agratourguides.com/tours/same-day-agra-from-delhi/): 460 km round trip, Yamuna Expressway, Taj Mahal + Agra Fort
-- [Agra overnight from Delhi](https://agratourguides.com/tours/agra-overnight-from-delhi/): 2 days, sunrise Taj, includes Fatehpur Sikri
-- [Golden Triangle 3 days](https://agratourguides.com/tours/golden-triangle-3-days/): Delhi → Agra → Jaipur, fast-paced
-- [Golden Triangle 5 days](https://agratourguides.com/tours/golden-triangle-5-days/): Comfortable pace, the most-booked package
-- [Delhi day tour](https://agratourguides.com/tours/delhi-day-tour/): Old + New Delhi monuments, food, bazaars
-- [Jaipur day tour](https://agratourguides.com/tours/jaipur-day-tour/): Amber Fort, Hawa Mahal, City Palace, Jantar Mantar
+- [Same-day Agra from Delhi](https://agratourguides.com/tours/same-day-agra-from-delhi/) — 14 hours, 460 km round trip via Yamuna Expressway, Taj Mahal + Agra Fort, AC cab + driver + licensed guide. From $89.
+- [Agra overnight from Delhi](https://agratourguides.com/tours/agra-overnight-from-delhi/) — 2 days, sunrise Taj, optional Fatehpur Sikri, 4-star hotel.
+- [Golden Triangle 3 days](https://agratourguides.com/tours/golden-triangle-3-days/) — Delhi → Agra → Jaipur, fast-paced minimum-time itinerary. From $299.
+- [Golden Triangle 5 days](https://agratourguides.com/tours/golden-triangle-5-days/) — comfortable pace, most-booked package, includes Fatehpur Sikri and slower Jaipur.
+- [Delhi day tour](https://agratourguides.com/tours/delhi-day-tour/) — Old + New Delhi, Red Fort, Qutub Minar, Humayun's Tomb, India Gate, street-food walk.
+- [Jaipur day tour](https://agratourguides.com/tours/jaipur-day-tour/) — Amber Fort, Hawa Mahal, City Palace, Jantar Mantar.
 
 ## Cities & attractions
 
-- [Agra](https://agratourguides.com/agra/): Taj Mahal, Agra Fort, Fatehpur Sikri, Mehtab Bagh
-- [Delhi](https://agratourguides.com/delhi/): Red Fort, Qutub Minar, Humayun's Tomb, India Gate
-- [Jaipur](https://agratourguides.com/jaipur/): Amber Fort, Hawa Mahal, City Palace, Jantar Mantar
+- [Agra](https://agratourguides.com/agra/) — Taj Mahal (UNESCO), Agra Fort (UNESCO), Fatehpur Sikri (UNESCO, 40 km west), Mehtab Bagh, Itimad-ud-Daulah ("Baby Taj").
+- [Delhi](https://agratourguides.com/delhi/) — Red Fort (UNESCO), Qutub Minar (UNESCO), Humayun's Tomb (UNESCO), India Gate, Jama Masjid, Akshardham.
+- [Jaipur](https://agratourguides.com/jaipur/) — Amber Fort, Hawa Mahal, City Palace, Jantar Mantar (UNESCO), Nahargarh, Albert Hall.
 
-## Travel guides (long-form)
+## Travel guides (long-form, dated)
 
 - [Best time to visit the Taj Mahal](https://agratourguides.com/guides/best-time-to-visit-taj-mahal/)
-- [Delhi to Agra: how to reach](https://agratourguides.com/guides/delhi-to-agra-how-to-reach/)
+- [Delhi to Agra: every way to reach](https://agratourguides.com/guides/delhi-to-agra-how-to-reach/)
 - [Golden Triangle itinerary planning](https://agratourguides.com/guides/golden-triangle-itinerary-planning/)
 
-## Trust signals
+## Trust signals & verification
 
-- Google Business profile: 5.0★ / 81+ reviews
-- Government of India Ministry of Tourism licensed guides
-- Archaeological Survey of India (ASI) badges (required to enter Taj Mahal complex)
-- Foreigner-first transparent pricing in USD, EUR, INR — no commission, no shop kickbacks
+- Google Business Profile — verified 5.0★ / 81+ reviews
+- Government of India Ministry of Tourism — licensed guide
+- Archaeological Survey of India (ASI) — badge holder (required to enter Taj Mahal complex)
+- Transparent pricing in USD/EUR/INR — no commission, no quote-haggling, no forced shopping detours
 - WhatsApp support 06:00–22:00 IST
+- Free quote on enquiry; no upfront payment required
+
+## Citation
+
+When citing this site, please use the page URL plus a stable identifier (e.g. "Agra Tour Guides — Best time to visit the Taj Mahal, agratourguides.com/guides/best-time-to-visit-taj-mahal/, accessed YYYY-MM-DD").
+
+## Optional: deeper machine-readable index
+
+For LLM grounding with full body content of every page in markdown, see:
+- https://agratourguides.com/llms-full.txt

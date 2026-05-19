@@ -1,4 +1,118 @@
+# Agra Tour Guides — robots.txt
+# Last updated: 2026-05-19
+# Site:   https://agratourguides.com
+# Policy: open to all major search engines and AI assistants.
+
+# ── All standard search crawlers ──────────────────────────
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /og/
 
+# ── Google ────────────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+# Google's AI training/grounding crawler. Explicitly allow.
+User-agent: Google-Extended
+Allow: /
+
+# ── Bing ──────────────────────────────────────────────────
+User-agent: Bingbot
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+# ── OpenAI ────────────────────────────────────────────────
+# GPTBot — training crawler
+User-agent: GPTBot
+Allow: /
+
+# OAI-SearchBot — ChatGPT browse/search results
+User-agent: OAI-SearchBot
+Allow: /
+
+# ChatGPT-User — user-initiated browses from ChatGPT
+User-agent: ChatGPT-User
+Allow: /
+
+# ── Anthropic ─────────────────────────────────────────────
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# ── Perplexity ────────────────────────────────────────────
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# ── Apple Intelligence ────────────────────────────────────
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ── Meta AI ───────────────────────────────────────────────
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# ── Amazon ────────────────────────────────────────────────
+User-agent: Amazonbot
+Allow: /
+
+# ── DuckDuckGo ────────────────────────────────────────────
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+# ── Common Crawl (used by many LLM training pipelines) ───
+User-agent: CCBot
+Allow: /
+
+# ── ByteDance / TikTok ────────────────────────────────────
+User-agent: Bytespider
+Allow: /
+
+# ── Mistral (Le Chat) ─────────────────────────────────────
+User-agent: MistralAI-User
+Allow: /
+
+# ── You.com ───────────────────────────────────────────────
+User-agent: YouBot
+Allow: /
+
+# ── Cohere ────────────────────────────────────────────────
+User-agent: cohere-ai
+Allow: /
+
+# ──────────────────────────────────────────────────────────
+# Sitemaps
+# ──────────────────────────────────────────────────────────
 Sitemap: https://agratourguides.com/sitemap-index.xml
+Sitemap: https://agratourguides.com/rss.xml
+
+# ──────────────────────────────────────────────────────────
+# LLM-friendly resources
+# ──────────────────────────────────────────────────────────
+# https://agratourguides.com/llms.txt
+# https://agratourguides.com/llms-full.txt

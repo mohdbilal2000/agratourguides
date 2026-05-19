@@ -1,24 +1,31 @@
 @import "tailwindcss";
 
-/* Font imports */
-@import "@fontsource-variable/playfair-display";
+/* ──────────────────────────────────────────────
+   Fonts — self-hosted via @fontsource
+   Fraunces: variable serif with `opsz` (optical sizing), `SOFT`, `WONK`
+   axes — Google Fonts' most expressive editorial face.
+   Inter Variable: body workhorse.
+   JetBrains Mono Variable: prices, dates, numbers, captions.
+   ────────────────────────────────────────────── */
+
+@import "@fontsource-variable/fraunces";
 @import "@fontsource-variable/inter";
-@import "@fontsource/cormorant-garamond/400.css";
-@import "@fontsource/cormorant-garamond/500.css";
-@import "@fontsource/cormorant-garamond/600.css";
-@import "@fontsource/cormorant-garamond/700.css";
+@import "@fontsource-variable/jetbrains-mono";
 
 /* ──────────────────────────────────────────────
    Design Tokens
    ────────────────────────────────────────────── */
 
 @theme {
-  /* ── Typography ────────────────────────────── */
-  --font-heading: "Playfair Display Variable", "Georgia", serif;
+  /* ── Typography ──────────────────────────────
+     Fraunces uses opsz axis: small body sizes get a tighter, more
+     legible cut; display sizes open up with high contrast. */
+  --font-display: "Fraunces Variable", "Georgia", serif;
+  --font-heading: "Fraunces Variable", "Georgia", serif;
   --font-body: "Inter Variable", "system-ui", sans-serif;
-  --font-accent: "Cormorant Garamond", "Georgia", serif;
+  --font-mono: "JetBrains Mono Variable", "ui-monospace", monospace;
 
-  /* ── Gold Primary (warm-shifted) ─────────── */
+  /* ── Gold (paid-attention accent) ─────────── */
   --color-gold-50: #FFFBEB;
   --color-gold-100: #FEF3C7;
   --color-gold-200: #FDE68A;
@@ -31,7 +38,7 @@
   --color-gold-900: #78350F;
   --color-gold-950: #451A03;
 
-  /* ── Sandstone ─────────────────────────────── */
+  /* ── Sandstone (trust, calm, heritage) ─────── */
   --color-sandstone-50: #FAF5F0;
   --color-sandstone-100: #F5EDE3;
   --color-sandstone-200: #E8D9C8;
@@ -44,85 +51,177 @@
   --color-sandstone-900: #3D2E1E;
   --color-sandstone-950: #2A1F14;
 
-  /* ── Warm Gray (text scale) ────────────────── */
-  --color-warm-gray-50: #FAFAF8;
-  --color-warm-gray-100: #F5F5F0;
-  --color-warm-gray-200: #E8E8E0;
-  --color-warm-gray-300: #D4D4CC;
-  --color-warm-gray-400: #A8A89E;
-  --color-warm-gray-500: #787872;
-  --color-warm-gray-600: #5C5C56;
-  --color-warm-gray-700: #434340;
-  --color-warm-gray-800: #2E2E2B;
-  --color-warm-gray-900: #1C1C1A;
-  --color-warm-gray-950: #0F0F0E;
+  /* ── Ink (text on light bg) ────────────────── */
+  --color-ink-50: #FAFAF8;
+  --color-ink-100: #F5F5F0;
+  --color-ink-200: #E8E8E0;
+  --color-ink-300: #D4D4CC;
+  --color-ink-400: #A8A89E;
+  --color-ink-500: #787872;
+  --color-ink-600: #5C5C56;
+  --color-ink-700: #434340;
+  --color-ink-800: #2E2E2B;
+  --color-ink-900: #1C1C1A;
+  --color-ink-950: #0F0F0E;
 
-  /* ── Premium Neutrals ──────────────────────── */
+  /* ── Accent (reserved-use semantic colors) ──
+     ruby:  used ONLY for booking / urgency CTAs
+     jade:  used ONLY for confirmation / "free" / success
+     Never decorate with these. */
+  --color-ruby: #DC2626;
+  --color-ruby-soft: #FEE2E2;
+  --color-ruby-deep: #991B1B;
+  --color-jade: #059669;
+  --color-jade-soft: #D1FAE5;
+  --color-jade-deep: #065F46;
+
+  /* ── Premium neutrals ──────────────────────── */
   --color-midnight: #0f172a;
   --color-ivory: #faf7f2;
 
-  /* ── Accent Colors ─────────────────────────── */
-  --color-ruby: #DC2626;
-  --color-ruby-light: #FEE2E2;
-  --color-ruby-dark: #991B1B;
+  /* ── Fluid type scale ────────────────────────
+     clamp(min, preferred, max) — body resizes from 320px to 1440px.
+     Editorial scale: balanced ratio ~1.250 (major third) on body,
+     1.333 (perfect fourth) on display.
+     Each step honors min readability (16px floor on body). */
+  --text-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  --text-sm: clamp(0.875rem, 0.84rem + 0.18vw, 0.9375rem);
+  --text-base: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  --text-lg: clamp(1.125rem, 1.08rem + 0.22vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.18rem + 0.36vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.38rem + 0.6vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 1.66rem + 1.07vw, 2.5rem);
+  --text-4xl: clamp(2.25rem, 1.92rem + 1.65vw, 3.25rem);
+  --text-5xl: clamp(2.75rem, 2.23rem + 2.61vw, 4.375rem);
+  --text-6xl: clamp(3.5rem, 2.7rem + 4vw, 6rem);
+  --text-7xl: clamp(4.25rem, 3.1rem + 5.7vw, 7.75rem);
 
-  --color-jade: #059669;
-  --color-jade-light: #D1FAE5;
-  --color-jade-dark: #065F46;
+  /* ── Spacing rhythm (golden-ratio scale) ─────
+     Use only these values for vertical rhythm.
+     Section padding: --rhythm-7 (mobile) → --rhythm-9 (desktop). */
+  --rhythm-1: 0.25rem;
+  --rhythm-2: 0.5rem;
+  --rhythm-3: 1rem;
+  --rhythm-4: 1.5rem;
+  --rhythm-5: 2.5rem;
+  --rhythm-6: 4rem;
+  --rhythm-7: 6.5rem;
+  --rhythm-8: 10.5rem;
+  --rhythm-9: 17rem;
+
+  /* ── Motion tokens ───────────────────────────
+     Easing curves are taste-defining. These are 2024–26 industry
+     defaults (Material 3, iOS 26, Vercel design): bias toward
+     decel-on-entry (ease-out family). No bounces. */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-spring-soft: cubic-bezier(0.34, 1.26, 0.64, 1);
+
+  --duration-instant: 100ms;
+  --duration-fast: 180ms;
+  --duration-base: 240ms;
+  --duration-slow: 420ms;
+  --duration-cinematic: 720ms;
+
+  /* ── Radius scale ──────────────────────────── */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+
+  /* ── Shadow (subtle, never harsh) ──────────── */
+  --shadow-xs: 0 1px 2px 0 rgba(28, 28, 26, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(28, 28, 26, 0.06), 0 1px 2px 0 rgba(28, 28, 26, 0.04);
+  --shadow-md: 0 4px 12px -2px rgba(28, 28, 26, 0.06), 0 2px 4px -2px rgba(28, 28, 26, 0.04);
+  --shadow-lg: 0 12px 32px -8px rgba(28, 28, 26, 0.1), 0 4px 8px -4px rgba(28, 28, 26, 0.04);
+  --shadow-xl: 0 24px 48px -12px rgba(28, 28, 26, 0.14), 0 8px 16px -8px rgba(28, 28, 26, 0.05);
+
+  /* ── Layout caps ───────────────────────────── */
+  --measure-prose: 65ch;
+  --measure-headline: 18ch;
+  --site-max: 90rem;
 }
 
 /* ──────────────────────────────────────────────
-   CSS Custom Properties (light mode defaults)
+   Surface tokens (theme-aware)
    ────────────────────────────────────────────── */
 
 :root {
   --background: var(--color-sandstone-50);
-  --foreground: var(--color-sandstone-900);
   --background-alt: #FFFFFF;
-  --foreground-muted: var(--color-sandstone-600);
+  --background-deep: var(--color-ink-950);
+  --foreground: var(--color-ink-900);
+  --foreground-muted: var(--color-ink-600);
+  --foreground-subtle: var(--color-ink-500);
   --border: var(--color-sandstone-200);
+  --border-strong: var(--color-sandstone-300);
   --ring: var(--color-gold-500);
   --selection-bg: var(--color-gold-200);
   --selection-fg: var(--color-gold-900);
   --scrollbar-track: var(--color-sandstone-100);
-  --scrollbar-thumb: var(--color-gold-300);
+  --scrollbar-thumb: var(--color-sandstone-300);
   --scrollbar-thumb-hover: var(--color-gold-500);
+
+  color-scheme: light;
 }
 
-/* ── Dark Mode (opt-in only via [data-theme="dark"]) ────────────────
-   Auto-dark via prefers-color-scheme is disabled because most section
-   backgrounds in this site are hardcoded light (bg-white / bg-stone-50).
-   Auto-flipping foreground tokens caused unreadable grey-on-cream text. */
-
 [data-theme="dark"] {
-  --background: #1C1510;
-  --foreground: var(--color-sandstone-100);
+  --background: #16110C;
   --background-alt: var(--color-sandstone-950);
-  --foreground-muted: var(--color-sandstone-400);
+  --background-deep: #0A0805;
+  --foreground: var(--color-sandstone-50);
+  --foreground-muted: var(--color-sandstone-300);
+  --foreground-subtle: var(--color-sandstone-400);
   --border: var(--color-sandstone-800);
+  --border-strong: var(--color-sandstone-700);
   --ring: var(--color-gold-400);
   --selection-bg: var(--color-gold-800);
   --selection-fg: var(--color-gold-100);
   --scrollbar-track: var(--color-sandstone-950);
-  --scrollbar-thumb: var(--color-gold-700);
-  --scrollbar-thumb-hover: var(--color-gold-600);
+  --scrollbar-thumb: var(--color-sandstone-800);
+  --scrollbar-thumb-hover: var(--color-gold-500);
+
+  color-scheme: dark;
 }
 
 /* ──────────────────────────────────────────────
-   Base Styles
+   Base styles
    ────────────────────────────────────────────── */
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
+  /* Smooth scroll only honored if user hasn't requested reduced motion. */
   scroll-behavior: smooth;
+  /* Prevent rubber-band white bg on iOS pull-down. */
+  background-color: var(--background);
+  /* Vertical rhythm baseline. */
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 400;
+  line-height: 1.6;
   background-color: var(--background);
   color: var(--foreground);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-feature-settings: "kern", "liga", "calt", "ss01";
+  /* Hairline ink optical correction */
+  font-optical-sizing: auto;
 }
 
 ::selection {
@@ -130,12 +229,90 @@ body {
   color: var(--selection-fg);
 }
 
+/* ──────────────────────────────────────────────
+   Headings — Fraunces with opsz baked in by viewport size.
+   font-variation-settings sets the optical-size axis explicitly
+   so each heading level gets its appropriate cut.
+   ────────────────────────────────────────────── */
+
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--foreground);
+}
+
+h1 {
+  font-size: var(--text-5xl);
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+}
+
+h2 {
+  font-size: var(--text-4xl);
+  font-variation-settings: "opsz" 96, "SOFT" 40;
+}
+
+h3 {
+  font-size: var(--text-2xl);
+  font-variation-settings: "opsz" 36, "SOFT" 30;
+}
+
+h4 { font-size: var(--text-xl); font-variation-settings: "opsz" 24; }
+h5 { font-size: var(--text-lg); font-variation-settings: "opsz" 18; }
+h6 { font-size: var(--text-base); font-variation-settings: "opsz" 14; }
+
+p {
+  text-wrap: pretty;
+  max-width: var(--measure-prose);
 }
 
 /* ──────────────────────────────────────────────
-   Premium Scrollbar
+   Focus visibility — WCAG 2.2 (3px ring, 2px offset)
+   Applied via :focus-visible so mouse users don't see it.
+   ────────────────────────────────────────────── */
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* High-contrast outline on dark surfaces */
+.on-dark :focus-visible,
+[data-on-dark] :focus-visible {
+  outline-color: var(--color-gold-300);
+}
+
+/* ──────────────────────────────────────────────
+   Skip link (a11y)
+   ────────────────────────────────────────────── */
+
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-ink-900);
+  color: white;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top var(--duration-fast) var(--ease-out-quart);
+}
+
+.skip-to-content:focus {
+  top: 1rem;
+}
+
+/* ──────────────────────────────────────────────
+   Scrollbar
    ────────────────────────────────────────────── */
 
 * {
@@ -143,266 +320,236 @@ h1, h2, h3, h4, h5, h6 {
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--scrollbar-track);
-}
-
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
   border-radius: 9999px;
+  border: 2px solid var(--scrollbar-track);
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover);
-}
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 
 /* ──────────────────────────────────────────────
-   Typography Utilities
+   Typography utilities
    ────────────────────────────────────────────── */
 
 .heading-display {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
 }
 
 .heading-editorial {
-  font-family: var(--font-accent);
-  font-weight: 400;
+  font-family: var(--font-display);
   font-style: italic;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 72, "SOFT" 100, "WONK" 1;
 }
 
-.text-balance {
-  text-wrap: balance;
+.text-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum", "zero";
+  letter-spacing: -0.01em;
 }
 
-/* ──────────────────────────────────────────────
-   Glassmorphism
-   ────────────────────────────────────────────── */
+.text-balance { text-wrap: balance; }
+.text-pretty { text-wrap: pretty; }
+.measure-prose { max-width: var(--measure-prose); }
+.measure-headline { max-width: var(--measure-headline); }
 
-.glass {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold-700);
+  font-feature-settings: "tnum";
 }
 
-.glass-light {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.glass-dark {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.glass-gold {
-  background: rgba(217, 119, 6, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(217, 119, 6, 0.15);
+.on-dark .eyebrow,
+[data-on-dark] .eyebrow {
+  color: var(--color-gold-300);
 }
 
 /* ──────────────────────────────────────────────
-   Keyframe Animations
+   Touch targets — WCAG 2.5.5 minimum 44×44
+   Applied to anchors and buttons by default; opt out with .target-tight
    ────────────────────────────────────────────── */
 
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+a, button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+a.target-tight,
+button.target-tight,
+nav a,
+.target-auto,
+.target-auto a,
+.target-auto button {
+  min-height: auto;
+  display: inline;
+}
+
+/* ──────────────────────────────────────────────
+   Motion — scroll-driven CSS animations (no JS)
+   `animation-timeline: view()` is supported in:
+   - Chrome 115+ (Aug 2023)
+   - Edge 115+
+   - Safari 17.4+ (Mar 2024)
+   - Firefox 137+ (Apr 2025)
+   Older browsers gracefully ignore (content stays visible).
+   ────────────────────────────────────────────── */
+
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .reveal-fade {
+    animation: fade-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 50%;
   }
+  .reveal-rise {
+    animation: rise-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 70%;
+  }
+  .parallax-slow {
+    animation: parallax-y linear both;
+    animation-timeline: view();
+    animation-range: cover;
+  }
+}
+
+@keyframes reveal-in {
+  from { opacity: 0; transform: translateY(24px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
 }
 
 @keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-@keyframes slide-in-left {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(48px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+@keyframes parallax-y {
+  from { transform: translateY(-6%); }
+  to   { transform: translateY(6%); }
 }
 
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+/* ──────────────────────────────────────────────
+   Kinetic headline — split-word mask reveal
+   Used by <KineticHeadline />. Each word is a span with
+   inline `animation-delay`, riding the same `reveal-mask` keyframe.
+   ────────────────────────────────────────────── */
+
+.kinetic-headline {
+  display: block;
 }
 
-@keyframes float {
-  0%, 100% {
+.kinetic-headline > span {
+  display: inline-block;
+  clip-path: inset(0 0 110% 0);
+  transform: translateY(0.4em);
+  opacity: 0;
+  animation: kinetic-reveal var(--duration-cinematic) var(--ease-out-expo) forwards;
+}
+
+@keyframes kinetic-reveal {
+  to {
+    clip-path: inset(0);
     transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes shimmer {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 8px rgba(217, 119, 6, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 24px rgba(217, 119, 6, 0.6);
-  }
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    opacity: 1;
   }
 }
 
 /* ──────────────────────────────────────────────
-   Animation Utility Classes
+   Subtle hover lifts (CSS-only)
    ────────────────────────────────────────────── */
 
-.animate-fade-up {
-  opacity: 0;
-  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.hover-lift {
+  transition:
+    transform var(--duration-base) var(--ease-out-quart),
+    box-shadow var(--duration-base) var(--ease-out-quart);
+}
+@media (hover: hover) {
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
 }
 
-.animate-fade-in {
-  opacity: 0;
-  animation: fade-in 0.5s ease forwards;
+.img-zoom {
+  transition: transform var(--duration-cinematic) var(--ease-out-expo);
 }
-
-.animate-slide-in-left {
-  opacity: 0;
-  animation: slide-in-left 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-slide-in-right {
-  opacity: 0;
-  animation: slide-in-right 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-scale-in {
-  opacity: 0;
-  animation: scale-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animate-shimmer {
-  animation: shimmer 2s linear infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.animate-gradient-shift {
-  background-size: 200% 200%;
-  animation: gradient-shift 4s ease infinite;
-}
-
-/* ── Animation Delays ────────────────────────── */
-
-.animate-delay-100 { animation-delay: 100ms; }
-.animate-delay-200 { animation-delay: 200ms; }
-.animate-delay-300 { animation-delay: 300ms; }
-.animate-delay-400 { animation-delay: 400ms; }
-.animate-delay-500 { animation-delay: 500ms; }
-.animate-delay-600 { animation-delay: 600ms; }
-
-/* ──────────────────────────────────────────────
-   Image Hover
-   ────────────────────────────────────────────── */
-
-.img-hover {
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.img-hover:hover {
-  transform: scale(1.05);
+@media (hover: hover) {
+  .group:hover .img-zoom,
+  .img-zoom:hover {
+    transform: scale(1.04);
+  }
 }
 
 /* ──────────────────────────────────────────────
-   Card Styles
-   ────────────────────────────────────────────── */
-
-.card-luxury {
-  border-radius: 1rem;
-  overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.card-luxury:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-/* ──────────────────────────────────────────────
-   Reduced Motion
+   Reduced motion — disable EVERYTHING motion-related,
+   including scroll-driven animations and smooth scroll.
    ────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+
+  .reveal,
+  .reveal-fade,
+  .reveal-rise,
+  .parallax-slow,
+  .kinetic-headline > span {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
+  }
 }
+
+/* ──────────────────────────────────────────────
+   No-scrollbar utility (used on horizontal snap rails)
+   ────────────────────────────────────────────── */
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ──────────────────────────────────────────────
+   Mask gradient utility for fade edges on horizontal rails
+   ────────────────────────────────────────────── */
+
+.mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+}
+
+/* ──────────────────────────────────────────────
+   Safe-area for iOS notch / home indicator
+   ────────────────────────────────────────────── */
+
+.pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 0.75rem); }
+.pt-safe { padding-top: max(env(safe-area-inset-top), 0.75rem); }
