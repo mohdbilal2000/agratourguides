@@ -1,12 +1,12 @@
 ---
 import Logo from "../brand/Logo.astro";
+import MagneticLink from "../react/MagneticLink";
 
 interface Props {
   /**
-   * When true, header starts transparent (white text) and animates into a
-   * solid white bar on scroll — for pages with a dark cinematic hero.
-   * When false (default), header is always solid white with dark text —
-   * for inner pages where the content immediately after sits on a light bg.
+   * When true, header starts transparent over a dark cinematic hero and
+   * resolves to a solid bar on scroll. When false (default), the header
+   * is always solid — for inner pages whose first section is light.
    */
   transparent?: boolean;
 }
@@ -18,254 +18,274 @@ interface NavItem {
 
 const { transparent = false } = Astro.props;
 
+// Slimmed nav — fewer choices, clearer hierarchy.
+// "Destinations" groups the three cities; primary nav is 6 items max.
 const navItems: NavItem[] = [
-  { label: "Tours", href: "/tours" },
-  { label: "Services", href: "/services" },
-  { label: "Agra", href: "/agra" },
-  { label: "Delhi", href: "/delhi" },
-  { label: "Jaipur", href: "/jaipur" },
-  { label: "Reviews", href: "/reviews" },
-  { label: "Guides", href: "/guides" },
-  { label: "Contact", href: "/contact" },
+  { label: "Tours", href: "/tours/" },
+  { label: "Destinations", href: "/agra/" },
+  { label: "Services", href: "/services/" },
+  { label: "Reviews", href: "/reviews/" },
+  { label: "Guides", href: "/guides/" },
+  { label: "About", href: "/about/" },
+];
+
+const destinationItems: NavItem[] = [
+  { label: "Agra", href: "/agra/" },
+  { label: "Delhi", href: "/delhi/" },
+  { label: "Jaipur", href: "/jaipur/" },
 ];
 
 const currentPath = Astro.url.pathname;
-
-// Always-solid header for inner pages: skip the transparent → scrolled animation
-// and just use white bg + dark text from page load.
-const headerClass = transparent
-  ? "fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent data-[scrolled]:bg-white/90 data-[scrolled]:backdrop-blur-xl data-[scrolled]:shadow-sm"
-  : "fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl shadow-sm border-b border-gray-100";
-
-const navLinkClass = transparent
-  ? "text-white data-[header-scrolled]:text-gray-700"
-  : "text-gray-700 hover:text-amber-700";
-
-const logoTextClass = transparent ? "text-white" : "text-gray-900";
-
-const hamburgerLineClass = transparent
-  ? "bg-white data-[header-scrolled]:bg-gray-800"
-  : "bg-gray-800";
 ---
 
 <header
-  class={headerClass}
   data-transparent={transparent ? "" : null}
   id="site-header"
+  class:list={[
+    "fixed top-0 inset-x-0 z-50 transition-[background,backdrop-filter,border-color] duration-300",
+    transparent
+      ? "bg-transparent border-b border-transparent data-[scrolled]:bg-[var(--background)]/85 data-[scrolled]:backdrop-blur-xl data-[scrolled]:border-[var(--border)]"
+      : "bg-[var(--background)]/90 backdrop-blur-xl border-b border-[var(--border)]",
+  ]}
 >
-  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex h-16 items-center justify-between lg:h-20">
-      <!-- Logo -->
-      <a href="/" class:list={["flex items-center gap-2 shrink-0", logoTextClass]} data-logo-link>
+  <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Primary">
+    <div class="flex h-16 lg:h-20 items-center justify-between">
+      {/* Logo */}
+      <a
+        href="/"
+        data-logo-link
+        class:list={[
+          "flex items-center gap-2 shrink-0 target-auto",
+          transparent ? "text-white data-[header-scrolled]:text-[var(--foreground)]" : "text-[var(--foreground)]",
+        ]}
+        aria-label="Agra Tour Guides — home"
+      >
         <Logo size="sm" />
       </a>
 
-      <!-- Desktop Navigation -->
-      <div class="hidden items-center gap-1 lg:flex">
-        {
-          navItems.map((item) => {
-            const isActive = currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href));
-            return (
+      {/* Desktop nav */}
+      <ul class="hidden lg:flex items-center gap-1 target-auto" role="list">
+        {navItems.map((item) => {
+          const isActive = currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href));
+          const isDestinations = item.label === "Destinations";
+          return (
+            <li class:list={["relative target-auto", isDestinations && "group"]}>
               <a
                 href={item.href}
+                data-nav-link
                 class:list={[
-                  "relative px-3 py-2 text-sm font-medium tracking-wide transition-colors duration-300",
-                  navLinkClass,
-                  "group",
+                  "relative px-3 py-2 text-[15px] font-medium tracking-tight transition-colors duration-200 target-auto",
+                  transparent
+                    ? "text-white/90 hover:text-white data-[header-scrolled]:text-[var(--foreground-muted)] data-[header-scrolled]:hover:text-[var(--foreground)]"
+                    : "text-[var(--foreground-muted)] hover:text-[var(--foreground)]",
                   isActive && "nav-active",
                 ]}
-                data-nav-link
               >
                 {item.label}
+                {isDestinations && (
+                  <svg class="inline-block ml-0.5 -mt-0.5 h-3 w-3 opacity-60" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                )}
                 <span
+                  aria-hidden="true"
                   class:list={[
-                    "absolute bottom-0 left-3 right-3 h-0.5 bg-amber-500 transition-transform duration-300 origin-left",
-                    isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                    "absolute left-3 right-3 -bottom-px h-px bg-[var(--color-gold-500)] origin-left transition-transform duration-300",
+                    isActive ? "scale-x-100" : "scale-x-0 group-hover/link:scale-x-100",
                   ]}
                 />
               </a>
-            );
-          })
-        }
-        <a
-          href="/contact"
-          class="ml-4 bg-amber-500 hover:bg-amber-600 text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-all hover:shadow-lg hover:shadow-amber-500/25"
+
+              {isDestinations && (
+                <div
+                  class:list={[
+                    "absolute left-1/2 -translate-x-1/2 top-full pt-3",
+                    "opacity-0 pointer-events-none translate-y-1",
+                    "group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0",
+                    "focus-within:opacity-100 focus-within:pointer-events-auto focus-within:translate-y-0",
+                    "transition-all duration-200",
+                  ]}
+                >
+                  <div class="min-w-44 rounded-xl border border-[var(--border)] bg-[var(--background-alt)] shadow-lg py-2">
+                    {destinationItems.map((d) => (
+                      <a
+                        href={d.href}
+                        class="block px-4 py-2 text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--background)] transition-colors target-auto"
+                      >
+                        {d.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+
+      {/* Desktop CTA — magnetic */}
+      <div class="hidden lg:flex items-center">
+        <MagneticLink
+          client:idle
+          href="/contact/"
+          strength={0.3}
+          className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold-600)] hover:bg-[var(--color-gold-700)] text-white px-5 py-2.5 text-sm font-semibold tracking-tight transition-colors duration-200 shadow-sm hover:shadow target-auto"
+          ariaLabel="Plan your trip — get a quote"
         >
-          Book Now
-        </a>
+          Plan your trip
+          <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </MagneticLink>
       </div>
 
-      <!-- Mobile Hamburger -->
+      {/* Mobile hamburger */}
       <button
         type="button"
-        class="relative flex items-center justify-center w-10 h-10 lg:hidden"
+        class:list={[
+          "lg:hidden relative w-10 h-10 flex items-center justify-center target-auto",
+          transparent ? "text-white data-[header-scrolled]:text-[var(--foreground)]" : "text-[var(--foreground)]",
+        ]}
         aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
         id="mobile-menu-btn"
+        data-mobile-btn
       >
-        <div class="flex flex-col items-center justify-center gap-1.5 w-6" id="hamburger-icon">
-          <span class:list={["block h-0.5 w-6 transition-all duration-300 origin-center", hamburgerLineClass]} data-hamburger-line="1"></span>
-          <span class:list={["block h-0.5 w-6 transition-all duration-300 origin-center", hamburgerLineClass]} data-hamburger-line="2"></span>
-          <span class:list={["block h-0.5 w-4 transition-all duration-300 origin-center ml-auto", hamburgerLineClass]} data-hamburger-line="3"></span>
-        </div>
+        <span class="block w-5 h-px bg-current relative">
+          <span class="absolute left-0 -top-1.5 w-5 h-px bg-current"></span>
+          <span class="absolute left-0 top-1.5 w-3 h-px bg-current"></span>
+        </span>
       </button>
     </div>
   </nav>
 </header>
 
-<!-- Mobile Menu Overlay -->
-<div
-  class="fixed inset-0 z-[60] bg-gray-950/95 backdrop-blur-2xl opacity-0 pointer-events-none transition-opacity duration-300 data-[menu-open]:opacity-100 data-[menu-open]:pointer-events-auto lg:hidden"
+{/* Mobile menu — native <dialog> for built-in focus trap + ESC close */}
+<dialog
   id="mobile-menu"
+  class="
+    backdrop:bg-black/40 backdrop:backdrop-blur-sm
+    open:flex flex-col
+    fixed inset-0 m-0 p-0
+    w-screen h-screen max-w-none max-h-none
+    bg-[var(--background-deep)] text-[var(--foreground)]
+    border-0 outline-none
+    [&:not([open])]:hidden
+  "
+  aria-label="Mobile navigation"
+  data-on-dark
 >
-  <!-- Close Button -->
-  <button
-    type="button"
-    class="absolute top-4 right-4 flex items-center justify-center w-10 h-10 text-white/80 hover:text-white transition-colors"
-    aria-label="Close menu"
-    id="mobile-menu-close"
-  >
-    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  </button>
+  <div class="flex items-center justify-between px-4 pt-safe h-16">
+    <a href="/" class="text-white text-base font-medium tracking-tight target-auto">Agra Tour Guides</a>
+    <button type="button" id="mobile-menu-close" class="w-10 h-10 flex items-center justify-center text-white/80 target-auto" aria-label="Close menu">
+      <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
 
-  <!-- Mobile Nav Links -->
-  <div class="flex flex-col items-center justify-center h-full">
-    <div class="flex flex-col items-center gap-2">
-      {
-        navItems.map((item, index) => {
-          const isActive = currentPath === item.href || (item.href !== "/" && currentPath.startsWith(item.href));
-          return (
-            <a
-              href={item.href}
-              class:list={[
-                "text-2xl font-medium tracking-wide transition-all duration-300 py-3 px-6",
-                "opacity-0 translate-y-4 data-[menu-open]:opacity-100 data-[menu-open]:translate-y-0",
-                isActive ? "text-amber-400" : "text-white/80 hover:text-amber-400",
-              ]}
-              style={`transition-delay: ${(index + 1) * 75}ms;`}
-              data-mobile-link
-            >
-              {item.label}
-            </a>
-          );
-        })
-      }
-    </div>
+  <div class="flex-1 flex flex-col justify-center px-6">
+    <ul class="flex flex-col gap-1 target-auto">
+      {navItems.map((item, i) => (
+        <li class="target-auto" data-mobile-item style={`animation-delay:${i * 40}ms`}>
+          <a
+            href={item.href}
+            class="block py-3 text-3xl font-medium tracking-tight text-white/90 hover:text-[var(--color-gold-300)] heading-display target-auto"
+            style="font-variation-settings: 'opsz' 60, 'SOFT' 30;"
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
 
-    <div
-      class="mt-10 opacity-0 translate-y-4 data-[menu-open]:opacity-100 data-[menu-open]:translate-y-0 transition-all duration-300"
-      style={`transition-delay: ${(navItems.length + 1) * 75}ms;`}
-      data-mobile-link
-    >
+    <div class="mt-10">
       <a
-        href="/contact"
-        class="bg-amber-500 hover:bg-amber-600 text-white px-10 py-3.5 rounded-full text-lg font-semibold transition-all hover:shadow-lg hover:shadow-amber-500/25"
+        href="/contact/"
+        class="inline-flex items-center justify-center gap-2 w-full rounded-full bg-[var(--color-gold-500)] hover:bg-[var(--color-gold-400)] text-[var(--color-sandstone-950)] px-6 py-4 text-base font-semibold transition-colors target-auto"
       >
-        Book Now
+        Plan your trip
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </a>
     </div>
   </div>
-</div>
+
+  <div class="px-6 pb-safe pt-6 text-xs text-white/40 target-auto">
+    5.0 / 5 on Google · 81+ verified reviews · Govt-licensed
+  </div>
+</dialog>
 
 <script>
   function initHeader() {
     const header = document.getElementById("site-header");
-    const menuBtn = document.getElementById("mobile-menu-btn");
-    const mobileMenu = document.getElementById("mobile-menu");
+    const menuBtn = document.getElementById("mobile-menu-btn") as HTMLButtonElement | null;
+    const menu = document.getElementById("mobile-menu") as HTMLDialogElement | null;
     const closeBtn = document.getElementById("mobile-menu-close");
-    const navLinks = document.querySelectorAll("[data-nav-link]");
-    const hamburgerLines = document.querySelectorAll("[data-hamburger-line]");
-    const mobileLinks = document.querySelectorAll("[data-mobile-link]");
-    const logoLink = document.querySelector("[data-logo-link]");
+    if (!header || !menuBtn || !menu) return;
 
-    if (!header || !menuBtn || !mobileMenu || !closeBtn) return;
-
-    // Only run the scroll/transparency animation when header is in transparent
-    // mode (over a dark hero). Solid-mode headers stay solid white from load.
     const isTransparent = header.hasAttribute("data-transparent");
 
+    // ── Scroll-driven transparent → solid transition.
     if (isTransparent) {
       let ticking = false;
-      const onScroll = () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            const scrolled = window.scrollY > 50;
-            if (scrolled) {
-              header.setAttribute("data-scrolled", "");
-            } else {
-              header.removeAttribute("data-scrolled");
-            }
-            navLinks.forEach((link) => {
-              if (scrolled) link.setAttribute("data-header-scrolled", "");
-              else link.removeAttribute("data-header-scrolled");
-            });
-            hamburgerLines.forEach((line) => {
-              if (scrolled) line.setAttribute("data-header-scrolled", "");
-              else line.removeAttribute("data-header-scrolled");
-            });
-            if (logoLink) {
-              if (scrolled) {
-                logoLink.classList.remove("text-white");
-                logoLink.classList.add("text-gray-900");
-              } else {
-                logoLink.classList.remove("text-gray-900");
-                logoLink.classList.add("text-white");
-              }
-            }
-            ticking = false;
-          });
-          ticking = true;
-        }
+      const updateScrolled = () => {
+        const scrolled = window.scrollY > 40;
+        header.toggleAttribute("data-scrolled", scrolled);
+        header.querySelectorAll("[data-nav-link], [data-logo-link], [data-mobile-btn]").forEach((el) => {
+          el.toggleAttribute("data-header-scrolled", scrolled);
+        });
+        ticking = false;
       };
-      window.addEventListener("scroll", onScroll, { passive: true });
-      onScroll();
+      window.addEventListener(
+        "scroll",
+        () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(updateScrolled);
+          }
+        },
+        { passive: true },
+      );
+      updateScrolled();
     }
 
-    // Mobile menu toggle
-    function openMenu() {
-      mobileMenu.setAttribute("data-menu-open", "");
-      document.body.classList.add("overflow-hidden");
-      mobileLinks.forEach((link) => {
-        link.setAttribute("data-menu-open", "");
-      });
-      // Morph hamburger to X
+    // ── Mobile menu open/close via <dialog>.
+    const openMenu = () => {
+      menu.showModal();
       menuBtn.setAttribute("aria-expanded", "true");
-    }
+      document.documentElement.classList.add("overflow-hidden");
+    };
 
-    function closeMenu() {
-      mobileMenu.removeAttribute("data-menu-open");
-      document.body.classList.remove("overflow-hidden");
-      mobileLinks.forEach((link) => {
-        link.removeAttribute("data-menu-open");
-      });
+    const closeMenu = () => {
+      menu.close();
       menuBtn.setAttribute("aria-expanded", "false");
-    }
+      document.documentElement.classList.remove("overflow-hidden");
+    };
 
-    menuBtn.addEventListener("click", () => {
-      const isOpen = mobileMenu.hasAttribute("data-menu-open");
-      if (isOpen) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
+    menuBtn.addEventListener("click", openMenu);
+    closeBtn?.addEventListener("click", closeMenu);
+    menu.addEventListener("close", () => {
+      menuBtn.setAttribute("aria-expanded", "false");
+      document.documentElement.classList.remove("overflow-hidden");
     });
 
-    closeBtn.addEventListener("click", closeMenu);
-
-    // Close on link click
-    mobileMenu.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", closeMenu);
-    });
-
-    // Close on Escape key
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && mobileMenu.hasAttribute("data-menu-open")) {
-        closeMenu();
-      }
+    // Close on link click + click outside dialog box.
+    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
+    menu.addEventListener("click", (e) => {
+      if (e.target === menu) closeMenu();
     });
   }
 
   initHeader();
   document.addEventListener("astro:after-swap", initHeader);
 </script>
+
+<style>
+  /* Mobile-link entry animation — runs each time the dialog opens. */
+  dialog[open] [data-mobile-item] {
+    animation: rise-in 400ms var(--ease-out-expo) both;
+  }
+</style>
