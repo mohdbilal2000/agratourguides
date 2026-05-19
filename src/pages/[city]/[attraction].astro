@@ -116,10 +116,12 @@ const mapMarkers = [{
   transparentHeader
 >
   <HeroSection
-    title={attraction.data.title}
-    subtitle={attraction.data.description}
+    eyebrow={`${attraction.data.city} · attraction`}
+    leadIn="Plan your visit to"
+    punch={attraction.data.title}
+    lede={attraction.data.description}
     backgroundImage={heroImages[attraction.data.slug] || attraction.data.heroImage}
-    showStats={false}
+    backgroundAlt={attraction.data.heroAlt}
   />
 
   <Section class="bg-white">

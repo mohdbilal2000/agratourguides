@@ -97,11 +97,12 @@ const jsonLd = [
   transparentHeader
 >
   <HeroSection
-    title={city.data.title}
-    subtitle={city.data.description}
-    ctaText={`Explore ${city.data.title} Tours`}
-    ctaHref="/tours/"
+    eyebrow={`Destination · ${city.data.title}`}
+    leadIn="Plan your visit to"
+    punch={city.data.title}
+    lede={city.data.description}
     backgroundImage={heroImage}
+    backgroundAlt={city.data.heroAlt}
   />
 
   <Section class="bg-white">

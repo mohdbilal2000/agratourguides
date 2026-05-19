@@ -27,3 +27,6 @@ pnpm-debug.log*
 .claude/
 
 .vercel
+
+# dev tooling artifacts
+screenshot.mjs
