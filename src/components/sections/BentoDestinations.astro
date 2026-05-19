@@ -68,7 +68,7 @@ const [primary, ...secondary] = destinations;
       {/* ── Primary: full-bleed feature card */}
       <a
         href={primary.href}
-        class="reveal group relative block overflow-hidden rounded-2xl bg-[var(--color-sandstone-900)] aspect-[5/6] lg:aspect-auto lg:row-span-2 target-auto"
+        class="reveal group relative block overflow-hidden rounded-2xl bg-[var(--color-ink-900)] aspect-[5/6] lg:aspect-auto lg:row-span-2 target-auto"
         data-on-dark
       >
         <Image
@@ -108,7 +108,7 @@ const [primary, ...secondary] = destinations;
       {secondary.map((d, i) => (
         <a
           href={d.href}
-          class="reveal group relative block overflow-hidden rounded-2xl bg-[var(--color-sandstone-900)] aspect-[16/10] target-auto"
+          class="reveal group relative block overflow-hidden rounded-2xl bg-[var(--color-ink-900)] aspect-[16/10] target-auto"
           data-on-dark
           style={`animation-delay: ${(i + 1) * 120}ms;`}
         >

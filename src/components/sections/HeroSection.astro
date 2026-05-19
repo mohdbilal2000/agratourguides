@@ -35,14 +35,14 @@ const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent
 ---
 
 <section
-  class="relative bg-[var(--color-sandstone-950)] text-white"
+  class="relative bg-[var(--color-ink-950)] text-white"
   data-on-dark
   aria-label="Welcome"
 >
   <div class="grid grid-cols-1 lg:grid-cols-12" style="min-height: 92vh; min-height: 92svh;">
 
     {/* ── LEFT: copy (solid sandstone, AA contrast guaranteed) */}
-    <div class="lg:col-span-6 xl:col-span-5 relative flex flex-col justify-end px-6 sm:px-10 lg:px-16 pt-24 lg:pt-36 pb-14 lg:pb-20 bg-[var(--color-sandstone-950)]">
+    <div class="lg:col-span-6 xl:col-span-5 relative flex flex-col justify-end px-6 sm:px-10 lg:px-16 pt-24 lg:pt-36 pb-14 lg:pb-20 bg-[var(--color-ink-950)]">
 
       {/* Decorative warm corner — subtle, doesn't fight copy */}
       <div aria-hidden="true" class="absolute inset-0 pointer-events-none opacity-[0.18]"
@@ -73,7 +73,7 @@ const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent
         <div class="reveal-fade flex flex-wrap items-center gap-x-6 gap-y-3" style="animation-delay: 1100ms;">
           <a
             href="/tours/"
-            class="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold-500)] text-[var(--color-sandstone-950)] px-7 py-3.5 text-sm font-semibold tracking-tight shadow-lg shadow-black/30 hover:bg-[var(--color-gold-400)] transition-colors target-auto"
+            class="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold-500)] text-[var(--color-ink-950)] px-7 py-3.5 text-sm font-semibold tracking-tight shadow-lg shadow-black/30 hover:bg-[var(--color-gold-400)] transition-colors target-auto"
           >
             Explore tours
             <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -111,7 +111,7 @@ const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent
     </div>
 
     {/* ── RIGHT: photograph */}
-    <div class="lg:col-span-6 xl:col-span-7 relative overflow-hidden bg-[var(--color-sandstone-900)] aspect-[4/5] sm:aspect-[16/10] lg:aspect-auto">
+    <div class="lg:col-span-6 xl:col-span-7 relative overflow-hidden bg-[var(--color-ink-900)] aspect-[4/5] sm:aspect-[16/10] lg:aspect-auto">
       <div class="absolute inset-0 hero-bg" data-hero-parallax>
         <Image
           src={backgroundImage}
@@ -128,10 +128,11 @@ const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent
           class="h-full w-full object-cover scale-[1.08]"
         />
       </div>
-      {/* Subtle vignette on left edge to blend with copy column */}
-      <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-r from-[var(--color-sandstone-950)]/40 lg:from-[var(--color-sandstone-950)]/60 via-transparent to-transparent"></div>
-      {/* Bottom caption */}
-      <p class="absolute bottom-5 right-6 lg:bottom-7 lg:right-10 text-[10px] tracking-widest uppercase text-white/60 font-semibold target-auto">
+      {/* Left-edge blend wash + bottom scrim for caption AA contrast */}
+      <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-r from-[var(--color-ink-950)]/40 lg:from-[var(--color-ink-950)]/60 via-transparent to-transparent"></div>
+      <div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/55 to-transparent"></div>
+      {/* Bottom caption — readable inside the scrim */}
+      <p class="absolute bottom-5 right-6 lg:bottom-7 lg:right-10 text-[10px] tracking-[0.18em] uppercase text-white/85 font-semibold target-auto">
         Taj Mahal · East Gate · 06:24 IST
       </p>
     </div>

@@ -25,22 +25,45 @@
   --font-body: "Inter Variable", "system-ui", sans-serif;
   --font-mono: "JetBrains Mono Variable", "ui-monospace", monospace;
 
-  /* ── Gold (paid-attention accent) ─────────── */
-  --color-gold-50: #FFFBEB;
-  --color-gold-100: #FEF3C7;
-  --color-gold-200: #FDE68A;
-  --color-gold-300: #FCD34D;
-  --color-gold-400: #FBBF24;
-  --color-gold-500: #F59E0B;
-  --color-gold-600: #D97706;
-  --color-gold-700: #B45309;
-  --color-gold-800: #92400E;
-  --color-gold-900: #78350F;
-  --color-gold-950: #451A03;
+  /* ── Gold (paid-attention accent) ─────────────
+     Tuned to antique gold leaf (Mughal inlay reference) rather than
+     amber/orange. Mid-tones sit between yellow-gold and bronze; the
+     ramp avoids the "construction-cone" feel of pure amber.
+     Tailwind's amber-* utilities are aliased to these values below
+     so existing class names emit gold-leaf, not orange. */
+  --color-gold-50: #FBF8EE;
+  --color-gold-100: #F4ECD2;
+  --color-gold-200: #E9D89E;
+  --color-gold-300: #DCC074;
+  --color-gold-400: #CFA84F;
+  --color-gold-500: #BC9237;
+  --color-gold-600: #9F7929;
+  --color-gold-700: #7E5E1F;
+  --color-gold-800: #604718;
+  --color-gold-900: #463311;
+  --color-gold-950: #2A1F0A;
 
-  /* ── Sandstone (trust, calm, heritage) ─────── */
-  --color-sandstone-50: #FAF5F0;
-  --color-sandstone-100: #F5EDE3;
+  /* Tailwind amber alias → gold. Existing bg-amber-500 / text-amber-600
+     etc usages across content pages, cards and React islands now resolve
+     to the refined gold-leaf ramp without a sweep edit. */
+  --color-amber-50: var(--color-gold-50);
+  --color-amber-100: var(--color-gold-100);
+  --color-amber-200: var(--color-gold-200);
+  --color-amber-300: var(--color-gold-300);
+  --color-amber-400: var(--color-gold-400);
+  --color-amber-500: var(--color-gold-500);
+  --color-amber-600: var(--color-gold-600);
+  --color-amber-700: var(--color-gold-700);
+  --color-amber-800: var(--color-gold-800);
+  --color-amber-900: var(--color-gold-900);
+  --color-amber-950: var(--color-gold-950);
+
+  /* ── Sandstone (warm tints for surfaces, borders, ivory body) ───
+     These are mid/light-tones only now. The 900/950 stops still exist
+     for any callsite that wants warm-dark, but global dark surfaces
+     should reference --color-ink-* (below) for the cleaner ink-black. */
+  --color-sandstone-50: #FAF7F2;
+  --color-sandstone-100: #F4EDE2;
   --color-sandstone-200: #E8D9C8;
   --color-sandstone-300: #D9C3A9;
   --color-sandstone-400: #C4A67E;
@@ -51,18 +74,22 @@
   --color-sandstone-900: #3D2E1E;
   --color-sandstone-950: #2A1F14;
 
-  /* ── Ink (text on light bg) ────────────────── */
-  --color-ink-50: #FAFAF8;
-  --color-ink-100: #F5F5F0;
-  --color-ink-200: #E8E8E0;
-  --color-ink-300: #D4D4CC;
-  --color-ink-400: #A8A89E;
-  --color-ink-500: #787872;
-  --color-ink-600: #5C5C56;
-  --color-ink-700: #434340;
-  --color-ink-800: #2E2E2B;
-  --color-ink-900: #1C1C1A;
-  --color-ink-950: #0F0F0E;
+  /* ── Ink (text + DARK SURFACES) ─────────────────
+     Slightly warm-black at the top so it doesn't read as blue-cold next
+     to the warm-cream body. Sits at near-zero chroma — cleaner than the
+     previous sandstone-950 brown-black. Used wherever the design needs a
+     dark editorial surface (hero panel, footer, CTA banner). */
+  --color-ink-50: #F8F5F0;
+  --color-ink-100: #ECE8E0;
+  --color-ink-200: #D6D2C9;
+  --color-ink-300: #B2AEA5;
+  --color-ink-400: #8C887F;
+  --color-ink-500: #6B6760;
+  --color-ink-600: #4E4B45;
+  --color-ink-700: #38352F;
+  --color-ink-800: #25231F;
+  --color-ink-900: #181612;
+  --color-ink-950: #13110E;
 
   /* ── Accent (reserved-use semantic colors) ──
      ruby:  used ONLY for booking / urgency CTAs
@@ -152,12 +179,15 @@
    ────────────────────────────────────────────── */
 
 :root {
-  --background: var(--color-sandstone-50);
-  --background-alt: #FFFFFF;
-  --background-deep: var(--color-ink-950);
-  --foreground: var(--color-ink-900);
+  --background: var(--color-sandstone-50);          /* warm cream body */
+  --background-alt: #FFFFFF;                        /* pure white panels */
+  --background-deep: var(--color-ink-950);          /* ink dark surfaces */
+  --background-deeper: #0B0A08;                     /* one notch deeper for footer */
+  --foreground: var(--color-ink-900);               /* near-black body text */
   --foreground-muted: var(--color-ink-600);
   --foreground-subtle: var(--color-ink-500);
+  --foreground-on-dark: #F5F2EC;                    /* warm white for ink surfaces */
+  --foreground-on-dark-muted: rgba(245, 242, 236, 0.72);
   --border: var(--color-sandstone-200);
   --border-strong: var(--color-sandstone-300);
   --ring: var(--color-gold-500);
@@ -171,19 +201,19 @@
 }
 
 [data-theme="dark"] {
-  --background: #16110C;
-  --background-alt: var(--color-sandstone-950);
-  --background-deep: #0A0805;
-  --foreground: var(--color-sandstone-50);
-  --foreground-muted: var(--color-sandstone-300);
-  --foreground-subtle: var(--color-sandstone-400);
-  --border: var(--color-sandstone-800);
-  --border-strong: var(--color-sandstone-700);
+  --background: var(--color-ink-950);
+  --background-alt: var(--color-ink-900);
+  --background-deep: #0B0A08;
+  --foreground: var(--foreground-on-dark);
+  --foreground-muted: var(--color-ink-300);
+  --foreground-subtle: var(--color-ink-400);
+  --border: var(--color-ink-800);
+  --border-strong: var(--color-ink-700);
   --ring: var(--color-gold-400);
   --selection-bg: var(--color-gold-800);
   --selection-fg: var(--color-gold-100);
-  --scrollbar-track: var(--color-sandstone-950);
-  --scrollbar-thumb: var(--color-sandstone-800);
+  --scrollbar-track: var(--color-ink-950);
+  --scrollbar-thumb: var(--color-ink-700);
   --scrollbar-thumb-hover: var(--color-gold-500);
 
   color-scheme: dark;

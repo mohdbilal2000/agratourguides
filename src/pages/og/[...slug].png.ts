@@ -119,12 +119,12 @@ export const GET: APIRoute<OgVariant> = async ({ props }) => {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          background: "#FAF5F0",
+          background: "#FAF7F2",
           backgroundImage:
             "radial-gradient(circle at 92% 8%, rgba(217, 119, 6, 0.10) 0%, rgba(217, 119, 6, 0) 50%), radial-gradient(circle at 5% 95%, rgba(217, 119, 6, 0.07) 0%, rgba(217, 119, 6, 0) 50%)",
           padding: 80,
           fontFamily: "Inter",
-          color: "#1C1C1A",
+          color: "#181612",
         },
         children: [
           // Top bar: brand + verified pill
@@ -146,7 +146,7 @@ export const GET: APIRoute<OgVariant> = async ({ props }) => {
                       fontSize: 22,
                       fontWeight: 600,
                       letterSpacing: "-0.01em",
-                      color: "#1C1C1A",
+                      color: "#181612",
                     },
                     children: [
                       {
@@ -156,7 +156,7 @@ export const GET: APIRoute<OgVariant> = async ({ props }) => {
                             display: "flex",
                             width: 14,
                             height: 14,
-                            background: "#D97706",
+                            background: "#9F7929",
                             borderRadius: 999,
                             marginRight: 14,
                           },
@@ -174,11 +174,11 @@ export const GET: APIRoute<OgVariant> = async ({ props }) => {
                       alignItems: "center",
                       padding: "8px 18px",
                       borderRadius: 999,
-                      border: "1px solid #E8D9C8",
+                      border: "1px solid #D6D2C9",
                       background: "rgba(255, 255, 255, 0.6)",
                       fontSize: 16,
                       fontWeight: 600,
-                      color: "#3D2E1E",
+                      color: "#38352F",
                     },
                     children: [
                     {
@@ -187,7 +187,7 @@ export const GET: APIRoute<OgVariant> = async ({ props }) => {
                         width: 16,
                         height: 16,
                         viewBox: "0 0 24 24",
-                        fill: "#D97706",
+                        fill: "#9F7929",
                         style: { marginRight: 8 },
                         children: [
                           {
@@ -218,7 +218,7 @@ export const GET: APIRoute<OgVariant> = async ({ props }) => {
                 fontWeight: 600,
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
-                color: "#B45309",
+                color: "#7E5E1F",
                 marginBottom: 20,
               },
               children: eyebrow,
@@ -235,7 +235,7 @@ export const GET: APIRoute<OgVariant> = async ({ props }) => {
                 fontSize: 82,
                 lineHeight: 1.02,
                 letterSpacing: "-0.03em",
-                color: "#1C1C1A",
+                color: "#181612",
                 maxWidth: 1040,
               },
               children: title,
@@ -267,7 +267,7 @@ export const GET: APIRoute<OgVariant> = async ({ props }) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                borderTop: "1px solid #E8D9C8",
+                borderTop: "1px solid #D6D2C9",
                 paddingTop: 24,
                 fontSize: 18,
                 color: "#787872",
@@ -282,7 +282,7 @@ export const GET: APIRoute<OgVariant> = async ({ props }) => {
                       fontFamily: "Fraunces",
                       fontStyle: "italic",
                       fontWeight: 400,
-                      color: "#3D2E1E",
+                      color: "#38352F",
                     },
                     children: "Heritage, culture, experience.",
                   },
