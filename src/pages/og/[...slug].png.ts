@@ -38,6 +38,12 @@ export const getStaticPaths = (async () => {
       subtitle: "Transparent USD/EUR/INR pricing · Cash or UPI · No commission",
     },
     {
+      slug: "car-hire",
+      eyebrow: "Car hire",
+      title: "Chauffeur-driven cars across the Golden Triangle.",
+      subtitle: "Sedan $49/day · SUV $75 · All toll, parking, fuel included · Govt-licensed drivers",
+    },
+    {
       slug: "reviews",
       eyebrow: "Reviews",
       title: `${REVIEW_COUNT}+ travellers across 30+ countries.`,

@@ -32,8 +32,8 @@ export function ogImageForPath(pathname: string): string {
   if (segs.length === 1 && ["agra", "delhi", "jaipur"].includes(segs[0])) {
     return `${SITE_URL}/og/${segs[0]}.png`;
   }
-  // /tours/, /services/, /about/, /faq/, /reviews/, /contact/ → that slug
-  if (segs.length === 1 && ["tours", "services", "about", "faq", "reviews", "contact"].includes(segs[0])) {
+  // /tours/, /services/, /car-hire/, /about/, /faq/, /reviews/, /contact/ → that slug
+  if (segs.length === 1 && ["tours", "services", "car-hire", "about", "faq", "reviews", "contact"].includes(segs[0])) {
     return `${SITE_URL}/og/${segs[0]}.png`;
   }
   return `${SITE_URL}/og/home.png`;

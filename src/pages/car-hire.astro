@@ -1,0 +1,456 @@
+---
+/**
+ * Dedicated Car-Hire landing page. Sits at /car-hire/ so it ranks as a
+ * standalone surface for searches like "Agra car rental with driver" or
+ * "Delhi to Agra cab price". Emits Service schema, an Offer per vehicle
+ * class, and per-route price-list ItemList — all wired for LLM extraction.
+ */
+import PageLayout from "../layouts/PageLayout.astro";
+import Container from "../components/ui/Container.astro";
+import SectionHeader from "../components/ui/SectionHeader.astro";
+import Eyebrow from "../components/ui/Eyebrow.astro";
+import Reveal from "../components/ui/Reveal.astro";
+import AnswerBlock from "../components/ui/AnswerBlock.astro";
+import Breadcrumbs from "../components/layout/Breadcrumbs.astro";
+import CTABanner from "../components/sections/CTABanner.astro";
+import {
+  buildOrganizationSchema,
+  buildBreadcrumbSchema,
+  buildFAQSchema,
+  buildItemListSchema,
+  buildGraph,
+  ORG_ID,
+} from "../lib/schema";
+import {
+  SITE_NAME,
+  SITE_URL,
+  WHATSAPP_NUMBER_DIGITS,
+  usdToEur,
+  usdToInr,
+} from "../lib/constants";
+
+const pageUrl = `${SITE_URL}/car-hire/`;
+
+interface Vehicle {
+  name: string;
+  type: string;
+  capacity: string;
+  perDayUSD: number;
+  perDayInclusion: string;
+  bestFor: string;
+  features: string[];
+}
+
+const vehicles: Vehicle[] = [
+  {
+    name: "AC Sedan",
+    type: "Maruti Dzire / Toyota Etios",
+    capacity: "Up to 3 passengers + 2 large bags",
+    perDayUSD: 49,
+    perDayInclusion: "8 hours / 80 km within city",
+    bestFor: "Couples, business travellers, airport transfers",
+    features: ["Air conditioning", "Bottled water", "Phone charger", "Background-verified driver"],
+  },
+  {
+    name: "AC SUV",
+    type: "Toyota Innova / Innova Crysta",
+    capacity: "Up to 6 passengers + 4 large bags",
+    perDayUSD: 75,
+    perDayInclusion: "8 hours / 80 km within city",
+    bestFor: "Families, small groups, multi-day Golden Triangle",
+    features: ["Air conditioning", "Captain seats option", "WiFi hotspot (on request)", "Window blinds"],
+  },
+  {
+    name: "Premium SUV",
+    type: "Toyota Fortuner / Hyundai Alcazar",
+    capacity: "Up to 6 passengers + 5 large bags",
+    perDayUSD: 119,
+    perDayInclusion: "8 hours / 80 km within city",
+    bestFor: "Premium travellers, honeymoons, photographers",
+    features: ["Leather seats", "Sunroof", "Bottled water + snacks", "USB-C charging"],
+  },
+  {
+    name: "Tempo Traveller",
+    type: "Force Tempo Traveller (8-seater / 12-seater)",
+    capacity: "8–14 passengers",
+    perDayUSD: 145,
+    perDayInclusion: "8 hours / 80 km within city",
+    bestFor: "Large groups, multi-family trips, corporate",
+    features: ["Push-back seats", "Air conditioning", "Luggage carrier", "Trained tour driver"],
+  },
+];
+
+interface Route {
+  from: string;
+  to: string;
+  vehicleUSD: number;
+  distance: string;
+  duration: string;
+  notes: string;
+}
+
+const routes: Route[] = [
+  { from: "Delhi", to: "Agra (one-way)", vehicleUSD: 79, distance: "230 km via Yamuna Expressway", duration: "3.5 hr", notes: "Sedan rate; SUV +30%" },
+  { from: "Delhi", to: "Agra (round-trip same day)", vehicleUSD: 99, distance: "460 km", duration: "11 hr door-to-door", notes: "Includes 6 hr Agra wait" },
+  { from: "Delhi", to: "Jaipur (one-way)", vehicleUSD: 89, distance: "270 km via NH-48", duration: "5 hr", notes: "Sedan rate; SUV +30%" },
+  { from: "Agra", to: "Jaipur (one-way)", vehicleUSD: 79, distance: "240 km via NH-21", duration: "4.5 hr", notes: "Fatehpur Sikri stop +1 hr free" },
+  { from: "Jaipur", to: "Delhi (one-way)", vehicleUSD: 89, distance: "270 km", duration: "5 hr", notes: "Sedan; airport drop ₹500 extra" },
+  { from: "Delhi Airport (IGI)", to: "Hotel (any zone)", vehicleUSD: 29, distance: "Up to 50 km", duration: "45–90 min", notes: "Flat rate, all hours, meet-and-greet inside terminal" },
+  { from: "Agra Airport (AGR)", to: "Hotel (any zone)", vehicleUSD: 25, distance: "Up to 25 km", duration: "30 min", notes: "Flat rate" },
+  { from: "Agra Cantt Railway Station", to: "Hotel + Taj Mahal", vehicleUSD: 22, distance: "Within Agra", duration: "Half-day", notes: "Sedan, includes 4 hr at Taj Mahal complex" },
+];
+
+const inclusions = [
+  "All highway tolls, state border permits, parking",
+  "Driver allowance, food, lodging (multi-day trips)",
+  "Fuel — no surprise bills",
+  "Mineral water (2 bottles per passenger per day)",
+  "Background-verified, English-speaking driver",
+  "Mobile data / WiFi hotspot in vehicle (on request)",
+  "Phone charger (Type-C and Lightning)",
+  "GST and all government taxes",
+];
+
+const exclusions = [
+  "Monument entry tickets",
+  "Meals (driver eats at the same dhabas you do, on your bill if you invite — never expected)",
+  "Driver tip (optional, ₹200–500 per day if you wish — never solicited)",
+  "Extra mileage beyond included km (₹14/km for sedan, ₹18 SUV)",
+  "Extra hours beyond included hours (₹150/hr sedan, ₹200 SUV)",
+  "Night charges 22:00–06:00 (₹500 flat, only if you actually use that window)",
+];
+
+const carHireFaqs = [
+  {
+    question: "Is your car hire actually with a driver, or self-drive?",
+    answer:
+      "All car hire is chauffeur-driven. Self-drive rentals in India require an International Driving Permit, deposit cards in INR, and local insurance you almost certainly don't want to navigate on your trip. Every driver on our roster is government-licensed, background-verified, and speaks functional English. You ride; they drive.",
+  },
+  {
+    question: "Can I just hire a car without a tour guide?",
+    answer:
+      "Yes — this page is exactly that. \"Guide + Cab\" includes a licensed monument guide; \"Car Hire\" is the driver and vehicle only. Many independent travellers prefer this for airport transfers, business trips, or when they're using a different guide service inside the monuments. You can always add a guide later by message.",
+  },
+  {
+    question: "How do you charge — by the hour, by the km, or by the day?",
+    answer:
+      "By the day, with 8 hours and 80 km of in-city driving included. Extra mileage is ₹14/km for sedans, ₹18 for SUVs; extra hours are ₹150/hr sedan, ₹200 SUV. Inter-city trips (Delhi-Agra, Agra-Jaipur, etc.) are flat-rate, published in USD on this page. No \"surge\" pricing, ever.",
+  },
+  {
+    question: "Do you pick up from Delhi airport at 03:00?",
+    answer:
+      "Yes — Delhi IGI Airport pickups run 24/7 at a flat $29 (sedan, up to 50 km). Driver waits inside the arrivals hall with a printed name placard. Night-time pickups have no extra surcharge — the published rate is the published rate, regardless of arrival hour. Send your flight number on WhatsApp once you've booked.",
+  },
+  {
+    question: "Can I keep the same car and driver for 5–7 days across cities?",
+    answer:
+      "Yes — multi-day bookings are our most-asked package. A 5-day Golden Triangle car hire (Delhi → Agra → Fatehpur Sikri → Jaipur → Delhi) is typically $349 / €320 / ₹29,000 in a sedan, $449 / €410 / ₹37,500 in an SUV, all inclusive of toll, parking, driver allowance and fuel. You add only monument tickets and meals.",
+  },
+  {
+    question: "Is there insurance on the vehicle and us as passengers?",
+    answer:
+      "Every vehicle carries comprehensive third-party insurance (statutory in India) plus our agency's commercial-passenger cover up to ₹15,00,000 per passenger. The drivers are on our payroll, not contractors — meaning we underwrite their behaviour. Send us your travel insurance if you'd like us to cross-name us as an authorised carrier.",
+  },
+  {
+    question: "Are your prices in USD or INR — and how do I pay?",
+    answer:
+      "Both are published — USD is what foreign travellers see, INR is what locals see. Pay in either, at the same Google mid-market rate, on the last day of the trip. Cash (USD/EUR/GBP/AUD/INR), UPI for Indians, or Wise/Revolut transfer to our INR account. No upfront deposit on bookings under 7 days.",
+  },
+  {
+    question: "What if my flight is delayed or cancelled?",
+    answer:
+      "Free reschedule on flight delays — message us your new ETA and we shift the driver. Cancellations more than 24 hours out are free. Inside 24 hours we charge the driver's lost day (a flat ₹2,000 for a sedan, ₹3,000 for SUV) — never the full fare. For genuine emergencies, we waive it.",
+  },
+];
+
+const vehicleListSchema = buildItemListSchema(
+  "Available vehicles for hire",
+  vehicles.map((v) => ({
+    name: `${v.name} — ${v.type}`,
+    url: pageUrl,
+    description: `${v.capacity}. From $${v.perDayUSD}/day. ${v.perDayInclusion}.`,
+  })),
+);
+
+const routePriceListSchema = buildItemListSchema(
+  "Inter-city car-hire rates",
+  routes.map((r) => ({
+    name: `${r.from} → ${r.to}`,
+    url: pageUrl,
+    description: `${r.distance}, ${r.duration}. From $${r.vehicleUSD}. ${r.notes}`,
+  })),
+);
+
+const carHireService = {
+  "@type": "Service",
+  "@id": `${pageUrl}#service`,
+  name: "Car hire with driver in Agra, Delhi & Jaipur",
+  serviceType: "Chauffeur-driven car rental",
+  provider: { "@id": ORG_ID },
+  areaServed: [
+    { "@type": "City", name: "Agra" },
+    { "@type": "City", name: "Delhi" },
+    { "@type": "City", name: "Jaipur" },
+    { "@type": "Place", name: "Golden Triangle, India" },
+  ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Car-hire vehicle classes",
+    itemListElement: vehicles.map((v) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: `${v.name} — ${v.type}`,
+        description: `${v.capacity}. ${v.perDayInclusion}.`,
+      },
+      price: v.perDayUSD,
+      priceCurrency: "USD",
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: v.perDayUSD,
+        priceCurrency: "USD",
+        referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "DAY" },
+      },
+    })),
+  },
+  url: pageUrl,
+};
+
+const jsonLd = [
+  buildGraph([
+    buildOrganizationSchema(),
+    carHireService,
+    vehicleListSchema,
+    routePriceListSchema,
+    buildFAQSchema(carHireFaqs),
+    buildBreadcrumbSchema([
+      { name: "Home", url: SITE_URL + "/" },
+      { name: "Car Hire", url: pageUrl },
+    ]),
+  ]),
+];
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Car Hire" },
+];
+
+const waUrl = (text: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent(text)}`;
+---
+
+<PageLayout
+  title={`Car Hire with Driver — Agra, Delhi, Jaipur | ${SITE_NAME}`}
+  description="Chauffeur-driven car hire across Agra, Delhi & Jaipur. Sedan from $49/day, SUV from $75/day. All toll, parking, fuel, driver allowance included. Flat inter-city rates published. Govt-licensed."
+  jsonLd={jsonLd}
+>
+  <section class="bg-[var(--background)] pt-28 pb-16 md:pt-36 md:pb-20" itemscope itemtype="https://schema.org/Service">
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+      <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+        <Reveal variant="fade" class="lg:col-span-8">
+          <Eyebrow>Car hire · with driver</Eyebrow>
+          <h1 class="mt-5 text-balance" style="font-size: var(--text-5xl); font-variation-settings: 'opsz' 144, 'SOFT' 80;">
+            A car, a driver, and a flat
+            <em class="italic font-normal text-[var(--foreground-muted)]" style="font-variation-settings: 'opsz' 72, 'WONK' 1;">
+              all-inclusive
+            </em>
+            price.
+          </h1>
+          <p class="mt-6 text-pretty leading-relaxed max-w-prose" style="font-size: var(--text-lg);" itemprop="description">
+            Sedan from $49 / €45 / ₹4,100 a day. SUV from $75. Tempo for 8–14 from $145. Toll, parking, fuel, driver allowance — all in. Inter-city flat rates published below, no surge, no haggling.
+          </p>
+        </Reveal>
+        <div class="lg:col-span-4 flex flex-col gap-2 lg:items-end">
+          <a
+            href={waUrl("Hi! I want to hire a car with driver. Pickup city/date: ___, vehicle type: ___, group size: ___.")}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold-500)] hover:bg-[var(--color-gold-400)] text-[var(--color-ink-950)] px-7 py-3.5 text-sm font-semibold transition-colors"
+          >
+            WhatsApp for a quote
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <span class="text-xs text-[var(--foreground-subtle)]">Reply within 2 hours · 06:00–22:00 IST</span>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  {/* Vehicle classes */}
+  <section class="bg-[var(--background-alt)] py-20 md:py-28" aria-labelledby="vehicles-heading">
+    <Container>
+      <Reveal variant="fade">
+        <SectionHeader
+          eyebrow="Vehicles"
+          heading="Four classes. All chauffeur-driven."
+          lede="Daily rate includes 8 hours and 80 km within the city. Extra km, hours, and night windows are published below the table — no surprises."
+          align="left"
+          as="h2"
+        />
+      </Reveal>
+
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+        {vehicles.map((v) => (
+          <Reveal>
+            <article class="h-full rounded-2xl border border-[var(--border)] bg-[var(--background)] p-7 md:p-8 hover-lift" itemscope itemtype="https://schema.org/Offer">
+              <header class="flex items-baseline justify-between gap-4 mb-3">
+                <h3 itemprop="name" style="font-size: var(--text-2xl); font-variation-settings: 'opsz' 32, 'SOFT' 25;">
+                  {v.name}
+                </h3>
+                <p class="text-mono text-right" style="font-variation-settings: 'wght' 500;">
+                  <span class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] block leading-none">From</span>
+                  <span class="text-lg text-[var(--foreground)]" itemprop="price" content={String(v.perDayUSD)}>${v.perDayUSD}</span>
+                  <meta itemprop="priceCurrency" content="USD" />
+                  <span class="text-xs text-[var(--foreground-muted)] block">€{usdToEur(v.perDayUSD)} · ₹{usdToInr(v.perDayUSD)}</span>
+                </p>
+              </header>
+              <p class="text-sm text-[var(--foreground-muted)] italic mb-4">{v.type}</p>
+              <dl class="grid grid-cols-1 gap-3 text-sm border-t border-[var(--border)] pt-4">
+                <div>
+                  <dt class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)]">Capacity</dt>
+                  <dd class="text-[var(--foreground)]">{v.capacity}</dd>
+                </div>
+                <div>
+                  <dt class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)]">Day rate</dt>
+                  <dd class="text-[var(--foreground)]">{v.perDayInclusion}</dd>
+                </div>
+                <div>
+                  <dt class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)]">Best for</dt>
+                  <dd class="text-[var(--foreground)]">{v.bestFor}</dd>
+                </div>
+              </dl>
+              <ul class="mt-5 space-y-2 text-sm" role="list">
+                {v.features.map((f) => (
+                  <li class="flex items-start gap-2 text-[var(--foreground-muted)]">
+                    <svg class="h-4 w-4 mt-0.5 text-[var(--color-jade)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                      <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </Reveal>
+        ))}
+      </div>
+
+      <p class="mt-8 text-xs text-[var(--foreground-subtle)] max-w-3xl">
+        Extra mileage: ₹14/km sedan, ₹18 SUV, ₹22 premium SUV. Extra hours: ₹150 sedan, ₹200 SUV. Night charge 22:00–06:00: ₹500 flat, only if you actually use that window.
+      </p>
+    </Container>
+  </section>
+
+  {/* Route price list */}
+  <section class="bg-[var(--background)] py-20 md:py-28" aria-labelledby="routes-heading">
+    <Container>
+      <Reveal variant="fade">
+        <SectionHeader
+          eyebrow="Inter-city flat rates"
+          heading="The drives travellers ask for, priced up-front."
+          lede="Sedan rates shown. SUV upgrade is roughly +30%. All flat — no surge, no holiday markups."
+          align="left"
+          as="h2"
+        />
+      </Reveal>
+
+      <div class="mt-12 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+        <table class="w-full text-left border-collapse" itemscope itemtype="https://schema.org/PriceSpecification">
+          <thead>
+            <tr class="border-b-2 border-[var(--border-strong)]">
+              <th scope="col" class="py-3 pr-4 text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold">Route</th>
+              <th scope="col" class="py-3 pr-4 text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold">Distance</th>
+              <th scope="col" class="py-3 pr-4 text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold hidden sm:table-cell">Duration</th>
+              <th scope="col" class="py-3 pr-4 text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold text-right">From (sedan)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {routes.map((r) => (
+              <tr class="border-b border-[var(--border)] hover:bg-[var(--background-alt)] transition-colors">
+                <td class="py-4 pr-4 align-top">
+                  <p class="text-[var(--foreground)] font-medium">{r.from} → {r.to}</p>
+                  <p class="text-xs text-[var(--foreground-muted)] mt-0.5">{r.notes}</p>
+                </td>
+                <td class="py-4 pr-4 align-top text-sm text-[var(--foreground-muted)]">{r.distance}</td>
+                <td class="py-4 pr-4 align-top text-sm text-[var(--foreground-muted)] hidden sm:table-cell">{r.duration}</td>
+                <td class="py-4 pr-4 align-top text-right">
+                  <span class="text-mono text-[var(--foreground)]" style="font-variation-settings: 'wght' 500;">${r.vehicleUSD}</span>
+                  <span class="block text-[10px] text-[var(--foreground-subtle)]">€{usdToEur(r.vehicleUSD)} · ₹{usdToInr(r.vehicleUSD)}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Container>
+  </section>
+
+  {/* What's in / what's out */}
+  <section class="bg-[var(--background-alt)] py-20 md:py-28">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-14">
+        <Reveal>
+          <Eyebrow>What's included</Eyebrow>
+          <ul class="mt-6 space-y-3" role="list">
+            {inclusions.map((i) => (
+              <li class="flex items-start gap-3 text-[var(--foreground)]">
+                <svg class="h-5 w-5 mt-0.5 text-[var(--color-jade)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                  <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>{i}</span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+
+        <Reveal style="animation-delay:120ms;">
+          <Eyebrow>What's not included</Eyebrow>
+          <ul class="mt-6 space-y-3" role="list">
+            {exclusions.map((e) => (
+              <li class="flex items-start gap-3 text-[var(--foreground-muted)]">
+                <svg class="h-5 w-5 mt-0.5 text-[var(--foreground-subtle)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/>
+                </svg>
+                <span>{e}</span>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </div>
+    </Container>
+  </section>
+
+  {/* FAQs (AEO answer blocks) */}
+  <section class="bg-[var(--background)] py-20 md:py-28" itemscope itemtype="https://schema.org/FAQPage">
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
+        <Reveal variant="fade" class="lg:col-span-4 lg:sticky lg:top-32 lg:self-start">
+          <SectionHeader
+            eyebrow="Car hire FAQ"
+            heading="The things travellers ask before booking a car."
+            lede="The boring fine print, written plainly."
+            align="left"
+            as="h2"
+          />
+        </Reveal>
+
+        <div class="lg:col-span-8">
+          <div class="divide-y divide-[var(--border)]">
+            {carHireFaqs.map((f, i) => (
+              <AnswerBlock question={f.question} answer={f.answer} id={`car-faq-${i + 1}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <CTABanner
+    title="Need a car tomorrow?"
+    subtitle="Tell us pickup city, date and vehicle class. Quote in two hours, driver assigned within four."
+    ctaText="WhatsApp now"
+    ctaLink={waUrl("Hi! I need a car with driver. Pickup: ___, date: ___, vehicle: ___.")}
+  />
+</PageLayout>

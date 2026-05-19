@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Tailwind v4 dark variant — opt-in only via [data-theme="dark"].
+   The default v4 dark: variant activates on prefers-color-scheme: dark
+   (the user's OS setting). Our site has light-only section backgrounds,
+   so OS dark mode would only flip `dark:` text/border utilities and
+   create contrast bugs ("Choose Your Experience" rendering white on
+   cream when the user's phone is set to dark mode). This variant
+   re-binds dark: to a data-attribute selector so it never auto-activates. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /* ──────────────────────────────────────────────
    Fonts — self-hosted via @fontsource
    Fraunces: variable serif with `opsz` (optical sizing), `SOFT`, `WONK`
@@ -413,17 +422,19 @@ p {
    Applied to anchors and buttons by default; opt out with .target-tight
    ────────────────────────────────────────────── */
 
-/* Touch-target floor for tap-able elements. Block-level layout primitives
-   (ul, nav, ol, dialog) opt out by being explicitly typed below. Headers
-   and other containers can wrap a, button in a context that needs the
-   `target-auto` class which removes the floor without changing display. */
-a:not(.target-auto):not(.target-auto *), button:not(.target-auto):not(.target-auto *) {
+/* Touch-target floor (WCAG 2.5.5). Only standalone tappable elements
+   get the 44px floor; links inside nav/lists/prose stay inline-natural.
+   `.target-auto` opts an element out of the floor WITHOUT altering its
+   display (the previous rule forced display:inline which collapsed
+   pill-shaped buttons into broken multi-line shapes on real devices). */
+a, button {
   min-height: 44px;
 }
 
-a, button { display: inline-flex; align-items: center; }
-a.target-auto, .target-auto a, button.target-auto, .target-auto button { display: inline; }
-nav a, ul a, li a { min-height: auto; }
+nav a, ul a, ol a, li a, p a, .prose a, address a, a.target-auto,
+.target-auto a, button.target-auto, .target-auto button {
+  min-height: 0;
+}
 
 /* ──────────────────────────────────────────────
    Motion — scroll-driven CSS animations (no JS)

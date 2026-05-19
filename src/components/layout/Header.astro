@@ -24,9 +24,9 @@ const navItems: NavItem[] = [
   { label: "Tours", href: "/tours/" },
   { label: "Destinations", href: "/agra/" },
   { label: "Services", href: "/services/" },
+  { label: "Car Hire", href: "/car-hire/" },
   { label: "Reviews", href: "/reviews/" },
   { label: "Guides", href: "/guides/" },
-  { label: "About", href: "/about/" },
 ];
 
 const destinationItems: NavItem[] = [
@@ -42,10 +42,10 @@ const currentPath = Astro.url.pathname;
   data-transparent={transparent ? "" : null}
   id="site-header"
   class:list={[
-    "fixed top-0 inset-x-0 z-50 transition-[background,backdrop-filter,border-color] duration-300",
+    "fixed top-0 inset-x-0 z-50 transition-[background,backdrop-filter,border-color,box-shadow] duration-300",
     transparent
-      ? "bg-transparent border-b border-transparent data-[scrolled]:bg-[var(--background)]/85 data-[scrolled]:backdrop-blur-xl data-[scrolled]:border-[var(--border)]"
-      : "bg-[var(--background)]/90 backdrop-blur-xl border-b border-[var(--border)]",
+      ? "bg-transparent border-b border-transparent data-[scrolled]:bg-[var(--background)] data-[scrolled]:backdrop-blur-xl data-[scrolled]:border-[var(--border-strong)] data-[scrolled]:shadow-sm"
+      : "bg-[var(--background)] backdrop-blur-xl border-b border-[var(--border-strong)] shadow-sm",
   ]}
 >
   <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Primary">
