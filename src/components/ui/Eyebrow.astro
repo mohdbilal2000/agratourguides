@@ -1,0 +1,19 @@
+---
+/**
+ * Small uppercase label that introduces a section.
+ * Wraps the consistent eyebrow pattern that appeared inline across many
+ * sections. Includes an optional leading rule for editorial framing.
+ */
+interface Props {
+  rule?: boolean;
+  class?: string;
+  as?: "p" | "span" | "div";
+}
+
+const { rule = false, class: className, as: Tag = "p" } = Astro.props;
+---
+
+<Tag class:list={["eyebrow target-auto", className]}>
+  {rule && <span aria-hidden="true" class="block h-px w-8 bg-current opacity-60"></span>}
+  <slot />
+</Tag>

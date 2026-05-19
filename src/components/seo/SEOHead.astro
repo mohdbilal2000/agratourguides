@@ -1,4 +1,6 @@
 ---
+import { SITE_URL, SITE_NAME } from "../../lib/constants";
+
 interface HreflangAlternate {
   hreflang: string;
   href: string;
@@ -13,6 +15,12 @@ interface Props {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
   hreflangAlternates?: HreflangAlternate[];
+  /** Article-only props for OG. */
+  articlePublished?: string;
+  articleModified?: string;
+  articleAuthor?: string;
+  /** Critical image to preload for LCP (e.g. hero). */
+  preloadImage?: string;
 }
 
 const {
@@ -24,47 +32,85 @@ const {
   jsonLd,
   noindex = false,
   hreflangAlternates,
+  articlePublished,
+  articleModified,
+  articleAuthor,
+  preloadImage,
 } = Astro.props;
 
-const siteName = "Agra Tour Guides";
-const jsonLdArray = jsonLd
-  ? Array.isArray(jsonLd)
-    ? jsonLd
-    : [jsonLd]
-  : [];
+const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const twitterHandle = "@agratourguides";
+
+// Augment hreflang with x-default — Google requires this for international SEO.
+const hreflangWithDefault = hreflangAlternates && hreflangAlternates.length > 0
+  ? [...hreflangAlternates, { hreflang: "x-default", href: canonical }]
+  : undefined;
 ---
 
+{/* ── Primary meta ─────────────────────────────────────── */}
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
 
-{noindex && <meta name="robots" content="noindex, nofollow" />}
+{/* ── Robots ───────────────────────────────────────────── */}
+{noindex ? (
+  <meta name="robots" content="noindex, nofollow" />
+) : (
+  <meta
+    name="robots"
+    content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+  />
+)}
 
-<!-- Open Graph -->
+{/* ── DNS / connection prefetch for first-paint critical hosts ─ */}
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+<link rel="dns-prefetch" href="https://images.unsplash.com" />
+<link rel="dns-prefetch" href="https://images.pexels.com" />
+
+{preloadImage && (
+  <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
+)}
+
+{/* ── Open Graph ───────────────────────────────────────── */}
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:type" content={ogType} />
-<meta property="og:site_name" content={siteName} />
-{ogImage && <meta property="og:image" content={ogImage} />}
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:locale" content="en_US" />
+{ogImage && (
+  <>
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+  </>
+)}
+{articlePublished && (
+  <meta property="article:published_time" content={articlePublished} />
+)}
+{articleModified && (
+  <meta property="article:modified_time" content={articleModified} />
+)}
+{articleAuthor && (
+  <meta property="article:author" content={articleAuthor} />
+)}
 
-<!-- Twitter Card -->
+{/* ── Twitter Card ─────────────────────────────────────── */}
 <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
+<meta name="twitter:site" content={twitterHandle} />
+<meta name="twitter:creator" content={twitterHandle} />
 {ogImage && <meta name="twitter:image" content={ogImage} />}
 
-<!-- Hreflang -->
-{
-  hreflangAlternates &&
-    hreflangAlternates.map((alt) => (
-      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
-    ))
-}
+{/* ── Hreflang (with x-default) ────────────────────────── */}
+{hreflangWithDefault &&
+  hreflangWithDefault.map((alt) => (
+    <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+  ))}
 
-<!-- JSON-LD -->
-{
-  jsonLdArray.map((ld) => (
-    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
-  ))
-}
+{/* ── JSON-LD ─────────────────────────────────────────── */}
+{jsonLdArray.map((ld) => (
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+))}

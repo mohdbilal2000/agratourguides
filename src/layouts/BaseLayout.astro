@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 import { SITE_URL, SITE_NAME } from "../lib/constants";
 
@@ -16,10 +16,12 @@ const { lang = "en" } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#d97706" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FAF5F0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#16110C" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="format-detection" content="telephone=yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content={SITE_NAME} />
     <meta name="application-name" content={SITE_NAME} />
 
@@ -28,10 +30,27 @@ const { lang = "en" } = Astro.props;
     <link rel="alternate" type="application/rss+xml" title={`${SITE_NAME} Travel Guides`} href={`${SITE_URL}/rss.xml`} />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 
-    <!-- Per-page head injection (SEOHead etc.) -->
+    {/* Per-page head injection (SEOHead, JSON-LD etc.) */}
     <slot name="head" />
 
-    <ViewTransitions />
+    {/*
+      Speculation Rules — instant nav prerender for same-origin links the
+      user is likely to click. Chrome 121+ uses this to make navigation
+      effectively instant; other browsers ignore. Pairs with Astro's
+      prefetch (link rel=prefetch on viewport-visible links) for full coverage.
+    */}
+    <script type="speculationrules" is:inline>
+      {JSON.stringify({
+        prerender: [
+          {
+            where: { href_matches: "/*" },
+            eagerness: "moderate",
+          },
+        ],
+      })}
+    </script>
+
+    <ClientRouter />
   </head>
   <body class="min-h-screen bg-[var(--background)] text-[var(--foreground)] font-body antialiased">
     <slot />

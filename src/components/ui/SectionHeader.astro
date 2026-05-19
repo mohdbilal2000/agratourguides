@@ -1,0 +1,44 @@
+---
+/**
+ * Composed section header: optional eyebrow, headline, lede.
+ * Centralises the rhythm and typography that was duplicated inline
+ * across every section. Slots allow override of any part.
+ */
+import Eyebrow from "./Eyebrow.astro";
+
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  lede?: string;
+  align?: "left" | "center";
+  as?: "h1" | "h2" | "h3";
+  class?: string;
+}
+
+const {
+  eyebrow,
+  heading,
+  lede,
+  align = "left",
+  as: Heading = "h2",
+  class: className,
+} = Astro.props;
+---
+
+<header
+  class:list={[
+    "flex flex-col gap-4 max-w-3xl",
+    align === "center" && "mx-auto text-center items-center",
+    className,
+  ]}
+>
+  {eyebrow && <Eyebrow rule={align === "left"}>{eyebrow}</Eyebrow>}
+  <Heading class="text-balance">
+    {heading}
+  </Heading>
+  {lede && (
+    <p class="text-[var(--foreground-muted)] text-pretty" style="font-size: var(--text-lg); line-height: 1.55;">
+      {lede}
+    </p>
+  )}
+</header>

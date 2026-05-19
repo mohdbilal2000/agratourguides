@@ -5,7 +5,39 @@ export const SITE_URL = "https://agratourguides.com";
 export const SITE_DESCRIPTION =
   "Private guided Taj Mahal tours and Golden Triangle itineraries from a 5.0★ Google-rated Agra agency. English, Hindi & Japanese speaking guides. Skip-the-line, photo-included.";
 
-export const DEFAULT_OG_IMAGE = "/images/og-default.jpg";
+export const DEFAULT_OG_IMAGE = "/og/home.png";
+
+/**
+ * Compute a per-page OG image URL from the page pathname.
+ * Maps pathnames to the static-path slugs emitted by /og/[...slug].png.ts.
+ * Returns an absolute URL.
+ */
+export function ogImageForPath(pathname: string): string {
+  const clean = pathname.replace(/^\/|\/$/g, "");
+  if (clean === "" || clean === "index.html") return `${SITE_URL}/og/home.png`;
+  // /tours/:slug → tours-:slug
+  if (clean.startsWith("tours/") && clean !== "tours/") {
+    return `${SITE_URL}/og/tours-${clean.slice(6)}.png`;
+  }
+  // /guides/:slug → guides-:slug
+  if (clean.startsWith("guides/") && clean !== "guides/") {
+    return `${SITE_URL}/og/guides-${clean.slice(7)}.png`;
+  }
+  // /:city/:attraction → :city-:attraction (e.g. agra-taj-mahal)
+  const segs = clean.split("/").filter(Boolean);
+  if (segs.length === 2 && ["agra", "delhi", "jaipur"].includes(segs[0])) {
+    return `${SITE_URL}/og/${segs[0]}-${segs[1]}.png`;
+  }
+  // /:city → city slug
+  if (segs.length === 1 && ["agra", "delhi", "jaipur"].includes(segs[0])) {
+    return `${SITE_URL}/og/${segs[0]}.png`;
+  }
+  // /tours/, /services/, /about/, /faq/, /reviews/, /contact/ → that slug
+  if (segs.length === 1 && ["tours", "services", "about", "faq", "reviews", "contact"].includes(segs[0])) {
+    return `${SITE_URL}/og/${segs[0]}.png`;
+  }
+  return `${SITE_URL}/og/home.png`;
+}
 
 // REPLACE_BEFORE_LAUNCH: real number from Google Business listing
 export const WHATSAPP_NUMBER = "+919999999999";

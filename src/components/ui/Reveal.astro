@@ -1,0 +1,32 @@
+---
+/**
+ * CSS-only scroll-driven reveal wrapper. Zero JS, zero hydration cost.
+ * Uses `animation-timeline: view()` (Chrome 115+, Edge, Safari 17.4+,
+ * Firefox 137+). Older browsers gracefully ignore — content stays visible.
+ * Honors prefers-reduced-motion via the global stylesheet.
+ *
+ * Variants:
+ *  - default: blur+rise+fade (premium feel)
+ *  - rise:    translate-only
+ *  - fade:    opacity-only (lightest, safest)
+ */
+interface Props {
+  as?: string;
+  variant?: "default" | "rise" | "fade";
+  delay?: 0 | 80 | 160 | 240 | 320;
+  class?: string;
+  id?: string;
+}
+
+const { as: Tag = "div", variant = "default", delay = 0, class: className, id } = Astro.props;
+
+const variantClass = {
+  default: "reveal",
+  rise: "reveal-rise",
+  fade: "reveal-fade",
+}[variant];
+---
+
+<Tag class:list={[variantClass, className]} id={id} style={delay ? `animation-delay: ${delay}ms;` : undefined}>
+  <slot />
+</Tag>

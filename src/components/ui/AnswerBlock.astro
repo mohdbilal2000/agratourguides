@@ -1,0 +1,29 @@
+---
+/**
+ * AEO-first Q&A block. Question is a real H3 (LLMs and Google look for
+ * `<h2>/<h3>` questions). Answer is a paragraph with a `.speakable-answer`
+ * class so SpeakableSpecification schema can target it.
+ *
+ * Answer copy should be 40–60 words: long enough to stand alone in a
+ * generative answer, short enough to read as a snippet.
+ */
+interface Props {
+  question: string;
+  answer: string;
+  as?: "h2" | "h3";
+  id?: string;
+}
+
+const { question, answer, as: QuestionTag = "h3", id } = Astro.props;
+---
+
+<article class="border-b border-[var(--border)] py-6 last:border-b-0" id={id} itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+  <QuestionTag itemprop="name" class="speakable-question text-balance" style="font-size: var(--text-xl); font-variation-settings: 'opsz' 24, 'SOFT' 20;">
+    {question}
+  </QuestionTag>
+  <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
+    <p itemprop="text" class="speakable-answer mt-3 text-[var(--foreground-muted)] text-pretty leading-relaxed">
+      {answer}
+    </p>
+  </div>
+</article>

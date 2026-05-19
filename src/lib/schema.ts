@@ -10,6 +10,11 @@ import {
   GOOGLE_REVIEWS_URL,
 } from "./constants";
 
+// ─── Stable @ids — used everywhere to link entities in the @graph ─────────
+export const ORG_ID = `${SITE_URL}/#organization`;
+export const SITE_ID = `${SITE_URL}/#website`;
+export const LOGO_ID = `${SITE_URL}/#logo`;
+
 interface BreadcrumbItem {
   name: string;
   url: string;
@@ -72,25 +77,83 @@ export interface ReviewItem {
   datePublished: string;
 }
 
-const ORG_ID = `${SITE_URL}#organization`;
+interface HowToStep {
+  name: string;
+  text: string;
+  url?: string;
+  image?: string;
+}
+
+interface HowToInput {
+  name: string;
+  description: string;
+  totalTime?: string;
+  steps: HowToStep[];
+  url: string;
+  estimatedCost?: { currency: string; value: number };
+}
+
+interface ItemListEntry {
+  name: string;
+  url: string;
+  image?: string;
+  description?: string;
+}
+
+interface PersonInput {
+  name: string;
+  jobTitle: string;
+  description: string;
+  image?: string;
+  sameAs?: string[];
+  url?: string;
+  credential?: string;
+}
+
+interface EventInput {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate?: string;
+  location: { name: string; lat?: number; lng?: number };
+  url?: string;
+}
+
+interface ImageObjectInput {
+  url: string;
+  caption: string;
+  width?: number;
+  height?: number;
+  creator?: string;
+  creditText?: string;
+  license?: string;
+  acquireLicensePage?: string;
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// Organization (LocalBusiness + TravelAgency dual-type)
+// ──────────────────────────────────────────────────────────────────────
 
 export function buildOrganizationSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "TravelAgency",
+    "@type": ["TravelAgency", "LocalBusiness"],
     "@id": ORG_ID,
     name: SITE_NAME,
-    alternateName: ["Agra Tour Guide", "Taj Mahal Tour Guide Agra"],
+    alternateName: ["Agra Tour Guide", "Taj Mahal Tour Guide Agra", "Pawan Agra Tour Guides"],
     url: SITE_URL,
     logo: {
       "@type": "ImageObject",
+      "@id": LOGO_ID,
       url: `${SITE_URL}/images/logo.png`,
       width: 512,
       height: 512,
+      caption: `${SITE_NAME} logo`,
     },
     image: `${SITE_URL}/images/og-default.jpg`,
     description:
-      "Government-licensed Agra-based tour agency specialising in private Taj Mahal tours, Agra Fort, and Golden Triangle itineraries (Delhi-Agra-Jaipur). 5.0 stars on Google. English, Hindi & Japanese-speaking guides.",
+      "Government-licensed Agra-based tour agency specialising in private Taj Mahal tours, Agra Fort, and Golden Triangle itineraries (Delhi–Agra–Jaipur). 5.0★ on Google. English, Hindi & Japanese-speaking guides.",
+    slogan: "Heritage, culture, experience — by the people who grew up here.",
     foundingLocation: {
       "@type": "Place",
       name: "Agra, Uttar Pradesh, India",
@@ -116,6 +179,16 @@ export function buildOrganizationSchema() {
       { "@type": "TouristDestination", name: "Golden Triangle, India" },
     ],
     knowsLanguage: LANGUAGES_SPOKEN as unknown as string[],
+    knowsAbout: [
+      "Mughal architecture",
+      "Indo-Islamic art",
+      "Taj Mahal",
+      "Agra Fort",
+      "Fatehpur Sikri",
+      "Pietra dura inlay",
+      "UNESCO World Heritage Sites in India",
+      "Golden Triangle itinerary planning",
+    ],
     priceRange: "$$",
     currenciesAccepted: "INR, USD, EUR",
     paymentAccepted: "Cash, Credit Card, UPI, Bank Transfer",
@@ -131,7 +204,8 @@ export function buildOrganizationSchema() {
         telephone: CONTACT_PHONE,
         contactType: "reservations",
         availableLanguage: LANGUAGES_SPOKEN as unknown as string[],
-        areaServed: ["IN", "GB", "US", "FR", "DE", "JP", "AU"],
+        areaServed: ["IN", "GB", "US", "FR", "DE", "JP", "AU", "IT", "ES", "NL", "AE", "SG"],
+        contactOption: "TollFree",
       },
       {
         "@type": "ContactPoint",
@@ -151,17 +225,30 @@ export function buildOrganizationSchema() {
   };
 }
 
+// ──────────────────────────────────────────────────────────────────────
+// WebSite
+// ──────────────────────────────────────────────────────────────────────
+
 export function buildWebSiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "@id": `${SITE_URL}#website`,
+    "@id": SITE_ID,
     name: SITE_NAME,
     url: SITE_URL,
     publisher: { "@id": ORG_ID },
     inLanguage: "en",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/?q={search_term_string}` },
+      "query-input": "required name=search_term_string",
+    },
   };
 }
+
+// ──────────────────────────────────────────────────────────────────────
+// BreadcrumbList
+// ──────────────────────────────────────────────────────────────────────
 
 export function buildBreadcrumbSchema(items: BreadcrumbItem[]) {
   return {
@@ -176,6 +263,10 @@ export function buildBreadcrumbSchema(items: BreadcrumbItem[]) {
   };
 }
 
+// ──────────────────────────────────────────────────────────────────────
+// TouristDestination
+// ──────────────────────────────────────────────────────────────────────
+
 export function buildTouristDestinationSchema(city: CitySchemaInput) {
   return {
     "@context": "https://schema.org",
@@ -189,8 +280,13 @@ export function buildTouristDestinationSchema(city: CitySchemaInput) {
     },
     touristType: city.highlights,
     url: city.url,
+    includesAttraction: city.highlights.map((h) => ({ "@type": "TouristAttraction", name: h })),
   };
 }
+
+// ──────────────────────────────────────────────────────────────────────
+// TouristAttraction (with full geo + visit info)
+// ──────────────────────────────────────────────────────────────────────
 
 export function buildTouristAttractionSchema(attraction: AttractionSchemaInput) {
   return {
@@ -203,7 +299,12 @@ export function buildTouristAttractionSchema(attraction: AttractionSchemaInput) 
       latitude: attraction.location.lat,
       longitude: attraction.location.lng,
     },
-    openingHours: attraction.visitInfo.timings,
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      opens: "06:00",
+      closes: "18:30",
+      validFrom: new Date().toISOString().split("T")[0],
+    },
     isAccessibleForFree: false,
     image: attraction.heroImage.startsWith("http")
       ? attraction.heroImage
@@ -215,8 +316,13 @@ export function buildTouristAttractionSchema(attraction: AttractionSchemaInput) 
     },
     publicAccess: true,
     url: attraction.url,
+    isPartOf: { "@id": ORG_ID },
   };
 }
+
+// ──────────────────────────────────────────────────────────────────────
+// TouristTrip (Tour) — with offer, itinerary, aggregateRating
+// ──────────────────────────────────────────────────────────────────────
 
 export function buildTouristTripSchema(tour: TourSchemaInput) {
   return {
@@ -242,6 +348,12 @@ export function buildTouristTripSchema(tour: TourSchemaInput) {
       priceCurrency: tour.currency,
       availability: "https://schema.org/InStock",
       validFrom: new Date().toISOString().split("T")[0],
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        price: tour.priceFrom,
+        priceCurrency: tour.currency,
+        valueAddedTaxIncluded: false,
+      },
     },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -254,10 +366,18 @@ export function buildTouristTripSchema(tour: TourSchemaInput) {
   };
 }
 
+// ──────────────────────────────────────────────────────────────────────
+// FAQPage with SpeakableSpecification baked in
+// ──────────────────────────────────────────────────────────────────────
+
 export function buildFAQSchema(faqs: FAQItem[]) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".speakable-question", ".speakable-answer"],
+    },
     mainEntity: faqs.map((faq) => ({
       "@type": "Question",
       name: faq.question,
@@ -269,6 +389,10 @@ export function buildFAQSchema(faqs: FAQItem[]) {
   };
 }
 
+// ──────────────────────────────────────────────────────────────────────
+// Article (for travel guides)
+// ──────────────────────────────────────────────────────────────────────
+
 export function buildArticleSchema(guide: GuideSchemaInput) {
   return {
     "@context": "https://schema.org",
@@ -277,6 +401,7 @@ export function buildArticleSchema(guide: GuideSchemaInput) {
     description: guide.description,
     author: {
       "@type": "Organization",
+      "@id": ORG_ID,
       name: SITE_NAME,
       url: SITE_URL,
     },
@@ -285,26 +410,150 @@ export function buildArticleSchema(guide: GuideSchemaInput) {
     image: guide.heroImage.startsWith("http")
       ? guide.heroImage
       : `${SITE_URL}${guide.heroImage}`,
-    publisher: {
-      "@type": "Organization",
-      "@id": ORG_ID,
-      name: SITE_NAME,
-      logo: {
-        "@type": "ImageObject",
-        url: `${SITE_URL}/images/logo.png`,
-      },
-    },
+    publisher: { "@id": ORG_ID },
     mainEntityOfPage: guide.url,
     url: guide.url,
+    inLanguage: "en",
   };
 }
 
-export function buildSpeakableSchema(cssSelectors: string[]) {
+// ──────────────────────────────────────────────────────────────────────
+// HowTo (for "how to reach X" style guides)
+// ──────────────────────────────────────────────────────────────────────
+
+export function buildHowToSchema(input: HowToInput) {
   return {
-    "@type": "SpeakableSpecification",
-    cssSelector: cssSelectors,
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: input.name,
+    description: input.description,
+    totalTime: input.totalTime,
+    estimatedCost: input.estimatedCost && {
+      "@type": "MonetaryAmount",
+      currency: input.estimatedCost.currency,
+      value: input.estimatedCost.value,
+    },
+    step: input.steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+      url: s.url,
+      ...(s.image ? { image: s.image } : {}),
+    })),
+    url: input.url,
   };
 }
+
+// ──────────────────────────────────────────────────────────────────────
+// ItemList — for tour collection pages, attraction lists
+// ──────────────────────────────────────────────────────────────────────
+
+export function buildItemListSchema(name: string, items: ItemListEntry[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    numberOfItems: items.length,
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: it.url,
+      name: it.name,
+      ...(it.image ? { image: it.image } : {}),
+      ...(it.description ? { description: it.description } : {}),
+    })),
+  };
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// Person — for guide team pages
+// ──────────────────────────────────────────────────────────────────────
+
+export function buildPersonSchema(person: PersonInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: person.name,
+    jobTitle: person.jobTitle,
+    description: person.description,
+    image: person.image,
+    sameAs: person.sameAs,
+    url: person.url,
+    worksFor: { "@id": ORG_ID },
+    ...(person.credential
+      ? {
+          hasCredential: {
+            "@type": "EducationalOccupationalCredential",
+            name: person.credential,
+            credentialCategory: "Professional Certification",
+            recognizedBy: {
+              "@type": "Organization",
+              name: "Ministry of Tourism, Government of India",
+            },
+          },
+        }
+      : {}),
+  };
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// Event — festivals & seasonal events
+// ──────────────────────────────────────────────────────────────────────
+
+export function buildEventSchema(event: EventInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.name,
+    description: event.description,
+    startDate: event.startDate,
+    endDate: event.endDate ?? event.startDate,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: {
+      "@type": "Place",
+      name: event.location.name,
+      ...(event.location.lat && event.location.lng
+        ? {
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: event.location.lat,
+              longitude: event.location.lng,
+            },
+          }
+        : {}),
+    },
+    organizer: { "@id": ORG_ID },
+    url: event.url,
+  };
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// ImageObject with full attribution
+// ──────────────────────────────────────────────────────────────────────
+
+export function buildImageObjectSchema(img: ImageObjectInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    contentUrl: img.url,
+    url: img.url,
+    caption: img.caption,
+    width: img.width,
+    height: img.height,
+    creator: img.creator
+      ? { "@type": "Person", name: img.creator }
+      : undefined,
+    creditText: img.creditText,
+    license: img.license,
+    acquireLicensePage: img.acquireLicensePage,
+  };
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// Review schemas
+// ──────────────────────────────────────────────────────────────────────
 
 export function buildReviewSchema(review: ReviewItem) {
   return {
@@ -330,4 +579,32 @@ export function buildReviewSchema(review: ReviewItem) {
 
 export function buildReviewsCollectionSchema(reviews: ReviewItem[]) {
   return reviews.map(buildReviewSchema);
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// SpeakableSpecification standalone (rarely needed — usually embed in FAQ)
+// ──────────────────────────────────────────────────────────────────────
+
+export function buildSpeakableSchema(cssSelectors: string[]) {
+  return {
+    "@type": "SpeakableSpecification",
+    cssSelector: cssSelectors,
+  };
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// @graph wrapper — folds multiple entities into a single document so
+// LLMs and search engines can follow @id refs between them.
+// Preferred over emitting many separate <script type="application/ld+json"> blocks.
+// ──────────────────────────────────────────────────────────────────────
+
+export function buildGraph(entities: Record<string, unknown>[]) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": entities.map((e) => {
+      const copy = { ...e };
+      delete copy["@context"];
+      return copy;
+    }),
+  };
 }

@@ -1,0 +1,50 @@
+---
+/**
+ * Split-word kinetic headline. Each word is a span that animates in with
+ * a staggered mask reveal. CSS-only — no JS island, no Motion library.
+ *
+ * Usage:
+ *   <KineticHeadline as="h1" class="...">Discover India's Timeless Wonders</KineticHeadline>
+ *
+ * The component splits the `text` prop on whitespace and emits a span per
+ * word, applying `animation-delay` so words appear in left-to-right rhythm.
+ */
+interface Props {
+  text: string;
+  as?: "h1" | "h2" | "h3" | "div" | "span" | "p";
+  class?: string;
+  /** Per-word delay step in ms. Default 80ms (crisp). 120ms is more cinematic. */
+  stagger?: number;
+  /** Optional offset before the first word starts (ms). */
+  delay?: number;
+  /** Italic display variant — uses Fraunces italic with WONK axis. */
+  italic?: boolean;
+}
+
+const {
+  text,
+  as: Tag = "h1",
+  class: className,
+  stagger = 80,
+  delay = 0,
+  italic = false,
+} = Astro.props;
+
+const words = text.split(/(\s+)/);
+---
+
+<Tag
+  class:list={[
+    "kinetic-headline",
+    italic && "heading-editorial",
+    className,
+  ]}
+>
+  {words.map((word, i) => {
+    if (/^\s+$/.test(word)) return word;
+    const wordDelay = delay + Math.floor(i / 2) * stagger;
+    return (
+      <span style={`animation-delay: ${wordDelay}ms;`}>{word}</span>
+    );
+  })}
+</Tag>
