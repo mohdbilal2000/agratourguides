@@ -1,7 +1,7 @@
 import type { ReviewItem } from "./schema";
 
 // Real Google reviews for Agra Tour Guides — verified April 2026.
-// Source: Google Business Profile (5.0★ / 81 reviews).
+// Source: Google Business Profile (5.0★ / 85 reviews).
 // `country` is best-effort inferred from reviewer name + Local Guide locale where reasonable;
 // leave undefined when unsure. `datePublished` uses month/year — exact day not always shown by Google.
 
@@ -344,4 +344,4 @@ export const REAL_REVIEWS: ReviewItem[] = [
   },
 ];
 
-export const TOTAL_REVIEW_COUNT = 81;
+export const TOTAL_REVIEW_COUNT = 85;

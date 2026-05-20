@@ -39,22 +39,25 @@ export function ogImageForPath(pathname: string): string {
   return `${SITE_URL}/og/home.png`;
 }
 
-// REPLACE_BEFORE_LAUNCH: real number from Google Business listing
-export const WHATSAPP_NUMBER = "+919999999999";
-export const WHATSAPP_NUMBER_DIGITS = "919999999999";
+// Real number from Google Business Profile: 081718 26921 (India display).
+// International: +91 81718 26921. WhatsApp digits: 918171826921.
+export const WHATSAPP_NUMBER = "+918171826921";
+export const WHATSAPP_NUMBER_DIGITS = "918171826921";
 
 export const CONTACT_EMAIL = "info@agratourguides.com";
 
-// REPLACE_BEFORE_LAUNCH: real number from Google Business listing
-export const CONTACT_PHONE = "+91-9999-999-999";
+// Real number from Google Business Profile.
+export const CONTACT_PHONE = "+91 81718 26921";
 
-// REPLACE_BEFORE_LAUNCH: real Google Maps profile URL
+// REPLACE_BEFORE_LAUNCH: paste the exact Google Maps share URL of the
+// "Agra Tour Guides" business profile (Share → Copy link) so reviews +
+// maps deep-links resolve to the real listing.
 export const GOOGLE_MAPS_URL = "https://maps.google.com/?cid=REPLACE_ME";
 export const GOOGLE_REVIEWS_URL = "https://maps.google.com/?cid=REPLACE_ME";
 
-// Real, verified Google review data (April 2026) — source for AggregateRating schema
+// Verified Google Business Profile data (5.0★ / 85 reviews, May 2026).
 export const REVIEW_RATING = 5.0;
-export const REVIEW_COUNT = 81;
+export const REVIEW_COUNT = 85;
 
 // Languages spoken (verified in Google reviews)
 export const LANGUAGES_SPOKEN = ["English", "Hindi", "Japanese"] as const;

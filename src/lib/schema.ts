@@ -197,7 +197,7 @@ export function buildOrganizationSchema() {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
       opens: "06:00",
-      closes: "21:00",
+      closes: "22:00",
     },
     contactPoint: [
       {
@@ -612,7 +612,7 @@ export function buildFounderPersonSchema() {
     familyName: "Agarwal",
     jobTitle: "Founding tour guide",
     description:
-      "Born-and-raised Agra tour guide, founder of Agra Tour Guides. Ministry of Tourism (Government of India) licensed and Archaeological Survey of India (ASI) badged. Speaks English, Hindi and Japanese. Specialises in Mughal architecture, Indo-Islamic art, and Taj Mahal photography. 5.0 / 5 across 81+ verified Google reviews from travellers in 30+ countries.",
+      "Born-and-raised Agra tour guide, founder of Agra Tour Guides. Ministry of Tourism (Government of India) licensed and Archaeological Survey of India (ASI) badged. Speaks English, Hindi and Japanese. Specialises in Mughal architecture, Indo-Islamic art, and Taj Mahal photography. 5.0 / 5 across 85+ verified Google reviews from travellers in 30+ countries.",
     image: `${SITE_URL}/images/pawan-agarwal.jpg`,
     knowsLanguage: ["English", "Hindi", "Japanese"],
     knowsAbout: [
