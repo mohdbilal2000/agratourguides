@@ -2,6 +2,7 @@
 import PageLayout from "../layouts/PageLayout.astro";
 import HeroSection from "../components/sections/HeroSection.astro";
 import TrustBadges from "../components/sections/TrustBadges.astro";
+import DayTimeline from "../components/sections/DayTimeline.astro";
 import BentoDestinations from "../components/sections/BentoDestinations.astro";
 import PopularTours from "../components/sections/PopularTours.astro";
 import WhyChooseUs from "../components/sections/WhyChooseUs.astro";
@@ -90,7 +91,11 @@ const heroImage =
   {/* 2. Quiet trust strip — first anchor after the visual punch */}
   <TrustBadges />
 
-  {/* 3. Destinations — editorial 2-up bento with a feature card */}
+  {/* 3. Your day — client-centric scroll narrative. Puts the traveller
+       inside their actual morning before we ever talk about ourselves. */}
+  <DayTimeline />
+
+  {/* 4. Destinations — editorial 2-up bento with a feature card */}
   <BentoDestinations />
 
   {/* 4. Tours — editorial cards, snap-rail on mobile, grid on desktop */}

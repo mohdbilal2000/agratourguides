@@ -1,0 +1,139 @@
+---
+/**
+ * "Your morning at the Taj" — a client-centric, second-person scroll
+ * narrative. Instead of listing what WE offer, it walks the traveller
+ * through the hours of their actual day: the knock at the hotel, the empty
+ * gate, the marble turning pink. Information (timings, what's handled,
+ * what's included) is delivered as story, not as a feature list.
+ *
+ * Motion: each beat reveals on scroll (CSS scroll-driven, zero JS) and the
+ * vertical spine "draws" down as you read. Restrained — no parallax circus.
+ */
+import Reveal from "../ui/Reveal.astro";
+import Eyebrow from "../ui/Eyebrow.astro";
+
+interface Beat {
+  time: string;
+  title: string;
+  body: string;
+  /** quiet meta line — what's handled for the traveller at this moment */
+  handled?: string;
+}
+
+const beats: Beat[] = [
+  {
+    time: "05:30",
+    title: "A knock at your hotel — from someone you already know.",
+    body: "No lobby confusion, no stranger with a clipboard. Your licensed guide messaged you last night, and now they're here with a flask of chai and the day already planned.",
+    handled: "Hotel pickup · pre-confirmed on WhatsApp",
+  },
+  {
+    time: "06:00",
+    title: "Through the gate before the crowds arrive.",
+    body: "Tickets already booked, so you skip the queue and walk straight through security. The complex is nearly empty. The marble ahead of you is still a quiet pre-dawn grey.",
+    handled: "Skip-the-line entry · tickets pre-purchased",
+  },
+  {
+    time: "06:40",
+    title: "The marble turns pink — and you're standing where the postcards are taken.",
+    body: "For about forty minutes the Taj glows rose-gold. Your guide knows the exact spot, the exact angle, and takes the photos you'll actually keep — while telling you why the minarets lean outwards.",
+    handled: "Photography included · best-light timing",
+  },
+  {
+    time: "08:30",
+    title: "Agra Fort, then breakfast where locals actually eat.",
+    body: "The red-sandstone fort where Shah Jahan was imprisoned, watching the Taj from a window. Afterwards, a parantha and chai at a place you'd never have found alone.",
+    handled: "Agra Fort guided · honest local recommendations",
+  },
+  {
+    time: "12:30",
+    title: "You decide what happens next — not a coach timetable.",
+    body: "Tired and want the hotel? Done. Energised and want the Baby-Taj at golden hour? Also done. The day bends around you, because it was never a fixed package.",
+    handled: "Flexible pace · pay on the day, in your currency",
+  },
+];
+---
+
+<section class="relative bg-[var(--color-ink-950)] text-white py-24 md:py-36 overflow-hidden" data-on-dark aria-labelledby="day-heading">
+  {/* faint warm wash */}
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none opacity-[0.10]"
+    style="background: radial-gradient(circle at 80% 0%, var(--color-gold-500) 0%, transparent 55%);"></div>
+
+  <div class="relative mx-auto max-w-[var(--site-max)] px-4 sm:px-6 lg:px-8">
+    <Reveal variant="fade" class="max-w-2xl mb-16 md:mb-20">
+      <Eyebrow class="text-[var(--color-gold-300)]">A morning with us</Eyebrow>
+      <h2 id="day-heading" class="mt-5 heading-display text-white text-balance" style="font-size: var(--text-5xl);">
+        Here's how your first morning in Agra
+        <em class="italic font-normal text-white/80" style="font-variation-settings:'opsz' 60,'WONK' 1;"> actually goes.</em>
+      </h2>
+      <p class="mt-6 text-white/70 text-pretty leading-relaxed" style="font-size: var(--text-lg);">
+        Not a list of what we offer — the real shape of your day, hour by hour. This is the Same-Day Agra tour, the one most travellers start with.
+      </p>
+    </Reveal>
+
+    {/* Timeline */}
+    <ol class="relative max-w-3xl ml-0 md:ml-[12%] target-auto" role="list">
+      {/* animated spine */}
+      <span aria-hidden="true" class="timeline-spine absolute left-[3.25rem] md:left-20 top-2 bottom-2 w-px bg-white/15"></span>
+
+      {beats.map((b) => (
+        <li class="relative reveal pl-20 md:pl-32 pb-12 last:pb-0 target-auto">
+          {/* time + dot */}
+          <div class="absolute left-0 top-0 flex items-center gap-3 md:gap-4">
+            <span class="text-mono text-[var(--color-gold-300)] tabular-nums" style="font-size: var(--text-base); font-variation-settings:'wght' 500;">
+              {b.time}
+            </span>
+          </div>
+          <span aria-hidden="true" class="absolute left-[3.25rem] md:left-20 top-1.5 -translate-x-1/2 h-3 w-3 rounded-full bg-[var(--color-gold-400)] ring-4 ring-[var(--color-ink-950)]"></span>
+
+          <h3 class="text-balance text-white" style="font-size: var(--text-2xl); font-variation-settings:'opsz' 36,'SOFT' 30;">
+            {b.title}
+          </h3>
+          <p class="mt-3 text-white/70 leading-relaxed text-pretty max-w-xl">
+            {b.body}
+          </p>
+          {b.handled && (
+            <p class="mt-3 inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-[var(--color-gold-300)] uppercase">
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              {b.handled}
+            </p>
+          )}
+        </li>
+      ))}
+    </ol>
+
+    <Reveal variant="fade" class="mt-14 md:mt-16 md:ml-[12%] max-w-3xl md:pl-32">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 rounded-2xl border border-white/12 bg-white/[0.03] p-6 md:p-8">
+        <div class="flex-1">
+          <p class="text-white font-medium" style="font-size: var(--text-lg);">This is the Same-Day Agra tour.</p>
+          <p class="text-white/60 text-sm mt-1">From $89 / €82 per person · sunrise start · back by evening.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a href="/tours/same-day-agra-from-delhi/" class="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold-500)] hover:bg-[var(--color-gold-400)] text-[var(--color-ink-950)] px-6 py-3 text-sm font-semibold transition-colors target-auto">
+            See this day in detail
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </Reveal>
+  </div>
+</section>
+
+<style>
+  /* The spine grows as the section scrolls through the viewport. */
+  @supports (animation-timeline: view()) {
+    .timeline-spine {
+      transform-origin: top;
+      transform: scaleY(0);
+      animation: spine-grow linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 60%;
+    }
+  }
+  @keyframes spine-grow { to { transform: scaleY(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .timeline-spine { transform: scaleY(1); }
+  }
+</style>
