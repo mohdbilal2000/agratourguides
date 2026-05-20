@@ -590,3 +590,155 @@ nav a, ul a, ol a, li a, p a, .prose a, address a, a.target-auto,
 
 .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 0.75rem); }
 .pt-safe { padding-top: max(env(safe-area-inset-top), 0.75rem); }
+
+/* ──────────────────────────────────────────────
+   Reading progress bar — scroll-driven, zero JS.
+   Animates scaleX from 0→1 across the document scroll timeline.
+   ────────────────────────────────────────────── */
+
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 60;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--color-gold-500), var(--color-gold-700));
+}
+
+@supports (animation-timeline: scroll()) {
+  .reading-progress {
+    animation: progress-grow linear;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes progress-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress { display: none; }
+}
+
+/* ──────────────────────────────────────────────
+   Editorial article (.article-prose)
+   Long-form reading: Fraunces headings with opsz, generous measure,
+   drop cap, pull quotes, styled links, lists, tables.
+   ────────────────────────────────────────────── */
+
+.article-prose {
+  font-size: var(--text-lg);
+  line-height: 1.75;
+  color: var(--foreground);
+  max-width: 68ch;
+}
+
+.article-prose > * + * { margin-top: 1.4em; }
+
+.article-prose h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-variation-settings: "opsz" 72, "SOFT" 40;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin-top: 2.2em;
+  margin-bottom: 0.2em;
+  scroll-margin-top: 6rem;
+  text-wrap: balance;
+}
+
+.article-prose h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-variation-settings: "opsz" 28, "SOFT" 30;
+  line-height: 1.2;
+  margin-top: 1.8em;
+  margin-bottom: 0.1em;
+  scroll-margin-top: 6rem;
+  text-wrap: balance;
+}
+
+.article-prose p { text-wrap: pretty; }
+
+/* Drop cap on the very first paragraph after the lede */
+.article-prose > p:first-of-type::first-letter {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 3.4em;
+  line-height: 0.78;
+  float: left;
+  margin: 0.06em 0.1em 0 0;
+  color: var(--color-gold-700);
+  font-variation-settings: "opsz" 144;
+}
+
+.article-prose a {
+  color: var(--color-gold-800);
+  text-decoration: underline;
+  text-decoration-color: var(--color-gold-300);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+  transition: text-decoration-color var(--duration-fast) var(--ease-out-quart);
+}
+.article-prose a:hover { text-decoration-color: var(--color-gold-700); }
+
+.article-prose strong { font-weight: 600; color: var(--foreground); }
+
+.article-prose ul, .article-prose ol { padding-left: 1.4em; }
+.article-prose li { margin-top: 0.5em; padding-left: 0.3em; }
+.article-prose ul > li::marker { color: var(--color-gold-600); }
+.article-prose ol > li::marker { color: var(--color-gold-700); font-variation-settings: "wght" 600; }
+
+.article-prose blockquote {
+  margin: 1.8em 0;
+  padding-left: 1.4em;
+  border-left: 3px solid var(--color-gold-400);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-2xl);
+  line-height: 1.4;
+  font-variation-settings: "opsz" 48, "WONK" 1;
+  color: var(--foreground);
+}
+
+.article-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-base);
+  margin: 1.8em 0;
+}
+.article-prose th {
+  text-align: left;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--foreground-subtle);
+  border-bottom: 2px solid var(--border-strong);
+  padding: 0.6em 0.8em;
+}
+.article-prose td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.7em 0.8em;
+  vertical-align: top;
+}
+.article-prose tr:hover td { background: var(--background-alt); }
+
+.article-prose hr {
+  border: 0;
+  height: 1px;
+  background: var(--border);
+  margin: 2.4em 0;
+}
+
+.article-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--background-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.1em 0.4em;
+}

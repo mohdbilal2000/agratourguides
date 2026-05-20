@@ -68,6 +68,11 @@ interface GuideSchemaInput {
   updatedAt: Date;
   heroImage: string;
   url: string;
+  keyTakeaways?: string[];
+  sources?: { label: string; url: string }[];
+  wordCount?: number;
+  /** ISO 8601 duration, e.g. "PT6M" for a 6-minute read. */
+  timeRequired?: string;
 }
 
 export interface ReviewItem {
@@ -402,12 +407,9 @@ export function buildArticleSchema(guide: GuideSchemaInput) {
     "@type": "Article",
     headline: guide.title,
     description: guide.description,
-    author: {
-      "@type": "Organization",
-      "@id": ORG_ID,
-      name: SITE_NAME,
-      url: SITE_URL,
-    },
+    // Author is the founding guide (a Person) — stronger E-E-A-T than an org.
+    author: { "@id": FOUNDER_ID },
+    editor: { "@id": FOUNDER_ID },
     datePublished: guide.publishedAt.toISOString(),
     dateModified: guide.updatedAt.toISOString(),
     image: guide.heroImage.startsWith("http")
@@ -417,6 +419,21 @@ export function buildArticleSchema(guide: GuideSchemaInput) {
     mainEntityOfPage: guide.url,
     url: guide.url,
     inLanguage: "en",
+    isAccessibleForFree: true,
+    ...(guide.keyTakeaways && guide.keyTakeaways.length
+      ? { abstract: guide.keyTakeaways.join(" ") }
+      : {}),
+    ...(guide.wordCount ? { wordCount: guide.wordCount } : {}),
+    ...(guide.timeRequired ? { timeRequired: guide.timeRequired } : {}),
+    ...(guide.sources && guide.sources.length
+      ? {
+          citation: guide.sources.map((s) => ({
+            "@type": "CreativeWork",
+            name: s.label,
+            url: s.url,
+          })),
+        }
+      : {}),
   };
 }
 

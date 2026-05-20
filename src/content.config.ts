@@ -122,6 +122,13 @@ const guides = defineCollection({
       "culture",
       "food",
     ]),
+    /** TL;DR bullets shown in a "Key takeaways" box at the top of the article
+     * and emitted in Article schema. LLMs lift these verbatim for answers. */
+    keyTakeaways: z.array(z.string()).optional(),
+    /** Optional source citations rendered at the article foot + as Article.citation. */
+    sources: z
+      .array(z.object({ label: z.string(), url: z.string() }))
+      .optional(),
     relatedCities: z.array(z.string()),
     relatedTours: z.array(z.string()),
     author: z.string().default("Agra Tour Guides"),
