@@ -89,22 +89,30 @@ const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent
   <Footer />
 
   {!hideMobileActionBar && (
-    <!-- Sticky mobile action bar — single decision, thumb-zone, safe-area aware.
-         Fully opaque bg + ~no shadow on the pill to prevent the green halo
-         artifact some Android browsers render around shadow-lg on rounded pills. -->
+    <!-- Sticky mobile action bar — editorial split layout: value-prop on the
+         left, compact WhatsApp action on the right. Fully opaque bg + no pill
+         shadow to avoid the green-halo artifact some Android browsers render
+         around shadowed rounded pills. -->
     <div class="mobile-action-bar md:hidden">
-      <a
-        href={waUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-action="primary-cta"
-        class="mobile-action-cta target-auto"
-      >
-        <svg class="h-4 w-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
-        </svg>
-        WhatsApp us — quote in 2 hours
-      </a>
+      <div class="mobile-action-inner">
+        <div class="mobile-action-pitch">
+          <span class="mobile-action-title">Free quote in 2 hours</span>
+          <span class="mobile-action-sub">Pay on the day · no deposit</span>
+        </div>
+        <a
+          href={waUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-action="primary-cta"
+          class="mobile-action-cta target-auto"
+          aria-label="Message us on WhatsApp for a free quote"
+        >
+          <svg class="h-[1.125rem] w-[1.125rem] shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
+          </svg>
+          WhatsApp
+        </a>
+      </div>
     </div>
   )}
 
@@ -115,32 +123,61 @@ const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent
       right: 0;
       bottom: 0;
       z-index: 40;
-      padding: 0.5rem 0.75rem max(env(safe-area-inset-bottom), 0.75rem);
+      padding: 0.625rem 0.875rem max(env(safe-area-inset-bottom), 0.875rem);
       background: var(--background);
       border-top: 1px solid var(--border);
       /* No backdrop-blur, no overflow — both can trigger the Android Chrome
          rounded-pill halo glitch reported in real-device QA. */
     }
-    .mobile-action-cta {
+    .mobile-action-inner {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.875rem;
+    }
+    .mobile-action-pitch {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .mobile-action-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--foreground);
+    }
+    .mobile-action-sub {
+      margin-top: 1px;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      color: var(--foreground-muted);
+    }
+    .mobile-action-cta {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      width: 100%;
+      flex-shrink: 0;
       min-height: 48px;
-      padding: 0.75rem 1.25rem;
+      padding: 0 1.375rem;
       border-radius: 9999px;
-      background: #128C7E; /* WhatsApp brand teal, slightly desaturated for editorial palette */
-      color: #FFFFFF;
-      font-size: 0.875rem;
+      background: var(--color-jade); /* brand emerald — matches WhatsApp CTAs site-wide */
+      color: #ffffff;
+      font-size: 0.9375rem;
       font-weight: 600;
       letter-spacing: -0.005em;
       text-decoration: none;
-      transition: background-color 180ms var(--ease-out-quart);
+      transition:
+        background-color 180ms var(--ease-out-quart),
+        transform 180ms var(--ease-out-quart);
     }
     .mobile-action-cta:hover,
     .mobile-action-cta:active {
-      background: #0E6E63;
+      background: var(--color-jade-deep);
+    }
+    .mobile-action-cta:active {
+      transform: scale(0.98);
     }
   </style>
 </BaseLayout>
