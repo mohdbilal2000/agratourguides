@@ -38,7 +38,7 @@ const jsonLd = [
         <div class="space-y-8">
           <div>
             <h3 class="font-heading text-xl font-bold text-gray-900 mb-2">WhatsApp</h3>
-            <a href={`https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}?text=Hi! I'm interested in booking a tour.`} class="text-emerald-600 hover:underline font-medium" target="_blank" rel="noopener noreferrer">
+            <a href={`https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}?text=${encodeURIComponent("Hi! I'm interested in booking a tour.")}`} class="text-emerald-600 hover:underline font-medium" target="_blank" rel="noopener noreferrer">
               {WHATSAPP_NUMBER}
             </a>
             <p class="text-sm text-gray-500 mt-1">Fastest way to reach us — instant replies</p>

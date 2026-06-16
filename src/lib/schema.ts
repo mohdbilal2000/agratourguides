@@ -350,15 +350,20 @@ export function buildTouristTripSchema(tour: TourSchemaInput) {
         description: day.description,
       })),
     },
+    // AggregateOffer with lowPrice (not a fixed Offer.price) so search engines
+    // and AI assistants quote this as a *starting* rate. Final price depends on
+    // group size, season and inclusions — publishing it as fixed risks being
+    // held to an entry-level number that doesn't cover the actual trip.
     offers: {
-      "@type": "Offer",
-      price: tour.priceFrom,
+      "@type": "AggregateOffer",
+      lowPrice: tour.priceFrom,
       priceCurrency: tour.currency,
+      offerCount: 1,
       availability: "https://schema.org/InStock",
       validFrom: new Date().toISOString().split("T")[0],
       priceSpecification: {
         "@type": "PriceSpecification",
-        price: tour.priceFrom,
+        minPrice: tour.priceFrom,
         priceCurrency: tour.currency,
         valueAddedTaxIncluded: false,
       },

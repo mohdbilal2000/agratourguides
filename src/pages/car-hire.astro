@@ -197,17 +197,21 @@ const carHireService = {
     "@type": "OfferCatalog",
     name: "Car-hire vehicle classes",
     itemListElement: vehicles.map((v) => ({
-      "@type": "Offer",
+      // AggregateOffer + lowPrice signals a starting day-rate. SUV upgrades,
+      // extra mileage/hours and multi-day routes push the real figure higher,
+      // so we never publish a fixed price that could undercut the actual cost.
+      "@type": "AggregateOffer",
       itemOffered: {
         "@type": "Service",
         name: `${v.name} — ${v.type}`,
         description: `${v.capacity}. ${v.perDayInclusion}.`,
       },
-      price: v.perDayUSD,
+      lowPrice: v.perDayUSD,
       priceCurrency: "USD",
+      offerCount: 1,
       priceSpecification: {
         "@type": "UnitPriceSpecification",
-        price: v.perDayUSD,
+        minPrice: v.perDayUSD,
         priceCurrency: "USD",
         referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "DAY" },
       },
@@ -295,14 +299,14 @@ const waUrl = (text: string) =>
       <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
         {vehicles.map((v) => (
           <Reveal>
-            <article class="h-full rounded-2xl border border-[var(--border)] bg-[var(--background)] p-7 md:p-8 hover-lift" itemscope itemtype="https://schema.org/Offer">
+            <article class="h-full rounded-2xl border border-[var(--border)] bg-[var(--background)] p-7 md:p-8 hover-lift" itemscope itemtype="https://schema.org/AggregateOffer">
               <header class="flex items-baseline justify-between gap-4 mb-3">
                 <h3 itemprop="name" style="font-size: var(--text-2xl); font-variation-settings: 'opsz' 32, 'SOFT' 25;">
                   {v.name}
                 </h3>
                 <p class="text-mono text-right" style="font-variation-settings: 'wght' 500;">
                   <span class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] block leading-none">From</span>
-                  <span class="text-lg text-[var(--foreground)]" itemprop="price" content={String(v.perDayUSD)}>${v.perDayUSD}</span>
+                  <span class="text-lg text-[var(--foreground)]" itemprop="lowPrice" content={String(v.perDayUSD)}>${v.perDayUSD}</span>
                   <meta itemprop="priceCurrency" content="USD" />
                   <span class="text-xs text-[var(--foreground-muted)] block">€{usdToEur(v.perDayUSD)} · ₹{usdToInr(v.perDayUSD)}</span>
                 </p>
