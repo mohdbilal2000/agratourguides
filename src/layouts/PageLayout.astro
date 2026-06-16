@@ -123,11 +123,16 @@ const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent
       right: 0;
       bottom: 0;
       z-index: 40;
-      padding: 0.625rem 0.875rem max(env(safe-area-inset-bottom), 0.875rem);
-      background: var(--background);
-      border-top: 1px solid var(--border);
-      /* No backdrop-blur, no overflow — both can trigger the Android Chrome
-         rounded-pill halo glitch reported in real-device QA. */
+      padding: 1.75rem 0.875rem max(env(safe-area-inset-bottom), 0.875rem);
+      /* Soft top fade so page content (incl. the dark hero) melts into the bar
+         instead of meeting a hard cream band + border line. The fade lives in
+         the top padding, above the content row, so text stays on solid cream.
+         No backdrop-blur — it triggers the Android Chrome rounded-pill halo. */
+      background: linear-gradient(
+        to top,
+        var(--background) calc(100% - 1.5rem),
+        transparent
+      );
     }
     .mobile-action-inner {
       display: flex;
@@ -162,7 +167,7 @@ const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent
       min-height: 48px;
       padding: 0 1.375rem;
       border-radius: 9999px;
-      background: var(--color-jade); /* brand emerald — matches WhatsApp CTAs site-wide */
+      background: var(--color-jade-deep); /* deep forest emerald — sits with the warm gold/sandstone palette */
       color: #ffffff;
       font-size: 0.9375rem;
       font-weight: 600;
@@ -174,7 +179,7 @@ const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent
     }
     .mobile-action-cta:hover,
     .mobile-action-cta:active {
-      background: var(--color-jade-deep);
+      background: color-mix(in srgb, var(--color-jade-deep) 85%, #000);
     }
     .mobile-action-cta:active {
       transform: scale(0.98);
