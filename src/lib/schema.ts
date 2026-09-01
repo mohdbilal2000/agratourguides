@@ -7,7 +7,7 @@ import {
   REVIEW_RATING,
   REVIEW_COUNT,
   LANGUAGES_SPOKEN,
-  GOOGLE_REVIEWS_URL,
+  GOOGLE_BUSINESS_PROFILE_URL,
 } from "./constants";
 
 // ─── Stable @ids — used everywhere to link entities in the @graph ─────────
@@ -49,8 +49,6 @@ interface TourSchemaInput {
   title: string;
   description: string;
   itinerary: { day: number; title: string; description: string; locations: string[] }[];
-  priceFrom: number;
-  currency: string;
   duration: string;
   url: string;
 }
@@ -229,7 +227,7 @@ export function buildOrganizationSchema() {
     },
     founder: { "@id": FOUNDER_ID },
     employee: [{ "@id": FOUNDER_ID }],
-    sameAs: [GOOGLE_REVIEWS_URL].filter((u) => !u.includes("REPLACE_ME")),
+    sameAs: [GOOGLE_BUSINESS_PROFILE_URL].filter(Boolean),
   };
 }
 
@@ -350,23 +348,20 @@ export function buildTouristTripSchema(tour: TourSchemaInput) {
         description: day.description,
       })),
     },
-    // AggregateOffer with lowPrice (not a fixed Offer.price) so search engines
-    // and AI assistants quote this as a *starting* rate. Final price depends on
-    // group size, season and inclusions — publishing it as fixed risks being
-    // held to an entry-level number that doesn't cover the actual trip.
+    // Every itinerary is quoted individually against the traveller's dates,
+    // group size and pace, so there is no published rate to emit. The Offer is
+    // still declared (availability + the channel to reach us) so search engines
+    // and AI assistants know the trip is bookable — they just quote it as
+    // "price on request" rather than anchoring on a number we'd have to caveat.
     offers: {
-      "@type": "AggregateOffer",
-      lowPrice: tour.priceFrom,
-      priceCurrency: tour.currency,
-      offerCount: 1,
+      "@type": "Offer",
       availability: "https://schema.org/InStock",
-      validFrom: new Date().toISOString().split("T")[0],
       priceSpecification: {
         "@type": "PriceSpecification",
-        minPrice: tour.priceFrom,
-        priceCurrency: tour.currency,
-        valueAddedTaxIncluded: false,
+        description:
+          "Quoted per itinerary. Tell us your dates, group size and pace and we send a written quote — no deposit, pay at the end of the tour.",
       },
+      url: tour.url,
     },
     aggregateRating: {
       "@type": "AggregateRating",

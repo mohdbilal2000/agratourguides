@@ -18,10 +18,7 @@ const tiers = [
   {
     name: "Guide Only",
     bestFor: "Independent travellers who already have a hotel & cab",
-    fromUSD: 22,
-    fromEUR: 20,
-    fromINR: 1800,
-    inrUnit: "for group up to 5 (1.5–2 hr)",
+    quoteNote: "Priced per group, not per head — up to 5 people, 1.5–2 hr inside the monument.",
     includes: [
       "Government-licensed Agra guide",
       "Inside-monument guiding (Taj Mahal, Agra Fort, etc.)",
@@ -39,10 +36,7 @@ const tiers = [
   {
     name: "Guide + Cab",
     bestFor: "Most travellers — same-day Agra from Delhi or Agra-only trips",
-    fromUSD: 89,
-    fromEUR: 82,
-    fromINR: 7500,
-    inrUnit: "per person, group of 2",
+    quoteNote: "Quoted per trip once we know your pickup city, dates and group size.",
     popular: true,
     includes: [
       "Everything in Guide Only",
@@ -62,10 +56,7 @@ const tiers = [
   {
     name: "All-Inclusive Golden Triangle",
     bestFor: "First-time visitors doing Delhi → Agra → Jaipur",
-    fromUSD: 299,
-    fromEUR: 274,
-    fromINR: 25000,
-    inrUnit: "per person, 3 days, double occupancy",
+    quoteNote: "Quoted per trip — hotel class, room split and number of days are all yours to choose.",
     includes: [
       "Everything in Guide + Cab, across all 3 cities",
       "3-star or 4-star hotel accommodation (your choice)",
@@ -85,17 +76,14 @@ const tiers = [
   {
     name: "Car Hire (Driver Only)",
     bestFor: "Travellers who only need transport — no guide, no narration",
-    fromUSD: 49,
-    fromEUR: 45,
-    fromINR: 4100,
-    inrUnit: "per day, sedan, 8 hr / 80 km included",
+    quoteNote: "Quoted per route or per day, by vehicle class. Tell us the drive and we cost it out.",
     includes: [
       "AC sedan (Dzire/Etios), SUV (Innova) or Tempo Traveller (8–14 seats)",
       "Government-licensed, background-verified, English-speaking driver",
       "All toll, parking, fuel, driver allowance covered",
       "Mineral water + phone charger + WiFi (on request)",
       "Door-to-door pickup anywhere in Agra / Delhi / Jaipur",
-      "Same-day, multi-day, airport transfer, station transfer — all rates published",
+      "Same-day, multi-day, airport transfer, station transfer — all quoted flat, agreed before you ride",
     ],
     excludes: [
       "Tour guide (add Guide+Cab tier if you want one)",
@@ -108,10 +96,7 @@ const tiers = [
   {
     name: "Custom Itinerary",
     bestFor: "Honeymoons, families, photographers, multi-week India trips",
-    fromUSD: null,
-    fromEUR: null,
-    fromINR: null,
-    inrUnit: "Quote within 24 hours",
+    quoteNote: "Full itinerary and costing within 24 hours, revised as often as you like.",
     includes: [
       "Bespoke route — Rajasthan, Varanasi, Khajuraho, Himalayas",
       "Heritage hotel & palace-stay options",
@@ -124,7 +109,7 @@ const tiers = [
       "Whatever you don't want — fully flexible",
     ],
     cta: "Plan Custom Trip",
-    whatsappText: "Hi! I want a custom India itinerary. Travel dates: ___, must-see places: ___, budget per person: ___.",
+    whatsappText: "Hi! I want a custom India itinerary. Travel dates: ___, must-see places: ___, group size: ___.",
   },
 ];
 
@@ -147,7 +132,7 @@ const servicesFaqs = [
   },
   {
     question: 'Do you take commission from shops if I visit during the tour?',
-    answer: 'No. We are a flat-fee service — your guide is paid the same whether or not you buy anything. We will show you marble-inlay workshops and carpet factories on request because reviewers love them, but there is zero pressure and no commission percentage hidden in the price.',
+    answer: 'No. We are a flat-fee service — your guide is paid the same whether or not you buy anything. We will show you marble-inlay workshops and carpet factories on request because reviewers love them, but there is zero pressure and no commission percentage hidden in your quote.',
   },
   {
     question: 'Can I pay in USD, EUR, or only Indian rupees?',
@@ -184,21 +169,23 @@ const lastUpdated = "April 2026";
 
 <PageLayout
   title={`Tour Services & Pricing — ${SITE_NAME} | Taj Mahal & Golden Triangle`}
-  description={`Four flexible service tiers from a 5.0★ Agra agency. Guide-only from $22, Guide+Cab from $89, Golden Triangle all-inclusive from $299. Transparent USD/EUR/INR pricing.`}
+  description="Five ways to travel with a 5.0★ Agra agency — guide-only, guide + cab, all-inclusive Golden Triangle, driver-only car hire, or a fully custom itinerary. Nothing is a fixed package: tell us your dates and group and we send one written, itemised quote."
   jsonLd={jsonLd}
 >
   <Section class="bg-gradient-to-b from-amber-50 to-white">
     <Container>
       <Breadcrumbs items={breadcrumbs} />
       <header class="text-center max-w-3xl mx-auto mb-12 mt-6">
-        <p class="text-sm font-semibold uppercase tracking-widest text-amber-600 mb-3">Services & Pricing</p>
+        <p class="text-sm font-semibold uppercase tracking-widest text-amber-600 mb-3">Services</p>
         <h1 class="font-heading text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Pick the tier that fits your trip
+          Pick a starting point. We build the rest around you.
         </h1>
         <p class="text-lg text-gray-700 leading-relaxed">
-          We publish pricing up-front in USD, EUR and INR — no quote-haggling, no hidden surcharges. All prices below include the licensed guide and exclude only what your government already collects (monument tickets) and meals you choose.
+          None of these are fixed packages. Tell us your dates, group size, pace and must-sees, and we
+          shape the itinerary to match, then send one written quote with every line itemised — guide,
+          transport, tickets, hotels. Nothing is added later, and you pay at the end of the tour, not before.
         </p>
-        <p class="mt-3 text-xs text-gray-500">Updated {lastUpdated} · Prices may vary on national holidays</p>
+        <p class="mt-3 text-xs text-gray-500">Updated {lastUpdated} · Quotes returned within 2 hours on WhatsApp, 06:00–22:00 IST</p>
       </header>
     </Container>
   </Section>
@@ -216,18 +203,9 @@ const lastUpdated = "April 2026";
             <p class="text-sm text-gray-700 mt-2 mb-6">{t.bestFor}</p>
 
             <div class="mb-6">
-              {t.fromUSD !== null ? (
-                <>
-                  <p class="text-xs uppercase tracking-wide text-gray-500">From</p>
-                  <p class="font-heading text-3xl font-bold text-gray-900">${t.fromUSD} <span class="text-sm font-normal text-gray-600">/ €{t.fromEUR} / ₹{t.fromINR}</span></p>
-                  <p class="text-xs text-gray-600 mt-1">{t.inrUnit}</p>
-                </>
-              ) : (
-                <>
-                  <p class="font-heading text-2xl font-bold text-gray-900">Custom quote</p>
-                  <p class="text-xs text-gray-600 mt-1">{t.inrUnit}</p>
-                </>
-              )}
+              <p class="text-xs uppercase tracking-wide text-gray-500">Your quote</p>
+              <p class="font-heading text-2xl font-bold text-gray-900 leading-snug">Built for your trip</p>
+              <p class="text-xs text-gray-600 mt-1">{t.quoteNote}</p>
             </div>
 
             <div class="space-y-1 mb-6 flex-1">

@@ -1,6 +1,6 @@
 export const SITE_NAME = "Agra Tour Guides";
 
-export const SITE_URL = "https://agratourguides.com";
+export const SITE_URL = "https://www.agratourguides.com";
 
 export const SITE_DESCRIPTION =
   "Private guided Taj Mahal tours and Golden Triangle itineraries from a 5.0★ Google-rated Agra agency. English, Hindi & Japanese speaking guides. Skip-the-line, photo-included.";
@@ -49,11 +49,18 @@ export const CONTACT_EMAIL = "info@agratourguides.com";
 // Real number from Google Business Profile.
 export const CONTACT_PHONE = "+91 81718 26921";
 
-// REPLACE_BEFORE_LAUNCH: paste the exact Google Maps share URL of the
-// "Agra Tour Guides" business profile (Share → Copy link) so reviews +
-// maps deep-links resolve to the real listing.
-export const GOOGLE_MAPS_URL = "https://maps.google.com/?cid=REPLACE_ME";
-export const GOOGLE_REVIEWS_URL = "https://maps.google.com/?cid=REPLACE_ME";
+// Google Maps deep-links. These resolve to the live "Agra Tour Guides"
+// listing via a name+location search, so they never 404 for a visitor.
+// A dead or placeholder link here is a trust signal browsers and travellers
+// both read badly, so these must always point somewhere real.
+export const GOOGLE_MAPS_URL =
+  "https://www.google.com/maps/search/?api=1&query=Agra%20Tour%20Guides%2C%20Tajganj%2C%20Agra";
+export const GOOGLE_REVIEWS_URL = GOOGLE_MAPS_URL;
+
+// The canonical Business Profile URL (Share → Copy link), used for
+// Organization.sameAs. Left empty until the exact profile URL is pasted in —
+// a search URL is not a stable identity and must not be published as sameAs.
+export const GOOGLE_BUSINESS_PROFILE_URL = "";
 
 // Verified Google Business Profile data (5.0★ / 85 reviews, May 2026).
 export const REVIEW_RATING = 5.0;
@@ -62,25 +69,11 @@ export const REVIEW_COUNT = 85;
 // Languages spoken (verified in Google reviews)
 export const LANGUAGES_SPOKEN = ["English", "Hindi", "Japanese"] as const;
 
-// Multi-currency display — site targets foreign travelers primarily
-// Conversion rates locked at site update time; refresh quarterly
-export const FX_RATES = {
-  INR_PER_USD: 84,
-  INR_PER_EUR: 91,
-} as const;
-
-export function inrToUsd(inr: number): number {
-  return Math.round(inr / FX_RATES.INR_PER_USD);
-}
-export function inrToEur(inr: number): number {
-  return Math.round(inr / FX_RATES.INR_PER_EUR);
-}
-export function usdToEur(usd: number): number {
-  return Math.round((usd * FX_RATES.INR_PER_USD) / FX_RATES.INR_PER_EUR);
-}
-export function usdToInr(usd: number): number {
-  return Math.round(usd * FX_RATES.INR_PER_USD);
-}
+// No published rate card: every trip is quoted individually against the
+// traveller's dates, group size and pace, in whichever of USD/EUR/INR they
+// prefer, converted at the mid-market rate at the time of quoting. Hard-coded
+// FX tables used to live here and drifted out of date, which is exactly the
+// kind of stale number that makes a small agency look untrustworthy.
 
 export interface NavItem {
   label: string;

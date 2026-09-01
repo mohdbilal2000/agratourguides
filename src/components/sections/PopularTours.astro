@@ -2,10 +2,9 @@
 /**
  * Editorial tours rail. Snap-scroll on mobile, 3-col grid on desktop.
  * Cards lean editorial: large photo, eyebrow with category + duration,
- * Fraunces headline, single-line summary, price in JetBrains mono.
+ * Fraunces headline, single-line summary, tailoring cue in JetBrains mono.
  */
 import { Image } from "astro:assets";
-import { usdToEur } from "../../lib/constants";
 import SectionHeader from "../ui/SectionHeader.astro";
 import Reveal from "../ui/Reveal.astro";
 
@@ -17,7 +16,8 @@ interface Tour {
   summary: string;
   duration: string;
   category: string;
-  priceUSD: number;
+  /** One-line cue for how this template gets adapted to the traveller. */
+  shape: string;
 }
 
 const tours: Tour[] = [
@@ -29,7 +29,7 @@ const tours: Tour[] = [
     summary: "Yamuna Expressway at dawn. Sunrise Taj. Agra Fort. Back by dinner.",
     duration: "14 hours",
     category: "Day trip",
-    priceUSD: 89,
+    shape: "Sunrise or sunset start",
   },
   {
     href: "/tours/golden-triangle-3-days/",
@@ -39,7 +39,7 @@ const tours: Tour[] = [
     summary: "Delhi to Agra to Jaipur. The classic arc, paced for travellers who plan to come back.",
     duration: "3 days",
     category: "Multi-day",
-    priceUSD: 299,
+    shape: "Stretch to 4–5 days",
   },
   {
     href: "/tours/jaipur-day-tour/",
@@ -49,7 +49,7 @@ const tours: Tour[] = [
     summary: "Amber Fort at first light, then Hawa Mahal, City Palace and Jantar Mantar before sunset.",
     duration: "10 hours",
     category: "Day trip",
-    priceUSD: 69,
+    shape: "Add Nahargarh sunset",
   },
 ];
 ---
@@ -127,10 +127,9 @@ const tours: Tour[] = [
               </p>
               <div class="mt-2 flex items-baseline justify-between border-t border-[var(--border)] pt-4">
                 <div>
-                  <span class="block text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)]">From</span>
-                  <span class="text-mono text-lg text-[var(--foreground)]" style="font-variation-settings: 'wght' 500;">
-                    ${t.priceUSD}
-                    <span class="text-xs text-[var(--foreground-subtle)] ml-1">/ €{usdToEur(t.priceUSD)}</span>
+                  <span class="block text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)]">Customisable</span>
+                  <span class="text-mono text-sm text-[var(--foreground)]" style="font-variation-settings: 'wght' 500;">
+                    {t.shape}
                   </span>
                 </div>
                 <span class="inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-gold-700)] group-hover:text-[var(--color-gold-800)] transition-colors target-auto">

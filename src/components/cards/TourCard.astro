@@ -1,34 +1,17 @@
 ---
-import { usdToEur, usdToInr } from "../../lib/constants";
-
 interface Props {
   title: string;
   slug: string;
   image: string;
   duration: string;
-  price: number;
-  currency?: string;
   highlights: string[];
   category?: string;
 }
 
-const { title, slug, image, duration, price, currency = "USD", highlights, category } = Astro.props;
+const { title, slug, image, duration, highlights, category } = Astro.props;
 
 const href = `/tours/${slug}`;
 const displayHighlights = highlights.slice(0, 3);
-
-const currencySymbols: Record<string, string> = {
-  USD: "$",
-  EUR: "€",
-  GBP: "£",
-  INR: "₹",
-};
-const symbol = currencySymbols[currency] || currency + " ";
-
-// Build secondary EUR + INR for USD-priced tours so foreign travellers see the comparable rate immediately.
-const showMulti = currency === "USD";
-const eur = showMulti ? usdToEur(price) : null;
-const inr = showMulti ? usdToInr(price) : null;
 ---
 
 <a
@@ -63,12 +46,11 @@ const inr = showMulti ? usdToInr(price) : null;
       </span>
     )}
 
-    <!-- Price Tag — bottom right of image -->
-    <div class="absolute bottom-0 right-0 bg-amber-500 text-white font-bold px-4 py-2 rounded-tl-xl shadow-lg">
-      <div class="text-lg leading-tight"><span class="text-xs font-normal opacity-90 mr-0.5">from</span>{symbol}{price}</div>
-      {showMulti && (
-        <div class="text-[10px] font-normal opacity-90 leading-tight">€{eur} · ₹{inr}</div>
-      )}
+    <!-- Itinerary tag — bottom right of image. This is a starting template,
+         not a fixed package, so the card advertises tailoring rather than a rate. -->
+    <div class="absolute bottom-0 right-0 bg-amber-500 text-white px-4 py-2 rounded-tl-xl shadow-lg">
+      <div class="text-sm font-bold leading-tight">Tailored to you</div>
+      <div class="text-[10px] font-normal opacity-90 leading-tight">Free quote on WhatsApp</div>
     </div>
   </div>
 

@@ -2,8 +2,10 @@
 /**
  * Dedicated Car-Hire landing page. Sits at /car-hire/ so it ranks as a
  * standalone surface for searches like "Agra car rental with driver" or
- * "Delhi to Agra cab price". Emits Service schema, an Offer per vehicle
- * class, and per-route price-list ItemList — all wired for LLM extraction.
+ * "Delhi to Agra cab with driver". Emits Service schema, a quote-on-request
+ * Offer per vehicle class, and a per-route ItemList carrying distance and
+ * drive time — all wired for LLM extraction. Rates are quoted per trip, so
+ * no figures are published here.
  */
 import PageLayout from "../layouts/PageLayout.astro";
 import Container from "../components/ui/Container.astro";
@@ -25,8 +27,6 @@ import {
   SITE_NAME,
   SITE_URL,
   WHATSAPP_NUMBER_DIGITS,
-  usdToEur,
-  usdToInr,
 } from "../lib/constants";
 
 const pageUrl = `${SITE_URL}/car-hire/`;
@@ -35,7 +35,6 @@ interface Vehicle {
   name: string;
   type: string;
   capacity: string;
-  perDayUSD: number;
   perDayInclusion: string;
   bestFor: string;
   features: string[];
@@ -46,7 +45,6 @@ const vehicles: Vehicle[] = [
     name: "AC Sedan",
     type: "Maruti Dzire / Toyota Etios",
     capacity: "Up to 3 passengers + 2 large bags",
-    perDayUSD: 49,
     perDayInclusion: "8 hours / 80 km within city",
     bestFor: "Couples, business travellers, airport transfers",
     features: ["Air conditioning", "Bottled water", "Phone charger", "Background-verified driver"],
@@ -55,7 +53,6 @@ const vehicles: Vehicle[] = [
     name: "AC SUV",
     type: "Toyota Innova / Innova Crysta",
     capacity: "Up to 6 passengers + 4 large bags",
-    perDayUSD: 75,
     perDayInclusion: "8 hours / 80 km within city",
     bestFor: "Families, small groups, multi-day Golden Triangle",
     features: ["Air conditioning", "Captain seats option", "WiFi hotspot (on request)", "Window blinds"],
@@ -64,7 +61,6 @@ const vehicles: Vehicle[] = [
     name: "Premium SUV",
     type: "Toyota Fortuner / Hyundai Alcazar",
     capacity: "Up to 6 passengers + 5 large bags",
-    perDayUSD: 119,
     perDayInclusion: "8 hours / 80 km within city",
     bestFor: "Premium travellers, honeymoons, photographers",
     features: ["Leather seats", "Sunroof", "Bottled water + snacks", "USB-C charging"],
@@ -73,7 +69,6 @@ const vehicles: Vehicle[] = [
     name: "Tempo Traveller",
     type: "Force Tempo Traveller (8-seater / 12-seater)",
     capacity: "8–14 passengers",
-    perDayUSD: 145,
     perDayInclusion: "8 hours / 80 km within city",
     bestFor: "Large groups, multi-family trips, corporate",
     features: ["Push-back seats", "Air conditioning", "Luggage carrier", "Trained tour driver"],
@@ -83,21 +78,20 @@ const vehicles: Vehicle[] = [
 interface Route {
   from: string;
   to: string;
-  vehicleUSD: number;
   distance: string;
   duration: string;
   notes: string;
 }
 
 const routes: Route[] = [
-  { from: "Delhi", to: "Agra (one-way)", vehicleUSD: 79, distance: "230 km via Yamuna Expressway", duration: "3.5 hr", notes: "Sedan rate; SUV +30%" },
-  { from: "Delhi", to: "Agra (round-trip same day)", vehicleUSD: 99, distance: "460 km", duration: "11 hr door-to-door", notes: "Includes 6 hr Agra wait" },
-  { from: "Delhi", to: "Jaipur (one-way)", vehicleUSD: 89, distance: "270 km via NH-48", duration: "5 hr", notes: "Sedan rate; SUV +30%" },
-  { from: "Agra", to: "Jaipur (one-way)", vehicleUSD: 79, distance: "240 km via NH-21", duration: "4.5 hr", notes: "Fatehpur Sikri stop +1 hr free" },
-  { from: "Jaipur", to: "Delhi (one-way)", vehicleUSD: 89, distance: "270 km", duration: "5 hr", notes: "Sedan; airport drop ₹500 extra" },
-  { from: "Delhi Airport (IGI)", to: "Hotel (any zone)", vehicleUSD: 29, distance: "Up to 50 km", duration: "45–90 min", notes: "Flat rate, all hours, meet-and-greet inside terminal" },
-  { from: "Agra Airport (AGR)", to: "Hotel (any zone)", vehicleUSD: 25, distance: "Up to 25 km", duration: "30 min", notes: "Flat rate" },
-  { from: "Agra Cantt Railway Station", to: "Hotel + Taj Mahal", vehicleUSD: 22, distance: "Within Agra", duration: "Half-day", notes: "Sedan, includes 4 hr at Taj Mahal complex" },
+  { from: "Delhi", to: "Agra (one-way)", distance: "230 km via Yamuna Expressway", duration: "3.5 hr", notes: "Sedan rate; SUV +30%" },
+  { from: "Delhi", to: "Agra (round-trip same day)", distance: "460 km", duration: "11 hr door-to-door", notes: "Includes 6 hr Agra wait" },
+  { from: "Delhi", to: "Jaipur (one-way)", distance: "270 km via NH-48", duration: "5 hr", notes: "Sedan rate; SUV +30%" },
+  { from: "Agra", to: "Jaipur (one-way)", distance: "240 km via NH-21", duration: "4.5 hr", notes: "Fatehpur Sikri stop +1 hr free" },
+  { from: "Jaipur", to: "Delhi (one-way)", distance: "270 km", duration: "5 hr", notes: "Sedan; airport drop ₹500 extra" },
+  { from: "Delhi Airport (IGI)", to: "Hotel (any zone)", distance: "Up to 50 km", duration: "45–90 min", notes: "Flat rate, all hours, meet-and-greet inside terminal" },
+  { from: "Agra Airport (AGR)", to: "Hotel (any zone)", distance: "Up to 25 km", duration: "30 min", notes: "Flat rate" },
+  { from: "Agra Cantt Railway Station", to: "Hotel + Taj Mahal", distance: "Within Agra", duration: "Half-day", notes: "Sedan, includes 4 hr at Taj Mahal complex" },
 ];
 
 const inclusions = [
@@ -114,10 +108,10 @@ const inclusions = [
 const exclusions = [
   "Monument entry tickets",
   "Meals (driver eats at the same dhabas you do, on your bill if you invite — never expected)",
-  "Driver tip (optional, ₹200–500 per day if you wish — never solicited)",
-  "Extra mileage beyond included km (₹14/km for sedan, ₹18 SUV)",
-  "Extra hours beyond included hours (₹150/hr sedan, ₹200 SUV)",
-  "Night charges 22:00–06:00 (₹500 flat, only if you actually use that window)",
+  "Driver tip (entirely optional — never solicited, never added to your bill)",
+  "Extra mileage beyond the included km, charged at the per-km rate stated on your quote",
+  "Extra hours beyond the included hours, charged at the per-hour rate stated on your quote",
+  "Night running 22:00–06:00, only if you actually use that window",
 ];
 
 const carHireFaqs = [
@@ -134,17 +128,17 @@ const carHireFaqs = [
   {
     question: "How do you charge — by the hour, by the km, or by the day?",
     answer:
-      "By the day, with 8 hours and 80 km of in-city driving included. Extra mileage is ₹14/km for sedans, ₹18 for SUVs; extra hours are ₹150/hr sedan, ₹200 SUV. Inter-city trips (Delhi-Agra, Agra-Jaipur, etc.) are flat-rate, published in USD on this page. No \"surge\" pricing, ever.",
+      "By the day, with 8 hours and 80 km of in-city driving included, or as a flat fare for inter-city trips (Delhi-Agra, Agra-Jaipur and so on). We quote each hire individually against your route, dates and vehicle class, and the per-km and per-hour rates for anything beyond the included allowance are written on that same quote. No \"surge\" pricing, ever, and nothing added after the drive.",
   },
   {
     question: "Do you pick up from Delhi airport at 03:00?",
     answer:
-      "Yes — Delhi IGI Airport pickups run 24/7 at a flat $29 (sedan, up to 50 km). Driver waits inside the arrivals hall with a printed name placard. Night-time pickups have no extra surcharge — the published rate is the published rate, regardless of arrival hour. Send your flight number on WhatsApp once you've booked.",
+      "Yes — Delhi IGI Airport pickups run 24/7 at a flat fare quoted before you fly, and the driver waits inside the arrivals hall with a printed name placard. Night-time pickups carry no extra surcharge: the fare we quote is the fare you pay, regardless of arrival hour. Send your flight number on WhatsApp once you've booked and we track the flight, so a delay costs you nothing.",
   },
   {
     question: "Can I keep the same car and driver for 5–7 days across cities?",
     answer:
-      "Yes — multi-day bookings are our most-asked package. A 5-day Golden Triangle car hire (Delhi → Agra → Fatehpur Sikri → Jaipur → Delhi) is typically $349 / €320 / ₹29,000 in a sedan, $449 / €410 / ₹37,500 in an SUV, all inclusive of toll, parking, driver allowance and fuel. You add only monument tickets and meals.",
+      "Yes — multi-day hires are our most-asked booking. A 5-day Golden Triangle run (Delhi → Agra → Fatehpur Sikri → Jaipur → Delhi) is quoted as one flat fare for your vehicle class, inclusive of toll, parking, driver allowance and fuel. You add only monument tickets and meals. Routes are entirely yours to change — add Ranthambore, drop a night in Jaipur, finish at the airport instead of the hotel — and we re-quote in writing at no charge.",
   },
   {
     question: "Is there insurance on the vehicle and us as passengers?",
@@ -152,9 +146,9 @@ const carHireFaqs = [
       "Every vehicle carries comprehensive third-party insurance (statutory in India) plus our agency's commercial-passenger cover up to ₹15,00,000 per passenger. The drivers are on our payroll, not contractors — meaning we underwrite their behaviour. Send us your travel insurance if you'd like us to cross-name us as an authorised carrier.",
   },
   {
-    question: "Are your prices in USD or INR — and how do I pay?",
+    question: "What currency is the quote in — and how do I pay?",
     answer:
-      "Both are published — USD is what foreign travellers see, INR is what locals see. Pay in either, at the same Google mid-market rate, on the last day of the trip. Cash (USD/EUR/GBP/AUD/INR), UPI for Indians, or Wise/Revolut transfer to our INR account. No upfront deposit on bookings under 7 days.",
+      "We quote in whichever currency you prefer — USD, EUR or INR — and convert at the Google mid-market rate, not a marked-up one. Payment comes on the last day of the trip: cash (USD/EUR/GBP/AUD/INR), UPI for Indian travellers, or a Wise/Revolut transfer to our INR account. No upfront deposit on bookings under 7 days, and we never ask for card details.",
   },
   {
     question: "What if my flight is delayed or cancelled?",
@@ -168,16 +162,16 @@ const vehicleListSchema = buildItemListSchema(
   vehicles.map((v) => ({
     name: `${v.name} — ${v.type}`,
     url: pageUrl,
-    description: `${v.capacity}. From $${v.perDayUSD}/day. ${v.perDayInclusion}.`,
+    description: `${v.capacity}. ${v.perDayInclusion}. Quoted per trip on request.`,
   })),
 );
 
-const routePriceListSchema = buildItemListSchema(
-  "Inter-city car-hire rates",
+const routeListSchema = buildItemListSchema(
+  "Inter-city drives we run",
   routes.map((r) => ({
     name: `${r.from} → ${r.to}`,
     url: pageUrl,
-    description: `${r.distance}, ${r.duration}. From $${r.vehicleUSD}. ${r.notes}`,
+    description: `${r.distance}, ${r.duration}. ${r.notes} Flat fare quoted before you travel.`,
   })),
 );
 
@@ -197,24 +191,23 @@ const carHireService = {
     "@type": "OfferCatalog",
     name: "Car-hire vehicle classes",
     itemListElement: vehicles.map((v) => ({
-      // AggregateOffer + lowPrice signals a starting day-rate. SUV upgrades,
-      // extra mileage/hours and multi-day routes push the real figure higher,
-      // so we never publish a fixed price that could undercut the actual cost.
-      "@type": "AggregateOffer",
+      // Fares depend on the route, the number of days and the vehicle class,
+      // so each hire is quoted individually rather than published as a rate
+      // that would need caveating. The Offer still declares availability and
+      // the quote channel, so assistants describe it as "quoted on request".
+      "@type": "Offer",
       itemOffered: {
         "@type": "Service",
         name: `${v.name} — ${v.type}`,
         description: `${v.capacity}. ${v.perDayInclusion}.`,
       },
-      lowPrice: v.perDayUSD,
-      priceCurrency: "USD",
-      offerCount: 1,
+      availability: "https://schema.org/InStock",
       priceSpecification: {
-        "@type": "UnitPriceSpecification",
-        minPrice: v.perDayUSD,
-        priceCurrency: "USD",
-        referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "DAY" },
+        "@type": "PriceSpecification",
+        description:
+          "Flat fare quoted per trip and agreed in writing before you travel. Toll, parking, fuel and driver allowance included.",
       },
+      url: pageUrl,
     })),
   },
   url: pageUrl,
@@ -225,7 +218,7 @@ const jsonLd = [
     buildOrganizationSchema(),
     carHireService,
     vehicleListSchema,
-    routePriceListSchema,
+    routeListSchema,
     buildFAQSchema(carHireFaqs),
     buildBreadcrumbSchema([
       { name: "Home", url: SITE_URL + "/" },
@@ -245,7 +238,7 @@ const waUrl = (text: string) =>
 
 <PageLayout
   title={`Car Hire with Driver — Agra, Delhi, Jaipur | ${SITE_NAME}`}
-  description="Chauffeur-driven car hire across Agra, Delhi & Jaipur. Sedan from $49/day, SUV from $75/day. All toll, parking, fuel, driver allowance included. Flat inter-city rates published. Govt-licensed."
+  description="Chauffeur-driven car hire across Agra, Delhi & Jaipur — sedan, SUV, premium SUV and Tempo Traveller. Toll, parking, fuel and driver allowance all included. Flat fare quoted per trip and agreed in writing before you travel. Govt-licensed drivers."
   jsonLd={jsonLd}
 >
   <section class="bg-[var(--background)] pt-28 pb-16 md:pt-36 md:pb-20" itemscope itemtype="https://schema.org/Service">
@@ -255,14 +248,16 @@ const waUrl = (text: string) =>
         <Reveal variant="fade" class="lg:col-span-8">
           <Eyebrow>Car hire · with driver</Eyebrow>
           <h1 class="mt-5 text-balance" style="font-size: var(--text-5xl); font-variation-settings: 'opsz' 144, 'SOFT' 80;">
-            A car, a driver, and a flat
+            A car, a driver, and one
             <em class="italic font-normal text-[var(--foreground-muted)]" style="font-variation-settings: 'opsz' 72, 'WONK' 1;">
               all-inclusive
             </em>
-            price.
+            fare.
           </h1>
           <p class="mt-6 text-pretty leading-relaxed max-w-prose" style="font-size: var(--text-lg);" itemprop="description">
-            Sedan from $49 / €45 / ₹4,100 a day. SUV from $75. Tempo for 8–14 from $145. Toll, parking, fuel, driver allowance — all in. Inter-city flat rates published below, no surge, no haggling.
+            Sedan, SUV, premium SUV or a Tempo for 8–14. Toll, parking, fuel and driver allowance — all in.
+            Tell us the route and the dates and we quote one flat fare in writing, agreed before you travel.
+            No surge, no holiday markup, no haggling at the roadside.
           </p>
         </Reveal>
         <div class="lg:col-span-4 flex flex-col gap-2 lg:items-end">
@@ -290,7 +285,7 @@ const waUrl = (text: string) =>
         <SectionHeader
           eyebrow="Vehicles"
           heading="Four classes. All chauffeur-driven."
-          lede="Daily rate includes 8 hours and 80 km within the city. Extra km, hours, and night windows are published below the table — no surprises."
+          lede="A standard hire day covers 8 hours and 80 km within the city. Anything beyond that — extra km, extra hours, a late-night run — is spelled out on your quote before you agree to it."
           align="left"
           as="h2"
         />
@@ -299,16 +294,14 @@ const waUrl = (text: string) =>
       <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
         {vehicles.map((v) => (
           <Reveal>
-            <article class="h-full rounded-2xl border border-[var(--border)] bg-[var(--background)] p-7 md:p-8 hover-lift" itemscope itemtype="https://schema.org/AggregateOffer">
+            <article class="h-full rounded-2xl border border-[var(--border)] bg-[var(--background)] p-7 md:p-8 hover-lift" itemscope itemtype="https://schema.org/Offer">
               <header class="flex items-baseline justify-between gap-4 mb-3">
                 <h3 itemprop="name" style="font-size: var(--text-2xl); font-variation-settings: 'opsz' 32, 'SOFT' 25;">
                   {v.name}
                 </h3>
-                <p class="text-mono text-right" style="font-variation-settings: 'wght' 500;">
-                  <span class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] block leading-none">From</span>
-                  <span class="text-lg text-[var(--foreground)]" itemprop="lowPrice" content={String(v.perDayUSD)}>${v.perDayUSD}</span>
-                  <meta itemprop="priceCurrency" content="USD" />
-                  <span class="text-xs text-[var(--foreground-muted)] block">€{usdToEur(v.perDayUSD)} · ₹{usdToInr(v.perDayUSD)}</span>
+                <p class="text-mono text-right shrink-0" style="font-variation-settings: 'wght' 500;">
+                  <span class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] block leading-none">Fare</span>
+                  <span class="text-sm text-[var(--foreground)]">Quoted per trip</span>
                 </p>
               </header>
               <p class="text-sm text-[var(--foreground-muted)] italic mb-4">{v.type}</p>
@@ -318,7 +311,7 @@ const waUrl = (text: string) =>
                   <dd class="text-[var(--foreground)]">{v.capacity}</dd>
                 </div>
                 <div>
-                  <dt class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)]">Day rate</dt>
+                  <dt class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)]">Hire day</dt>
                   <dd class="text-[var(--foreground)]">{v.perDayInclusion}</dd>
                 </div>
                 <div>
@@ -342,7 +335,8 @@ const waUrl = (text: string) =>
       </div>
 
       <p class="mt-8 text-xs text-[var(--foreground-subtle)] max-w-3xl">
-        Extra mileage: ₹14/km sedan, ₹18 SUV, ₹22 premium SUV. Extra hours: ₹150 sedan, ₹200 SUV. Night charge 22:00–06:00: ₹500 flat, only if you actually use that window.
+        Extra mileage, extra hours and any night running are quoted at a fixed per-km and per-hour rate
+        that appears on your written quote before you book. Nothing is added to the bill afterwards.
       </p>
     </Container>
   </section>
@@ -352,22 +346,22 @@ const waUrl = (text: string) =>
     <Container>
       <Reveal variant="fade">
         <SectionHeader
-          eyebrow="Inter-city flat rates"
-          heading="The drives travellers ask for, priced up-front."
-          lede="Sedan rates shown. SUV upgrade is roughly +30%. All flat — no surge, no holiday markups."
+          eyebrow="Inter-city drives"
+          heading="The drives travellers ask for, agreed up-front."
+          lede="Distances and honest door-to-door times for the routes we run most. Each one is a flat fare quoted for your vehicle class and dates — no surge, no holiday markups, no meter."
           align="left"
           as="h2"
         />
       </Reveal>
 
       <div class="mt-12 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
-        <table class="w-full text-left border-collapse" itemscope itemtype="https://schema.org/PriceSpecification">
+        <table class="w-full text-left border-collapse">
           <thead>
             <tr class="border-b-2 border-[var(--border-strong)]">
               <th scope="col" class="py-3 pr-4 text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold">Route</th>
               <th scope="col" class="py-3 pr-4 text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold">Distance</th>
               <th scope="col" class="py-3 pr-4 text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold hidden sm:table-cell">Duration</th>
-              <th scope="col" class="py-3 pr-4 text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold text-right">From (sedan)</th>
+              <th scope="col" class="py-3 pr-4 text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold text-right">Fare</th>
             </tr>
           </thead>
           <tbody>
@@ -380,8 +374,15 @@ const waUrl = (text: string) =>
                 <td class="py-4 pr-4 align-top text-sm text-[var(--foreground-muted)]">{r.distance}</td>
                 <td class="py-4 pr-4 align-top text-sm text-[var(--foreground-muted)] hidden sm:table-cell">{r.duration}</td>
                 <td class="py-4 pr-4 align-top text-right">
-                  <span class="text-mono text-[var(--foreground)]" style="font-variation-settings: 'wght' 500;">${r.vehicleUSD}</span>
-                  <span class="block text-[10px] text-[var(--foreground-subtle)]">€{usdToEur(r.vehicleUSD)} · ₹{usdToInr(r.vehicleUSD)}</span>
+                  <a
+                    href={waUrl(`Hi! I'd like a quote for the ${r.from} to ${r.to} drive. My dates: ___, group size: ___, vehicle preference: ___.`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-sm font-semibold text-[var(--color-gold-700)] hover:text-[var(--color-gold-800)] transition-colors whitespace-nowrap"
+                  >
+                    Get a quote
+                  </a>
+                  <span class="block text-[10px] text-[var(--foreground-subtle)]">Flat, agreed before you travel</span>
                 </td>
               </tr>
             ))}

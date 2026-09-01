@@ -78,8 +78,6 @@ const tours = defineCollection({
     metaDescription: z.string(),
     heroImage: z.string(),
     duration: z.string(),
-    priceFrom: z.number(),
-    currency: z.string().default("USD"),
     highlights: z.array(z.string()),
     itinerary: z.array(
       z.object({

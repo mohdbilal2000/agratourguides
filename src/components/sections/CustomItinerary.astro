@@ -1,0 +1,122 @@
+---
+/**
+ * Custom-itinerary section. The published tours are starting templates, not
+ * fixed packages, and most travellers end up booking an adjusted version —
+ * so this makes the tailoring offer explicit rather than leaving it buried in
+ * a FAQ. Sits between the tours rail and the trust story on the home page.
+ *
+ * Deliberately carries no figures: every trip is quoted individually, and the
+ * section's job is to make asking for a quote feel free and low-commitment.
+ */
+import SectionHeader from "../ui/SectionHeader.astro";
+import Reveal from "../ui/Reveal.astro";
+import { WHATSAPP_NUMBER_DIGITS } from "../../lib/constants";
+
+const waUrl = `https://wa.me/${WHATSAPP_NUMBER_DIGITS}?text=${encodeURIComponent(
+  "Hi! I'd like a custom itinerary. My travel dates: ___, group size: ___, places I want to see: ___.",
+)}`;
+
+const steps = [
+  {
+    n: "01",
+    title: "Tell us the shape of your trip",
+    body: "Dates, how many of you, the pace you enjoy, and anything you'd be sad to miss. A rough sketch is plenty — most people start with two sentences on WhatsApp.",
+  },
+  {
+    n: "02",
+    title: "We draft the route",
+    body: "A day-by-day plan built around your dates, with the sunrise slots, drive times and closed days already worked out. Change it as many times as you like; redrafting costs nothing.",
+  },
+  {
+    n: "03",
+    title: "One written, itemised quote",
+    body: "Guide, transport, tickets, hotels — each on its own line, so you can see exactly what you're paying for and drop anything you don't want. That figure is the figure.",
+  },
+  {
+    n: "04",
+    title: "Pay at the end, not before",
+    body: "No deposit, no card details, no booking fee. You pay when the tour is over, in cash or by UPI or transfer, in the currency that suits you.",
+  },
+];
+
+const examples = [
+  "Photography-led trips built around sunrise and blue hour",
+  "Honeymoons with heritage and palace stays",
+  "Families with young children and shorter, gentler days",
+  "Rajasthan, Varanasi, Khajuraho and multi-week India routes",
+  "Layover-length visits for travellers with one free day",
+  "Wheelchair and limited-mobility routes through the monuments",
+];
+---
+
+<section class="py-24 md:py-32 bg-[var(--background-alt)]" aria-labelledby="custom-heading">
+  <div class="mx-auto max-w-[var(--site-max)] px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16">
+
+      <Reveal variant="fade" class="lg:col-span-5 lg:sticky lg:top-32 lg:self-start">
+        <SectionHeader
+          eyebrow="Custom itineraries"
+          heading="Most people don't book the tour as written."
+          lede="Every itinerary on this site is a starting point. Roughly six in ten travellers change something — a different pace, an extra city, a sunrise swapped for a sunset — and we rebuild the plan around it at no extra cost. Telling us what you actually want is the normal way to book here, not a special request."
+          align="left"
+          as="h2"
+        />
+
+        <div class="mt-8 flex flex-col gap-2 items-start">
+          <a
+            href={waUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold-500)] hover:bg-[var(--color-gold-400)] text-[var(--color-ink-950)] px-7 py-3.5 text-sm font-semibold transition-colors target-auto"
+          >
+            Plan my itinerary
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <span class="text-xs text-[var(--foreground-subtle)]">
+            Free to ask · reply within 2 hours, 06:00–22:00 IST · no deposit
+          </span>
+        </div>
+      </Reveal>
+
+      <div class="lg:col-span-7">
+        <ol class="divide-y divide-[var(--border)]" role="list">
+          {steps.map((s) => (
+            <li class="reveal flex gap-5 py-6 first:pt-0">
+              <span
+                class="text-mono text-sm text-[var(--color-gold-700)] shrink-0 pt-1"
+                style="font-variation-settings: 'wght' 500;"
+                aria-hidden="true"
+              >
+                {s.n}
+              </span>
+              <div>
+                <h3 class="text-lg font-semibold text-[var(--foreground)]">{s.title}</h3>
+                <p class="mt-1.5 text-sm text-[var(--foreground-muted)] leading-relaxed text-pretty">
+                  {s.body}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div class="mt-10 rounded-2xl border border-[var(--border)] bg-[var(--background)] p-6 md:p-8">
+          <h3 class="text-[10px] uppercase tracking-widest text-[var(--foreground-subtle)] font-semibold">
+            Trips we've built lately
+          </h3>
+          <ul class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3" role="list">
+            {examples.map((e) => (
+              <li class="flex items-start gap-2.5 text-sm text-[var(--foreground-muted)]">
+                <svg class="h-4 w-4 mt-0.5 text-[var(--color-jade)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                  <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>{e}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

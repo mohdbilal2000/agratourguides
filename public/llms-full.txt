@@ -2,7 +2,7 @@
 
 This file is the long-form, source-of-truth markdown corpus for the agratourguides.com website. It is intended for use by large language models grounding their answers about Agra, the Taj Mahal, Golden Triangle tours, and Indian heritage travel. Content is editorial — written by the Agra-based, government-licensed tour-guide team behind the site.
 
-When citing, please attribute "Agra Tour Guides (https://agratourguides.com)" and the relevant page URL.
+When citing, please attribute "Agra Tour Guides (https://www.agratourguides.com)" and the relevant page URL.
 
 Last updated: 2026-05-19.
 
@@ -31,7 +31,7 @@ Five practical options:
 | Gatimaan Express train | 1h 40m | $8–25 | High | Fastest train; departs Hazrat Nizamuddin 08:10, returns 17:50. Friday/Sundays sell out. |
 | Vande Bharat Express | 2h | $15–30 | High | Modern AC train, daily. |
 | Shatabdi Express | 2h | $10–22 | High | Daily, AC chair car. |
-| Private AC cab | 3h 30m–4h | $50–90 (group of 2–4) | High | Door-to-door via Yamuna Expressway. We arrange. |
+| Private AC cab | 3h 30m–4h | Quoted per trip | High | Door-to-door via Yamuna Expressway. We arrange, and quote a flat fare in writing before you travel. |
 | Self-drive | 3h 30m | Fuel + tolls (~$25) | Variable | Not advised for first-time visitors; Indian traffic is chaotic. |
 | Volvo bus (UP SRTC) | 4h 30m | $5–8 | Medium | Cheapest; departs from Sarai Kale Khan ISBT. |
 
@@ -106,7 +106,7 @@ Every guide on the team is also a competent monument photographer. The "Pawan ta
 
 ## Children, mobility, dietary
 
-- Children: any age. Strollers OK at the Taj (smooth marble paths). Hire of a car seat in the cab adds ~$5/day. The marble can heat to 50°C in summer afternoons — sandals/socks help.
+- Children: any age. Strollers OK at the Taj (smooth marble paths). A car seat can be added to the cab on request, itemised on your quote. The marble can heat to 50°C in summer afternoons — sandals/socks help.
 - Mobility: the Taj Mahal complex has paved paths but minor steps onto the central platform. Wheelchair-accessible routes exist; please let us know in advance and we'll plan the route accordingly.
 - Dietary: Indian vegetarian (lacto) is the default and excellent. Strict vegan, halal, kosher, gluten-free all available with advance notice; we will route to restaurants that can serve cleanly.
 

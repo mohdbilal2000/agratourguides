@@ -39,8 +39,10 @@ const { lang = "en" } = Astro.props;
       effectively instant; other browsers ignore. Pairs with Astro's
       prefetch (link rel=prefetch on viewport-visible links) for full coverage.
     */}
-    <script type="speculationrules" is:inline>
-      {JSON.stringify({
+    <script
+      type="speculationrules"
+      is:inline
+      set:html={JSON.stringify({
         prerender: [
           {
             where: { href_matches: "/*" },
@@ -48,7 +50,7 @@ const { lang = "en" } = Astro.props;
           },
         ],
       })}
-    </script>
+    />
 
     <ClientRouter />
   </head>

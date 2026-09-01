@@ -1,6 +1,6 @@
 # Agra Tour Guides — robots.txt
 # Last updated: 2026-05-19
-# Site:   https://agratourguides.com
+# Site:   https://www.agratourguides.com
 # Policy: open to all major search engines and AI assistants.
 
 # ── All standard search crawlers ──────────────────────────
@@ -108,11 +108,11 @@ Allow: /
 # ──────────────────────────────────────────────────────────
 # Sitemaps
 # ──────────────────────────────────────────────────────────
-Sitemap: https://agratourguides.com/sitemap-index.xml
-Sitemap: https://agratourguides.com/rss.xml
+Sitemap: https://www.agratourguides.com/sitemap-index.xml
+Sitemap: https://www.agratourguides.com/rss.xml
 
 # ──────────────────────────────────────────────────────────
 # LLM-friendly resources
 # ──────────────────────────────────────────────────────────
-# https://agratourguides.com/llms.txt
-# https://agratourguides.com/llms-full.txt
+# https://www.agratourguides.com/llms.txt
+# https://www.agratourguides.com/llms-full.txt

@@ -5,7 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: "https://agratourguides.com",
+  site: "https://www.agratourguides.com",
   trailingSlash: "always",
 
   integrations: [
@@ -42,7 +42,7 @@ export default defineConfig({
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "images.pexels.com" },
     ],
-    domains: ["agratourguides.com"],
+    domains: ["www.agratourguides.com"],
   },
 
   prefetch: {

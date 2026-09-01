@@ -5,6 +5,7 @@ import TrustBadges from "../components/sections/TrustBadges.astro";
 import DayTimeline from "../components/sections/DayTimeline.astro";
 import BentoDestinations from "../components/sections/BentoDestinations.astro";
 import PopularTours from "../components/sections/PopularTours.astro";
+import CustomItinerary from "../components/sections/CustomItinerary.astro";
 import WhyChooseUs from "../components/sections/WhyChooseUs.astro";
 import TestimonialStrip from "../components/sections/TestimonialStrip.astro";
 import CTABanner from "../components/sections/CTABanner.astro";
@@ -24,7 +25,7 @@ const homeFaqs = [
   {
     question: "How much does a Taj Mahal tour guide cost?",
     answer:
-      "A private licensed Taj Mahal guide starts at ₹1,800 (about $22 / €20) for a group of up to 5 people on a 1.5–2 hour tour; the exact rate depends on your group size, season and how long you want. Foreigner monument entry (₹1,300 / $16) and the e-rickshaw to the gate (₹100 round-trip) are paid separately. Guide fees are flat and quoted up-front — no commission, no tipping pressure.",
+      "We quote every tour individually rather than publishing a rate card, because the honest figure depends on your group size, dates, how many monuments you want and whether you need transport. A private licensed guide is charged per group of up to 5, not per person, so the cost per head drops with group size. Message us on WhatsApp and you get a written, itemised quote — usually within 2 hours — and that is the figure you pay. Government fees (₹1,300 foreigner monument entry, ₹100 e-rickshaw round-trip) are listed separately and never marked up. No commission, no tipping pressure, no deposit.",
   },
   {
     question: "What is the best time to visit the Taj Mahal?",
@@ -100,6 +101,9 @@ const heroImage =
 
   {/* 4. Tours — editorial cards, snap-rail on mobile, grid on desktop */}
   <PopularTours />
+
+  {/* Custom itineraries — the tours above are templates, this is the real offer */}
+  <CustomItinerary />
 
   {/* 5. Story — calm split section establishing E-E-A-T */}
   <WhyChooseUs />

@@ -11,7 +11,7 @@ import NativeFAQ from '../../components/ui/NativeFAQ.astro';
 import BookingForm from '../../components/react/BookingForm';
 import { getCollection, render } from 'astro:content';
 import { buildTouristTripSchema, buildFAQSchema, buildBreadcrumbSchema, buildOrganizationSchema, buildGraph } from '../../lib/schema';
-import { SITE_NAME, SITE_URL, WHATSAPP_NUMBER_DIGITS, usdToEur, usdToInr } from '../../lib/constants';
+import { SITE_NAME, SITE_URL, WHATSAPP_NUMBER_DIGITS } from '../../lib/constants';
 
 export async function getStaticPaths() {
   const tours = await getCollection('tours');
@@ -51,8 +51,6 @@ const jsonLd = [
       title: tour.data.title,
       description: tour.data.description,
       itinerary: tour.data.itinerary,
-      priceFrom: tour.data.priceFrom,
-      currency: tour.data.currency,
       duration: tour.data.duration,
       url: `${SITE_URL}/tours/${tour.data.slug}/`,
     }),
@@ -91,7 +89,7 @@ const jsonLd = [
           <!-- Quick Info Bar -->
           <div class="flex flex-wrap gap-4 mb-8">
             <Badge variant="gold">{tour.data.duration}</Badge>
-            <Badge variant="green">From ${tour.data.priceFrom} {tour.data.currency}</Badge>
+            <Badge variant="green">Private &amp; customisable</Badge>
             {tour.data.cities.map((city: string) => (
               <Badge>{city.charAt(0).toUpperCase() + city.slice(1)}</Badge>
             ))}
@@ -171,10 +169,13 @@ const jsonLd = [
         <aside>
           <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
             <div class="text-center mb-4">
-              <p class="text-sm text-gray-500">Starting from</p>
-              <p class="text-4xl font-bold text-amber-600">${tour.data.priceFrom}</p>
-              <p class="text-xs text-gray-600 mt-1">€{usdToEur(tour.data.priceFrom)} · ₹{usdToInr(tour.data.priceFrom).toLocaleString("en-IN")}</p>
-              <p class="text-sm text-gray-500 mt-1">per person</p>
+              <p class="text-sm text-gray-500">Your itinerary, your quote</p>
+              <p class="text-2xl font-bold text-amber-600 leading-snug mt-1">Built around your dates</p>
+              <p class="text-xs text-gray-600 mt-2">
+                Tell us the dates, group size and pace. We reshape this route to fit and send a written,
+                itemised quote — usually within 2 hours.
+              </p>
+              <p class="text-xs text-gray-500 mt-2">Free to ask · no deposit · pay at the end of the tour</p>
             </div>
             <div class="text-sm text-gray-700 space-y-2 mb-6">
               <p class="flex justify-between"><span>Duration:</span> <strong>{tour.data.duration}</strong></p>
@@ -234,7 +235,6 @@ const jsonLd = [
               slug={t.data.slug}
               image={tourImages[t.data.slug] || t.data.heroImage}
               duration={t.data.duration}
-              price={t.data.priceFrom}
               highlights={t.data.highlights.slice(0, 3)}
             />
           ))}

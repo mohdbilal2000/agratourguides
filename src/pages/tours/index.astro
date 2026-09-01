@@ -16,7 +16,7 @@ import {
   buildFAQSchema,
   buildGraph,
 } from "../../lib/schema";
-import { SITE_NAME, SITE_URL, usdToEur } from "../../lib/constants";
+import { SITE_NAME, SITE_URL } from "../../lib/constants";
 
 const allTours = await getCollection("tours");
 const tours = allTours.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
@@ -34,7 +34,7 @@ const tourFaqs = [
   {
     question: "Can I customize a tour itinerary?",
     answer:
-      "Yes — every tour on this page is a starting template, not a fixed package. WhatsApp us your dates, group size, must-see monuments and pace preference; we adjust the route, add or drop stops, and re-quote within two hours. About 60% of our travellers ultimately book a customised version of one of these tours.",
+      "Yes — and most people do. Every tour on this page is a starting template, not a fixed package. WhatsApp us your dates, group size, must-see monuments and pace preference; we adjust the route, add or drop stops, and send a written quote within two hours. About 60% of our travellers end up booking a customised version rather than the template as written, and customising costs nothing extra.",
   },
   {
     question: "What's your cancellation policy across all tours?",
@@ -52,9 +52,9 @@ const tourFaqs = [
       "October to March is peak season. Two weeks' lead time is comfortable for day tours; one month for the Golden Triangle. December sunrise Taj slots often book out 5–7 days ahead. For April to September we accept same-day bookings most of the time — just WhatsApp us and we'll confirm a guide for the next morning.",
   },
   {
-    question: "Is monument entry included in the tour price?",
+    question: "Is monument entry included in the tour?",
     answer:
-      "On Guide-Only tours: no — you buy your foreigner ticket (₹1,300 for the Taj) at the gate. On Guide + Cab and Golden Triangle packages, entry tickets are pre-booked online so you skip the queue. We never inflate ticket prices; the printed receipt matches the published government rate to the rupee.",
+      "On Guide-Only tours you buy your own foreigner ticket at the gate. On Guide + Cab and Golden Triangle itineraries we pre-book entry tickets online so you skip the queue, and they are itemised separately on your quote. We never mark tickets up — the printed receipt matches the government rate to the rupee, and we hand it to you.",
   },
 ];
 
@@ -63,7 +63,7 @@ const itemList = buildItemListSchema(
   tours.map((t) => ({
     name: t.data.title,
     url: `${SITE_URL}/tours/${t.data.slug}/`,
-    description: `${t.data.duration}. From ${t.data.currency === "USD" ? "$" : ""}${t.data.priceFrom}. ${t.data.description.slice(0, 110)}${t.data.description.length > 110 ? "…" : ""}`,
+    description: `${t.data.duration}. Customisable itinerary, quoted per group. ${t.data.description.slice(0, 110)}${t.data.description.length > 110 ? "…" : ""}`,
     image: tourImages[t.data.slug] || t.data.heroImage,
   })),
 );
@@ -99,7 +99,7 @@ const lastUpdated = "April 2026";
 
 <PageLayout
   title={`Tours & itineraries — ${SITE_NAME}`}
-  description="Six published tours from a 5.0★ Agra agency. Same-day Agra from Delhi ($89), Golden Triangle 3 days ($299), Golden Triangle 5 days, Jaipur day tour. Custom routes on request."
+  description="Six starting itineraries from a 5.0★ Agra agency — same-day Agra from Delhi, Golden Triangle 3 & 5 days, Delhi and Jaipur day tours. Every route is customised to your dates, pace and group, then quoted individually."
   jsonLd={jsonLd}
 >
   <Section class="bg-[var(--background)] pt-28 md:pt-36 pb-16">
@@ -108,8 +108,8 @@ const lastUpdated = "April 2026";
       <Reveal variant="fade" class="mt-8 max-w-3xl">
         <SectionHeader
           eyebrow={`Tours · Updated ${lastUpdated}`}
-          heading="Six itineraries we'd run for our own families."
-          lede="Each tour is a starting template — adjust pace, stops and languages by message. Pricing in USD, EUR, INR is published per page; no surge, no holiday markups."
+          heading="Six starting points. Every trip is built around you."
+          lede="Nothing here is a fixed package — these are the routes travellers ask for most, and each one is a template we reshape around your dates, pace, group and must-sees. Send us what you have in mind and we quote that itinerary in writing."
           align="left"
           as="h1"
         />
@@ -137,7 +137,6 @@ const lastUpdated = "April 2026";
               slug={tour.data.slug}
               image={tourImages[tour.data.slug] || tour.data.heroImage}
               duration={tour.data.duration}
-              price={tour.data.priceFrom}
               highlights={tour.data.highlights.slice(0, 3)}
             />
           </li>

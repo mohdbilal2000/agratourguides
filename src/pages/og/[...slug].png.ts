@@ -35,13 +35,13 @@ export const getStaticPaths = (async () => {
       slug: "services",
       eyebrow: "Services",
       title: "Guide-only, guide + cab, or fully planned.",
-      subtitle: "Transparent USD/EUR/INR pricing · Cash or UPI · No commission",
+      subtitle: "Every itinerary custom-built · Cash or UPI on the day · No commission",
     },
     {
       slug: "car-hire",
       eyebrow: "Car hire",
       title: "Chauffeur-driven cars across the Golden Triangle.",
-      subtitle: "Sedan $49/day · SUV $75 · All toll, parking, fuel included · Govt-licensed drivers",
+      subtitle: "Sedan, SUV & Tempo · All toll, parking, fuel included · Govt-licensed drivers",
     },
     {
       slug: "reviews",
@@ -92,7 +92,7 @@ export const getStaticPaths = (async () => {
       slug: `tours-${t.data.slug}`,
       eyebrow: `Tour · ${t.data.duration}`,
       title: t.data.title,
-      subtitle: `From ${t.data.currency === "USD" ? "$" : ""}${t.data.priceFrom} · ${t.data.description.slice(0, 90)}…`,
+      subtitle: `Customised to your dates · ${t.data.description.slice(0, 80)}…`,
     }),
   );
 
