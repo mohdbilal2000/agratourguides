@@ -7,7 +7,7 @@ interface StickyBookingCTAProps {
 }
 
 export default function StickyBookingCTA({
-  whatsappNumber = "918909741833",
+  whatsappNumber = "918171826921",
   whatsappMessage = "Hi! I'm interested in booking a tour.",
 }: StickyBookingCTAProps) {
   const [isVisible, setIsVisible] = useState(false);

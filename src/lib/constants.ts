@@ -39,15 +39,15 @@ export function ogImageForPath(pathname: string): string {
   return `${SITE_URL}/og/home.png`;
 }
 
-// Real number from Google Business Profile: 089097 41833 (India display).
-// International: +91 89097 41833. WhatsApp digits: 918909741833.
-export const WHATSAPP_NUMBER = "+918909741833";
-export const WHATSAPP_NUMBER_DIGITS = "918909741833";
+// Real number from Google Business Profile: 081718 26921 (India display).
+// International: +91 81718 26921. WhatsApp digits: 918171826921.
+export const WHATSAPP_NUMBER = "+918171826921";
+export const WHATSAPP_NUMBER_DIGITS = "918171826921";
 
 export const CONTACT_EMAIL = "info@agratourguides.com";
 
 // Real number from Google Business Profile.
-export const CONTACT_PHONE = "+91 89097 41833";
+export const CONTACT_PHONE = "+91 81718 26921";
 
 // Google Maps deep-links. These resolve to the live "Agra Tour Guides"
 // listing via a name+location search, so they never 404 for a visitor.
